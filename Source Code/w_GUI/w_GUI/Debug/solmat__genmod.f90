@@ -1,0 +1,16 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:57:58 2012
+        MODULE SOLMAT__genmod
+          INTERFACE 
+            SUBROUTINE SOLMAT(IDCMIN,IDCMAX,AC2,IMATRA,IMATDA,IMATUA,   &
+     &IMATLA)
+              USE SWCOMM3
+              INTEGER(KIND=4) :: IDCMIN(MSC)
+              INTEGER(KIND=4) :: IDCMAX(MSC)
+              REAL(KIND=4) :: AC2(MDC,MSC,MCGRD)
+              REAL(KIND=4) :: IMATRA(MDC,MSC)
+              REAL(KIND=4) :: IMATDA(MDC,MSC)
+              REAL(KIND=4) :: IMATUA(MDC,MSC)
+              REAL(KIND=4) :: IMATLA(MDC,MSC)
+            END SUBROUTINE SOLMAT
+          END INTERFACE 
+        END MODULE SOLMAT__genmod

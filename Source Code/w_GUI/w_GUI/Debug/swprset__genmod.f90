@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:57:58 2012
+        MODULE SWPRSET__genmod
+          INTERFACE 
+            SUBROUTINE SWPRSET(SPCSIG)
+              USE SWCOMM3
+              REAL(KIND=4) :: SPCSIG(MSC)
+            END SUBROUTINE SWPRSET
+          END INTERFACE 
+        END MODULE SWPRSET__genmod

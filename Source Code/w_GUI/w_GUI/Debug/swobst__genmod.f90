@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:02 2012
+        MODULE SWOBST__genmod
+          INTERFACE 
+            SUBROUTINE SWOBST(XCGRID,YCGRID,KGRPNT,CROSS)
+              USE SWCOMM3
+              REAL(KIND=4) :: XCGRID(MXC,MYC)
+              REAL(KIND=4) :: YCGRID(MXC,MYC)
+              INTEGER(KIND=4) :: KGRPNT(MXC,MYC)
+              INTEGER(KIND=4) :: CROSS(2,MCGRD)
+            END SUBROUTINE SWOBST
+          END INTERFACE 
+        END MODULE SWOBST__genmod

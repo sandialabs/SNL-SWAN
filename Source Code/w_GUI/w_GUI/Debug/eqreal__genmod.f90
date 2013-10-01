@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:04 2012
+        MODULE EQREAL__genmod
+          INTERFACE 
+            FUNCTION EQREAL(REAL1,REAL2) RESULT(EQREAL_0)
+              REAL(KIND=4) :: REAL1
+              REAL(KIND=4) :: REAL2
+              LOGICAL(KIND=4) :: EQREAL_0
+            END FUNCTION EQREAL
+          END INTERFACE 
+        END MODULE EQREAL__genmod

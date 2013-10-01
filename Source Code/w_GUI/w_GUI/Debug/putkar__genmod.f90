@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:57:55 2012
+        MODULE PUTKAR__genmod
+          INTERFACE 
+            SUBROUTINE PUTKAR(LTEXT,KARR,JKAR)
+              CHARACTER(*) :: LTEXT
+              CHARACTER(LEN=1) :: KARR
+              INTEGER(KIND=4) :: JKAR
+            END SUBROUTINE PUTKAR
+          END INTERFACE 
+        END MODULE PUTKAR__genmod

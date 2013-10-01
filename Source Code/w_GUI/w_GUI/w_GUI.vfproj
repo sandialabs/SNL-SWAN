@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{2F965B27-A522-4852-9569-59DAE320BA8C}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool" AdditionalOptions="/check:none /warn:nointerfaces " SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Parallelization="true" Interfaces="true" WarnInterfaces="true" Traceback="true" BoundsCheck="true" UninitializedVariablesCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+		<File RelativePath="..\..\Bivariate_1.F90"/></Filter>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath="..\..\m_constants.f90"/>
+		<File RelativePath="..\..\m_fileio.f90"/>
+		<File RelativePath="..\..\mod_xnl4v5.f90"/>
+		<File RelativePath="..\..\ocpcre.for"/>
+		<File RelativePath="..\..\ocpids.for"/>
+		<File RelativePath="..\..\ocpmix.for"/>
+		<File RelativePath="..\..\serv_xnl4v5.f90"/>
+		<File RelativePath="..\..\SwanBpntlist.f90"/>
+		<File RelativePath="..\..\SwanCheckGrid.f90"/>
+		<File RelativePath="..\..\swancom1.for"/>
+		<File RelativePath="..\..\swancom2.for"/>
+		<File RelativePath="..\..\swancom3.for"/>
+		<File RelativePath="..\..\swancom4.for"/>
+		<File RelativePath="..\..\swancom5.for"/>
+		<File RelativePath="..\..\SwanCompdata.f90"/>
+		<File RelativePath="..\..\SwanCompUnstruc.f90"/>
+		<File RelativePath="..\..\SwanComputeForce.f90"/>
+		<File RelativePath="..\..\SwanConvAccur.f90"/>
+		<File RelativePath="..\..\SwanConvStopc.f90"/>
+		<File RelativePath="..\..\SwanCreateEdges.f90"/>
+		<File RelativePath="..\..\SwanCrossObstacle.f90"/>
+		<File RelativePath="..\..\SwanDiffPar.f90"/>
+		<File RelativePath="..\..\SwanDispParm.f90"/>
+		<File RelativePath="..\..\SwanFindObstacles.f90"/>
+		<File RelativePath="..\..\SwanFindPoint.f90"/>
+		<File RelativePath="..\..\SwanGridCell.f90"/>
+		<File RelativePath="..\..\SwanGriddata.f90"/>
+		<File RelativePath="..\..\SwanGridFace.f90"/>
+		<File RelativePath="..\..\SwanGridobjects.f90"/>
+		<File RelativePath="..\..\SwanGridTopology.f90"/>
+		<File RelativePath="..\..\SwanGridVert.f90"/>
+		<File RelativePath="..\..\SwanGSECorr.f90"/>
+		<File RelativePath="..\..\SwanInitCompGrid.f90"/>
+		<File RelativePath="..\..\SwanInterpolateAc.f90"/>
+		<File RelativePath="..\..\SwanInterpolateOutput.f90"/>
+		<File RelativePath="..\..\SwanInterpolatePoint.f90"/>
+		<File RelativePath="..\..\SwanIntgratSpc.f90"/>
+		<File RelativePath="..\..\swanmain.for"/>
+		<File RelativePath="..\..\swanout1.for"/>
+		<File RelativePath="..\..\swanout2.for"/>
+		<File RelativePath="..\..\swanparll.for"/>
+		<File RelativePath="..\..\SwanPointinMesh.f90"/>
+		<File RelativePath="..\..\swanpre1.for"/>
+		<File RelativePath="..\..\swanpre2.for"/>
+		<File RelativePath="..\..\SwanPrepComp.f90"/>
+		<File RelativePath="..\..\SwanPrintGridInfo.f90"/>
+		<File RelativePath="..\..\SwanPropvelS.f90"/>
+		<File RelativePath="..\..\SwanPropvelX.f90"/>
+		<File RelativePath="..\..\SwanReadADCGrid.f90"/>
+		<File RelativePath="..\..\SwanReadEasymeshGrid.f90"/>
+		<File RelativePath="..\..\SwanReadGrid.f90"/>
+		<File RelativePath="..\..\SwanReadTriangleGrid.f90"/>
+		<File RelativePath="..\..\swanser.for"/>
+		<File RelativePath="..\..\SwanSweepSel.f90"/>
+		<File RelativePath="..\..\SwanThreadBounds.f90"/>
+		<File RelativePath="..\..\SwanTranspAc.f90"/>
+		<File RelativePath="..\..\SwanTranspX.f90"/>
+		<File RelativePath="..\..\SwanVertlist.f90"/>
+		<File RelativePath="..\..\swmod1.for"/>
+		<File RelativePath="..\..\swmod2.for"/></Filter></Files>
+	<Globals/></VisualStudioProject>

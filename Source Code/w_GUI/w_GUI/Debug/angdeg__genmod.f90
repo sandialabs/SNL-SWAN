@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:02 2012
+        MODULE ANGDEG__genmod
+          INTERFACE 
+            FUNCTION ANGDEG(RADIAN) RESULT(ANGDEG_0)
+              REAL(KIND=4) :: RADIAN
+              REAL(KIND=4) :: ANGDEG_0
+            END FUNCTION ANGDEG
+          END INTERFACE 
+        END MODULE ANGDEG__genmod

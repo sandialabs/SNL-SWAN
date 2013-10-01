@@ -1,0 +1,13 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:02 2012
+        MODULE SSHAPE__genmod
+          INTERFACE 
+            SUBROUTINE SSHAPE(ACLOC,SPCSIG,SPCDIR,FSHAPL,DSHAPL)
+              USE SWCOMM3
+              REAL(KIND=4) :: ACLOC(MDC,MSC)
+              REAL(KIND=4) :: SPCSIG(MSC)
+              REAL(KIND=4) :: SPCDIR(MDC,6)
+              INTEGER(KIND=4) :: FSHAPL
+              INTEGER(KIND=4) :: DSHAPL
+            END SUBROUTINE SSHAPE
+          END INTERFACE 
+        END MODULE SSHAPE__genmod

@@ -1,0 +1,28 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:57:58 2012
+        MODULE SINTGRL__genmod
+          INTERFACE 
+            SUBROUTINE SINTGRL(SPCDIR,KWAVE,AC2,DEP2,QB_LOC,URSELL,RDX, &
+     &RDY,AC2TOT,ETOT,ABRBOT,UBOT,HS,QB,HM,KMESPC,SMEBRK,TMBOT,SWPDIR)
+              USE SWCOMM3
+              REAL(KIND=4), INTENT(IN) :: SPCDIR(MDC,6)
+              REAL(KIND=4), INTENT(IN) :: KWAVE(MSC,10)
+              REAL(KIND=4), INTENT(INOUT) :: AC2(MDC,MSC,MCGRD)
+              REAL(KIND=4), INTENT(IN) :: DEP2(MCGRD)
+              REAL(KIND=4), INTENT(OUT) :: QB_LOC
+              REAL(KIND=4), INTENT(INOUT) :: URSELL(MCGRD)
+              REAL(KIND=4), INTENT(IN) :: RDX(10)
+              REAL(KIND=4), INTENT(IN) :: RDY(10)
+              REAL(KIND=4), INTENT(OUT) :: AC2TOT
+              REAL(KIND=4), INTENT(OUT) :: ETOT
+              REAL(KIND=4), INTENT(OUT) :: ABRBOT
+              REAL(KIND=4), INTENT(INOUT) :: UBOT(MCGRD)
+              REAL(KIND=4), INTENT(OUT) :: HS
+              REAL(KIND=4), INTENT(INOUT) :: QB(MCGRD)
+              REAL(KIND=4), INTENT(OUT) :: HM
+              REAL(KIND=4), INTENT(OUT) :: KMESPC
+              REAL(KIND=4), INTENT(OUT) :: SMEBRK
+              REAL(KIND=4), INTENT(INOUT) :: TMBOT(MCGRD)
+              INTEGER(KIND=4), INTENT(IN) :: SWPDIR
+            END SUBROUTINE SINTGRL
+          END INTERFACE 
+        END MODULE SINTGRL__genmod

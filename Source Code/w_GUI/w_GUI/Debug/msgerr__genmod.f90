@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:04 2012
+        MODULE MSGERR__genmod
+          INTERFACE 
+            SUBROUTINE MSGERR(LEV,STRING)
+              INTEGER(KIND=4) :: LEV
+              CHARACTER(*) :: STRING
+            END SUBROUTINE MSGERR
+          END INTERFACE 
+        END MODULE MSGERR__genmod
