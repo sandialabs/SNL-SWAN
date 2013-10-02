@@ -1,0 +1,18 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:15 2013
+        MODULE RBFILE__genmod
+          INTERFACE 
+            SUBROUTINE RBFILE(SPCSIG,SPCDIR,BFILED,BSPLOC,BSPDIR,BSPFRQ,&
+     &BSPECS,XYTST)
+              USE SWCOMM3
+              USE SWCOMM2
+              REAL(KIND=4), INTENT(IN) :: SPCSIG(MSC)
+              REAL(KIND=4), INTENT(IN) :: SPCDIR(MDC,6)
+              INTEGER(KIND=4), INTENT(INOUT) :: BFILED(*)
+              INTEGER(KIND=4), INTENT(INOUT) :: BSPLOC(*)
+              REAL(KIND=4), INTENT(INOUT) :: BSPDIR(*)
+              REAL(KIND=4), INTENT(INOUT) :: BSPFRQ(*)
+              REAL(KIND=4), INTENT(INOUT) :: BSPECS(MDC,MSC,NBSPEC,2)
+              INTEGER(KIND=4), INTENT(IN) :: XYTST(*)
+            END SUBROUTINE RBFILE
+          END INTERFACE 
+        END MODULE RBFILE__genmod

@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:25 2013
+        MODULE RANGE4__genmod
+          INTERFACE 
+            SUBROUTINE RANGE4(WWINT,IDDLOW,IDDTOP)
+              INTEGER(KIND=4) :: WWINT(*)
+              INTEGER(KIND=4) :: IDDLOW
+              INTEGER(KIND=4) :: IDDTOP
+            END SUBROUTINE RANGE4
+          END INTERFACE 
+        END MODULE RANGE4__genmod

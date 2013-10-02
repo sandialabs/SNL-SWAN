@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:11:12 2013
+        MODULE SWREDUCI__genmod
+          INTERFACE 
+            SUBROUTINE SWREDUCI(IARR,ILEN,ITYPRD)
+              INTEGER(KIND=4) :: ILEN
+              INTEGER(KIND=4) :: IARR(ILEN)
+              INTEGER(KIND=4) :: ITYPRD
+            END SUBROUTINE SWREDUCI
+          END INTERFACE 
+        END MODULE SWREDUCI__genmod

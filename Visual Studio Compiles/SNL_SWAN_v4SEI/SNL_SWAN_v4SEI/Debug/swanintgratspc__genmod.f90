@@ -1,0 +1,21 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:24 2013
+        MODULE SWANINTGRATSPC__genmod
+          INTERFACE 
+            FUNCTION SWANINTGRATSPC(P,FMIN,FMAX,SPCSIG,THETA,WPAR,ECS,  &
+     &ULOC,VLOC,ACLOC,ITYPE) RESULT(SWANINTGRATSPC_0)
+              USE SWCOMM3
+              REAL(KIND=4), INTENT(IN) :: P
+              REAL(KIND=4), INTENT(IN) :: FMIN
+              REAL(KIND=4), INTENT(IN) :: FMAX
+              REAL(KIND=4), INTENT(IN) :: SPCSIG(MSC)
+              REAL(KIND=4), INTENT(IN) :: THETA(MDC)
+              REAL(KIND=4), INTENT(IN) :: WPAR(MSC)
+              REAL(KIND=4), INTENT(IN) :: ECS(MDC)
+              REAL(KIND=4) :: ULOC
+              REAL(KIND=4) :: VLOC
+              REAL(KIND=4), INTENT(IN) :: ACLOC(MDC,MSC)
+              INTEGER(KIND=4), INTENT(IN) :: ITYPE
+              REAL(KIND=4) :: SWANINTGRATSPC_0
+            END FUNCTION SWANINTGRATSPC
+          END INTERFACE 
+        END MODULE SWANINTGRATSPC__genmod

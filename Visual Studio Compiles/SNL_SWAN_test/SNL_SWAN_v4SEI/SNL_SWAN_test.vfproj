@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{152AD70E-76F6-42AF-A65A-F809B9E206BF}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Interfaces="true" Traceback="true" BoundsCheck="true" RuntimeLibrary="rtMultiThreadedDebug"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" GenerateDebugInformation="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" SubSystem="subSystemConsole"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd"/>
+		<Filter Name="Resource Files" Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"/>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\Bivariate_1.F90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\m_constants.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\m_fileio.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\mod_xnl4v5.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\ocpcre.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\ocpids.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\ocpmix.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\serv_xnl4v5.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanBpntlist.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanCheckGrid.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swancom1.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swancom2.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swancom3.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swancom4.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swancom5.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanCompdata.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanCompUnstruc.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanComputeForce.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanConvAccur.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanConvStopc.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanCreateEdges.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanCrossObstacle.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanDiffPar.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanDispParm.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanFindObstacles.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanFindPoint.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanGridCell.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanGriddata.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanGridFace.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanGridobjects.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanGridTopology.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanGridVert.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanGSECorr.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanInitCompGrid.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanInterpolateAc.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanInterpolateOutput.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanInterpolatePoint.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanIntgratSpc.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swanmain.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swanout1.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swanout2.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swanparll.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanPointinMesh.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swanpre1.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swanpre2.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanPrepComp.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanPrintGridInfo.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanPropvelS.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanPropvelX.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanReadADCGrid.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanReadEasymeshGrid.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanReadGrid.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanReadTriangleGrid.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swanser.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanSweepSel.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanThreadBounds.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanTranspAc.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanTranspX.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\SwanVertlist.f90"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swmod1.for"/>
+		<File RelativePath="..\..\..\SNL-SWAN\SNL_SWAN_v4 SEI Source Code\swmod2.for"/></Filter></Files>
+	<Globals/></VisualStudioProject>

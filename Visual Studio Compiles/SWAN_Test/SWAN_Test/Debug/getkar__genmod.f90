@@ -1,0 +1,7 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:42 2013
+        MODULE GETKAR__genmod
+          INTERFACE 
+            SUBROUTINE GETKAR
+            END SUBROUTINE GETKAR
+          END INTERFACE 
+        END MODULE GETKAR__genmod

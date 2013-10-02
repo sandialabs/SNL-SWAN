@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:20 2013
+        MODULE SEPARAREA__genmod
+          INTERFACE 
+            SUBROUTINE SEPARAREA(IX,IY,KGRPNT,IDIR)
+              USE SWCOMM3
+              INTEGER(KIND=4) :: IX
+              INTEGER(KIND=4) :: IY
+              INTEGER(KIND=4) :: KGRPNT(MXC,MYC)
+              INTEGER(KIND=4) :: IDIR
+            END SUBROUTINE SEPARAREA
+          END INTERFACE 
+        END MODULE SEPARAREA__genmod

@@ -1,0 +1,7 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:10:52 2013
+        MODULE RDINIT__genmod
+          INTERFACE 
+            SUBROUTINE RDINIT
+            END SUBROUTINE RDINIT
+          END INTERFACE 
+        END MODULE RDINIT__genmod

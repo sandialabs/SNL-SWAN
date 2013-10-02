@@ -1,0 +1,7 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:48 2013
+        MODULE NWLINE__genmod
+          INTERFACE 
+            SUBROUTINE NWLINE
+            END SUBROUTINE NWLINE
+          END INTERFACE 
+        END MODULE NWLINE__genmod

@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:20 2013
+        MODULE SSFILL__genmod
+          INTERFACE 
+            SUBROUTINE SSFILL(SPCSIG,SPCDIR)
+              USE SWCOMM3
+              REAL(KIND=4) :: SPCSIG(MSC)
+              REAL(KIND=4) :: SPCDIR(MDC,6)
+            END SUBROUTINE SSFILL
+          END INTERFACE 
+        END MODULE SSFILL__genmod

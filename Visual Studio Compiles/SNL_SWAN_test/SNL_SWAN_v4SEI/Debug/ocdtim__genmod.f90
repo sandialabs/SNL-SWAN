@@ -1,0 +1,8 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:57:33 2013
+        MODULE OCDTIM__genmod
+          INTERFACE 
+            SUBROUTINE OCDTIM(PRCTIM)
+              INTEGER(KIND=4) :: PRCTIM(6)
+            END SUBROUTINE OCDTIM
+          END INTERFACE 
+        END MODULE OCDTIM__genmod

@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:57:27 2013
+        MODULE SWGATHER__genmod
+          INTERFACE 
+            SUBROUTINE SWGATHER(IOPTR,IOLEN,IIPTR,IILEN,ITYPE)
+              INTEGER(KIND=4) :: IOPTR
+              INTEGER(KIND=4) :: IOLEN
+              INTEGER(KIND=4) :: IIPTR
+              INTEGER(KIND=4) :: IILEN
+              INTEGER(KIND=4) :: ITYPE
+            END SUBROUTINE SWGATHER
+          END INTERFACE 
+        END MODULE SWGATHER__genmod

@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:10:47 2013
+        MODULE SPRCON__genmod
+          INTERFACE 
+            SUBROUTINE SPRCON(XCGRID,YCGRID,KGRPNT,KGRBND)
+              USE SWCOMM3
+              REAL(KIND=4) :: XCGRID(MXC,MYC)
+              REAL(KIND=4) :: YCGRID(MXC,MYC)
+              INTEGER(KIND=4) :: KGRPNT(MXC,MYC)
+              INTEGER(KIND=4) :: KGRBND(*)
+            END SUBROUTINE SPRCON
+          END INTERFACE 
+        END MODULE SPRCON__genmod

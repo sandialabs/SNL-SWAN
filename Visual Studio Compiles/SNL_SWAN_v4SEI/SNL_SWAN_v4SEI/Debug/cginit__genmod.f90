@@ -1,0 +1,8 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:20 2013
+        MODULE CGINIT__genmod
+          INTERFACE 
+            SUBROUTINE CGINIT(LOGCOM)
+              LOGICAL(KIND=4) :: LOGCOM(6)
+            END SUBROUTINE CGINIT
+          END INTERFACE 
+        END MODULE CGINIT__genmod

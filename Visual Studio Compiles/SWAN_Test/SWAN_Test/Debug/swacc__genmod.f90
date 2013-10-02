@@ -1,0 +1,14 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:32 2013
+        MODULE SWACC__genmod
+          INTERFACE 
+            SUBROUTINE SWACC(AC2,AC2OLD,ACNRMS,ISSTOP,IDCMIN,IDCMAX)
+              USE SWCOMM3
+              REAL(KIND=4) :: AC2(MDC,MSC,MCGRD)
+              REAL(KIND=4) :: AC2OLD(MDC,MSC)
+              REAL(KIND=4) :: ACNRMS(2)
+              INTEGER(KIND=4) :: ISSTOP
+              INTEGER(KIND=4) :: IDCMIN(MSC)
+              INTEGER(KIND=4) :: IDCMAX(MSC)
+            END SUBROUTINE SWACC
+          END INTERFACE 
+        END MODULE SWACC__genmod

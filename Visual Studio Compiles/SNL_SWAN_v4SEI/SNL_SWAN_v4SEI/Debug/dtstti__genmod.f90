@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:28 2013
+        MODULE DTSTTI__genmod
+          INTERFACE 
+            SUBROUTINE DTSTTI(IOPT,TIMSTR,DTTIME)
+              INTEGER(KIND=4) :: IOPT
+              CHARACTER(LEN=24) :: TIMSTR
+              INTEGER(KIND=4) :: DTTIME(6)
+            END SUBROUTINE DTSTTI
+          END INTERFACE 
+        END MODULE DTSTTI__genmod

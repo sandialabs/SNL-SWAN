@@ -1,0 +1,20 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:11:03 2013
+        MODULE FILNL3__genmod
+          INTERFACE 
+            SUBROUTINE FILNL3(IDCMIN,IDCMAX,IMATRA,IMATDA,AC2,MEMNL4,   &
+     &PLNL4S,ISSTOP,REDC0,REDC1)
+              USE SWCOMM3
+              USE SWCOMM4
+              INTEGER(KIND=4) :: IDCMIN(MSC)
+              INTEGER(KIND=4) :: IDCMAX(MSC)
+              REAL(KIND=4) :: IMATRA(MDC,MSC)
+              REAL(KIND=4) :: IMATDA(MDC,MSC)
+              REAL(KIND=4) :: AC2(MDC,MSC,MCGRD)
+              REAL(KIND=4) :: MEMNL4(MDC,MSC,MCGRD)
+              REAL(KIND=4) :: PLNL4S(MDC,MSC,NPTST)
+              INTEGER(KIND=4) :: ISSTOP
+              REAL(KIND=4) :: REDC0(MDC,MSC,2)
+              REAL(KIND=4) :: REDC1(MDC,MSC,2)
+            END SUBROUTINE FILNL3
+          END INTERFACE 
+        END MODULE FILNL3__genmod

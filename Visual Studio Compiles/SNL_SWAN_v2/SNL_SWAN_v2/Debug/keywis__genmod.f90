@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:48 2013
+        MODULE KEYWIS__genmod
+          INTERFACE 
+            FUNCTION KEYWIS(STRING) RESULT(KEYWIS_0)
+              CHARACTER(*) :: STRING
+              LOGICAL(KIND=4) :: KEYWIS_0
+            END FUNCTION KEYWIS
+          END INTERFACE 
+        END MODULE KEYWIS__genmod

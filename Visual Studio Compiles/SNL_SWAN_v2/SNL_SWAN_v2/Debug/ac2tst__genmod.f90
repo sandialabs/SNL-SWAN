@@ -1,0 +1,11 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:43 2013
+        MODULE AC2TST__genmod
+          INTERFACE 
+            SUBROUTINE AC2TST(XYTST,AC2,KGRPNT)
+              USE SWCOMM3
+              INTEGER(KIND=4) :: XYTST(*)
+              REAL(KIND=4) :: AC2(MDC,MSC,MCGRD)
+              INTEGER(KIND=4) :: KGRPNT(MXC,MYC)
+            END SUBROUTINE AC2TST
+          END INTERFACE 
+        END MODULE AC2TST__genmod

@@ -1,0 +1,14 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:19 2013
+        MODULE WINDP3__genmod
+          INTERFACE 
+            SUBROUTINE WINDP3(ISSTOP,ALIMW,AC2,GROWW,IDCMIN,IDCMAX)
+              USE SWCOMM3
+              INTEGER(KIND=4) :: ISSTOP
+              REAL(KIND=4) :: ALIMW(MDC,MSC)
+              REAL(KIND=4) :: AC2(MDC,MSC,MCGRD)
+              LOGICAL(KIND=4) :: GROWW(MDC,MSC)
+              INTEGER(KIND=4) :: IDCMIN(MSC)
+              INTEGER(KIND=4) :: IDCMAX(MSC)
+            END SUBROUTINE WINDP3
+          END INTERFACE 
+        END MODULE WINDP3__genmod

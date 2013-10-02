@@ -1,0 +1,8 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:32 2013
+        MODULE SWINIT__genmod
+          INTERFACE 
+            SUBROUTINE SWINIT(INERR)
+              INTEGER(KIND=4) :: INERR
+            END SUBROUTINE SWINIT
+          END INTERFACE 
+        END MODULE SWINIT__genmod

@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:11:07 2013
+        MODULE DTINTI__genmod
+          INTERFACE 
+            SUBROUTINE DTINTI(TIMESC,INTTIM)
+              REAL(KIND=4) :: TIMESC
+              INTEGER(KIND=4) :: INTTIM(6)
+            END SUBROUTINE DTINTI
+          END INTERFACE 
+        END MODULE DTINTI__genmod

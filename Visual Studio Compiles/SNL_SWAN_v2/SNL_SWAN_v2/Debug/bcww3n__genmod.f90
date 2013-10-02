@@ -1,0 +1,20 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:30 2013
+        MODULE BCWW3N__genmod
+          INTERFACE 
+            SUBROUTINE BCWW3N(FBCNAM,BCTYPE,BSPFIL,LBGP,XCGRID,YCGRID,  &
+     &KGRPNT,XYTST,KGRBND,DONALL)
+              USE SWCOMM3
+              USE M_BNDSPEC
+              CHARACTER(*) :: FBCNAM
+              CHARACTER(*) :: BCTYPE
+              TYPE (BSPCDAT) :: BSPFIL
+              LOGICAL(KIND=4) :: LBGP
+              REAL(KIND=4), INTENT(IN) :: XCGRID(MXC,MYC)
+              REAL(KIND=4), INTENT(IN) :: YCGRID(MXC,MYC)
+              INTEGER(KIND=4), INTENT(IN) :: KGRPNT(MXC,MYC)
+              INTEGER(KIND=4), INTENT(IN) :: XYTST(*)
+              INTEGER(KIND=4), INTENT(IN) :: KGRBND(*)
+              LOGICAL(KIND=4) :: DONALL
+            END SUBROUTINE BCWW3N
+          END INTERFACE 
+        END MODULE BCWW3N__genmod

@@ -1,0 +1,7 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:10:47 2013
+        MODULE SWCLME__genmod
+          INTERFACE 
+            SUBROUTINE SWCLME
+            END SUBROUTINE SWCLME
+          END INTERFACE 
+        END MODULE SWCLME__genmod

@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:24 2013
+        MODULE SWRECVNB__genmod
+          INTERFACE 
+            SUBROUTINE SWRECVNB(IPTR,ILEN,ITYPE,ISOURCE,ITAG)
+              INTEGER(KIND=4) :: IPTR
+              INTEGER(KIND=4) :: ILEN
+              INTEGER(KIND=4) :: ITYPE
+              INTEGER(KIND=4) :: ISOURCE
+              INTEGER(KIND=4) :: ITAG
+            END SUBROUTINE SWRECVNB
+          END INTERFACE 
+        END MODULE SWRECVNB__genmod

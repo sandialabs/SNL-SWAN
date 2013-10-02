@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:57:27 2013
+        MODULE SWBROADC__genmod
+          INTERFACE 
+            SUBROUTINE SWBROADC(IPTR,ILEN,ITYPE)
+              INTEGER(KIND=4) :: IPTR
+              INTEGER(KIND=4) :: ILEN
+              INTEGER(KIND=4) :: ITYPE
+            END SUBROUTINE SWBROADC
+          END INTERFACE 
+        END MODULE SWBROADC__genmod

@@ -1,0 +1,8 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:48 2013
+        MODULE IGNORE__genmod
+          INTERFACE 
+            SUBROUTINE IGNORE(STRING)
+              CHARACTER(*) :: STRING
+            END SUBROUTINE IGNORE
+          END INTERFACE 
+        END MODULE IGNORE__genmod

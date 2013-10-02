@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "SNL_SWAN_v4SEI", "SNL_SWAN_v4SEI\SNL_SWAN_v4SEI.vfproj", "{152AD70E-76F6-42AF-A65A-F809B9E206BF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{152AD70E-76F6-42AF-A65A-F809B9E206BF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{152AD70E-76F6-42AF-A65A-F809B9E206BF}.Debug|Win32.Build.0 = Debug|Win32
+		{152AD70E-76F6-42AF-A65A-F809B9E206BF}.Release|Win32.ActiveCfg = Release|Win32
+		{152AD70E-76F6-42AF-A65A-F809B9E206BF}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

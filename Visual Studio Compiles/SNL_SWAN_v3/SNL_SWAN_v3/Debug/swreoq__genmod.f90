@@ -1,0 +1,8 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:11:05 2013
+        MODULE SWREOQ__genmod
+          INTERFACE 
+            SUBROUTINE SWREOQ(FOUND)
+              LOGICAL(KIND=4) :: FOUND
+            END SUBROUTINE SWREOQ
+          END INTERFACE 
+        END MODULE SWREOQ__genmod

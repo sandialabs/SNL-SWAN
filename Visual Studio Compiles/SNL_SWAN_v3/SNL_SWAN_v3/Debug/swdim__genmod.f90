@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:10:58 2013
+        MODULE SWDIM__genmod
+          INTERFACE 
+            SUBROUTINE SWDIM(KGRPNT,DEPTH,XCGRID,YCGRID)
+              USE SWCOMM3
+              INTEGER(KIND=4) :: KGRPNT(MXC,MYC)
+              REAL(KIND=4) :: DEPTH(*)
+              REAL(KIND=4) :: XCGRID(MXC,MYC)
+              REAL(KIND=4) :: YCGRID(MXC,MYC)
+            END SUBROUTINE SWDIM
+          END INTERFACE 
+        END MODULE SWDIM__genmod

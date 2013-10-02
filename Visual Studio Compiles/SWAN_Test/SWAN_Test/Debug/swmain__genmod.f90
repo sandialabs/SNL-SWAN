@@ -1,0 +1,7 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:32 2013
+        MODULE SWMAIN__genmod
+          INTERFACE 
+            SUBROUTINE SWMAIN
+            END SUBROUTINE SWMAIN
+          END INTERFACE 
+        END MODULE SWMAIN__genmod

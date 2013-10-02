@@ -1,0 +1,32 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 16:05:22 2013
+        MODULE SWANPROPVELS__genmod
+          INTERFACE 
+            SUBROUTINE SWANPROPVELS(CAD,CAS,UX2,UY2,DEP1,DEP2,CAX,CAY,  &
+     &KWAVE,CGO,SPCSIG,IDCMIN,IDCMAX,ECOS,ESIN,COSCOS,SINCOS,SINSIN,RDX,&
+     &RDY,JC)
+              USE SWCOMM3
+              USE SWANGRIDDATA
+              REAL(KIND=4), INTENT(OUT) :: CAD(MDC,MSC)
+              REAL(KIND=4), INTENT(OUT) :: CAS(MDC,MSC)
+              REAL(KIND=4), INTENT(IN) :: UX2(NVERTS)
+              REAL(KIND=4), INTENT(IN) :: UY2(NVERTS)
+              REAL(KIND=4), INTENT(IN) :: DEP1(NVERTS)
+              REAL(KIND=4), INTENT(IN) :: DEP2(NVERTS)
+              REAL(KIND=4), INTENT(IN) :: CAX(MDC,MSC,ICMAX)
+              REAL(KIND=4), INTENT(IN) :: CAY(MDC,MSC,ICMAX)
+              REAL(KIND=4), INTENT(IN) :: KWAVE(MSC,ICMAX)
+              REAL(KIND=4), INTENT(IN) :: CGO(MSC,ICMAX)
+              REAL(KIND=4), INTENT(IN) :: SPCSIG(MSC)
+              INTEGER(KIND=4), INTENT(IN) :: IDCMIN(MSC)
+              INTEGER(KIND=4), INTENT(IN) :: IDCMAX(MSC)
+              REAL(KIND=4), INTENT(IN) :: ECOS(MDC)
+              REAL(KIND=4), INTENT(IN) :: ESIN(MDC)
+              REAL(KIND=4), INTENT(IN) :: COSCOS(MDC)
+              REAL(KIND=4), INTENT(IN) :: SINCOS(MDC)
+              REAL(KIND=4), INTENT(IN) :: SINSIN(MDC)
+              REAL(KIND=4), INTENT(IN) :: RDX(2)
+              REAL(KIND=4), INTENT(IN) :: RDY(2)
+              INTEGER(KIND=4), INTENT(IN) :: JC
+            END SUBROUTINE SWANPROPVELS
+          END INTERFACE 
+        END MODULE SWANPROPVELS__genmod

@@ -1,0 +1,24 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:49 2013
+        MODULE SWSNL8__genmod
+          INTERFACE 
+            SUBROUTINE SWSNL8(WWINT,UE,SA1,SA2,SPCSIG,SNLC1,DAL1,DAL2,  &
+     &DAL3,SFNL,DEP2,AC2,KMESPC,MEMNL4,FACHFR)
+              USE SWCOMM3
+              INTEGER(KIND=4) :: WWINT(*)
+              REAL(KIND=4) :: UE(MSC4MI:MSC4MA,MDC4MI:MDC4MA)
+              REAL(KIND=4) :: SA1(MSC4MI:MSC4MA,MDC4MI:MDC4MA)
+              REAL(KIND=4) :: SA2(MSC4MI:MSC4MA,MDC4MI:MDC4MA)
+              REAL(KIND=4) :: SPCSIG(MSC)
+              REAL(KIND=4) :: SNLC1
+              REAL(KIND=4) :: DAL1
+              REAL(KIND=4) :: DAL2
+              REAL(KIND=4) :: DAL3
+              REAL(KIND=4) :: SFNL(MSC4MI:MSC4MA,MDC4MI:MDC4MA)
+              REAL(KIND=4) :: DEP2(MCGRD)
+              REAL(KIND=4) :: AC2(MDC,MSC,MCGRD)
+              REAL(KIND=4) :: KMESPC
+              REAL(KIND=4) :: MEMNL4(MDC,MSC,MCGRD)
+              REAL(KIND=4) :: FACHFR
+            END SUBROUTINE SWSNL8
+          END INTERFACE 
+        END MODULE SWSNL8__genmod

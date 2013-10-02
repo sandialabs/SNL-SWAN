@@ -1,0 +1,9 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:57:30 2013
+        MODULE INTSTR__genmod
+          INTERFACE 
+            FUNCTION INTSTR(IVAL) RESULT(INTSTR_0)
+              INTEGER(KIND=4) :: IVAL
+              CHARACTER(LEN=20) :: INTSTR_0
+            END FUNCTION INTSTR
+          END INTERFACE 
+        END MODULE INTSTR__genmod
