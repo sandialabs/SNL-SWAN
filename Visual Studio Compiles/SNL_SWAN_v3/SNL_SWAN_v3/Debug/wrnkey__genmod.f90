@@ -1,7 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Apr 29 12:10:52 2013
-        MODULE WRNKEY__genmod
-          INTERFACE 
-            SUBROUTINE WRNKEY
-            END SUBROUTINE WRNKEY
-          END INTERFACE 
-        END MODULE WRNKEY__genmod

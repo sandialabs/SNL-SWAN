@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:32 2013
-        MODULE DEGCNV__genmod
-          INTERFACE 
-            FUNCTION DEGCNV(DEGREE) RESULT(DEGCNV_0)
-              REAL(KIND=4) :: DEGREE
-              REAL(KIND=4) :: DEGCNV_0
-            END FUNCTION DEGCNV
-          END INTERFACE 
-        END MODULE DEGCNV__genmod

@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:33 2013
-        MODULE STRACE__genmod
-          INTERFACE 
-            SUBROUTINE STRACE(IENT,SUBNAM)
-              INTEGER(KIND=4) :: IENT
-              CHARACTER(*) :: SUBNAM
-            END SUBROUTINE STRACE
-          END INTERFACE 
-        END MODULE STRACE__genmod

@@ -1,8 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:44 2013
-        MODULE SVARTP__genmod
-          INTERFACE 
-            SUBROUTINE SVARTP(IVTYPE)
-              INTEGER(KIND=4) :: IVTYPE
-            END SUBROUTINE SVARTP
-          END INTERFACE 
-        END MODULE SVARTP__genmod

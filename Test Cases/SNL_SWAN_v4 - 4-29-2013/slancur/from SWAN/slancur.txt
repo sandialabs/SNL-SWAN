@@ -1,7 +1,0 @@
-This directory contains the following files:
-
-a33curs.swn       : SWAN input file
-a33curs.bot       : contains bottom values
-a33curs.cur       : contains currents
-a33curs.loc       : contains some locations in problem area
-a33curs.ana       : contains analytical solution

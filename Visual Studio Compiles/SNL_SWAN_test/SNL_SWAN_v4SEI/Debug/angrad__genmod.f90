@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:57:30 2013
-        MODULE ANGRAD__genmod
-          INTERFACE 
-            FUNCTION ANGRAD(DEGREE) RESULT(ANGRAD_0)
-              REAL(KIND=4) :: DEGREE
-              REAL(KIND=4) :: ANGRAD_0
-            END FUNCTION ANGRAD
-          END INTERFACE 
-        END MODULE ANGRAD__genmod

@@ -1,8 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:48 2013
-        MODULE UPCASE__genmod
-          INTERFACE 
-            SUBROUTINE UPCASE(CHARST)
-              CHARACTER(*) :: CHARST
-            END SUBROUTINE UPCASE
-          END INTERFACE 
-        END MODULE UPCASE__genmod

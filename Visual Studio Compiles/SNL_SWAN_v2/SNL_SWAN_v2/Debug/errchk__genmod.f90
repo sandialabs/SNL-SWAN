@@ -1,7 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:15 2013
-        MODULE ERRCHK__genmod
-          INTERFACE 
-            SUBROUTINE ERRCHK
-            END SUBROUTINE ERRCHK
-          END INTERFACE 
-        END MODULE ERRCHK__genmod
