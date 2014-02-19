@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:33 2013
-        MODULE SWRBC__genmod
-          INTERFACE 
-            SUBROUTINE SWRBC(COMPDA)
-              USE SWCOMM3
-              REAL(KIND=4) :: COMPDA(MCGRD,MCMVAR)
-            END SUBROUTINE SWRBC
-          END INTERFACE 
-        END MODULE SWRBC__genmod

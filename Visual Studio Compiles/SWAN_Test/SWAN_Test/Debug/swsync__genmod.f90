@@ -1,7 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:48 2013
-        MODULE SWSYNC__genmod
-          INTERFACE 
-            SUBROUTINE SWSYNC
-            END SUBROUTINE SWSYNC
-          END INTERFACE 
-        END MODULE SWSYNC__genmod

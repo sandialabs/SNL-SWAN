@@ -1,1 +1,0 @@
-These are all run with width file option =0, aka baseline SWAN for SWAN4072ABCDE

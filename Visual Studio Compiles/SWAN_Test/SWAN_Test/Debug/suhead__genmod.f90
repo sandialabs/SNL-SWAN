@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:44 2013
-        MODULE SUHEAD__genmod
-          INTERFACE 
-            FUNCTION SUHEAD(QUNIT) RESULT(SUHEAD_0)
-              CHARACTER(*) :: QUNIT
-              CHARACTER(LEN=8) :: SUHEAD_0
-            END FUNCTION SUHEAD
-          END INTERFACE 
-        END MODULE SUHEAD__genmod

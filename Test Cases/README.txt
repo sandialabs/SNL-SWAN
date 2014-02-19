@@ -1,14 +1,19 @@
-SNL-SWAN Test Cases
-===================
-
+SNL-SWAN Test Cases:
+====================
 This folder is where the SNL-SWAN test cases are stored. Test cases are used the verify the functionality of any newly compiled versions 
 of the code.  There is a series of automated MATLAB scripts that have been developed by SNL to quickly verify the code's functionality. 
 Some of the paths may need to be redefined by the user.
 
 
-
 SNL_SWAN_v4 - 4-29-2013
-	This is a new test run using the newly compiled SNL_SWAN_v4, with changes from SEI to omit option 2 interpolation errorrs, etc
+	This is a new test run using the newly compiled SNL_SWAN_alpha.exe (aka snl_swan_v4sei.exe), with changes from SEI to omit 
+	option 2 interpolation errorrs, etc
+
+
+
+
+Test cases not on GitHub site:
+==============================
 
 SNL_SWAN_v3 - 4-25-2013
 	see below, but had to update VS 2008 and Intel copmiler, this is the first new compile, checking its functionality

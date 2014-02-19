@@ -1,9 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Wed Apr 24 17:03:33 2013
-        MODULE TABHED__genmod
-          INTERFACE 
-            SUBROUTINE TABHED(PROGNM,LPR)
-              CHARACTER(*) :: PROGNM
-              INTEGER(KIND=4) :: LPR
-            END SUBROUTINE TABHED
-          END INTERFACE 
-        END MODULE TABHED__genmod

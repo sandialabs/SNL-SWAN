@@ -1,7 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Mon Sep 16 14:49:42 2013
-        MODULE LEESEL__genmod
-          INTERFACE 
-            SUBROUTINE LEESEL
-            END SUBROUTINE LEESEL
-          END INTERFACE 
-        END MODULE LEESEL__genmod
