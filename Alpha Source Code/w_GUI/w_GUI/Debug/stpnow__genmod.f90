@@ -1,8 +1,0 @@
-        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:04 2012
-        MODULE STPNOW__genmod
-          INTERFACE 
-            FUNCTION STPNOW RESULT(STPNOW_0)
-              LOGICAL(KIND=4) :: STPNOW_0
-            END FUNCTION STPNOW
-          END INTERFACE 
-        END MODULE STPNOW__genmod
