@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:00 2012
+        MODULE SWCOLOUT__genmod
+          INTERFACE 
+            SUBROUTINE SWCOLOUT(OURQT,BLKND)
+              USE M_PARALL
+              REAL(KIND=4) :: OURQT(250)
+              REAL(KIND=4) :: BLKND(MXCGL,MYCGL)
+            END SUBROUTINE SWCOLOUT
+          END INTERFACE 
+        END MODULE SWCOLOUT__genmod

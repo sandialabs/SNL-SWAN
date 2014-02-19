@@ -1,0 +1,258 @@
+
+MODULE Interp_v1
+
+contains 
+SUBROUTINE P_Matrix(TP,HSIN,RCW)
+
+
+	!   Code input: Period and Wave Height from SWAN
+	!	Code Body:  Find power extracted by reading and interpolating
+	!                     power matrix
+	!	            Calculate RCW
+	!	
+
+	
+	!	Record of Revisions
+	!		Date		Programmer	Description of Change
+	!		-----		----------	---------------------
+	!		12/21/12		Ari J Posner	Original Code
+	!		04/21/13		Craig Jones	    Updated Code, new interpolation scheme
+	!
+	implicit none
+	
+
+	!Data Dictionary: Declare calling parameter types & definitions 
+	character (len = 64 ) :: filein,fileout		!input file
+    character (len = 64 ) :: Period,Height,Power,Width_val,RelCapWidth
+	character (len = 40 ) ::name,temp1(1000)
+	real, allocatable::x1a(:),x2a(:),ya(:,:)
+	integer::n_Tp,n_Hs,n_RCW,ITRAS
+	integer::case_n   !case=1=power matrix; case=2=RCW  
+	COMMON CASE_N
+	integer::n,i,j,k,c
+	REAL:: dy,x1,x2,Width,p_abs
+!    REAL, intent(in)::TP,HSIN
+!    REAL, intent(out)::y1
+    REAL::TP,HSIN,Incident,temp2,RCW
+    REAL::y1
+
+!   get the name of the file containing the data. 
+!	write (*, *) 'Enter 1=Power Matrix Input, 2=RCW Input '
+!	read  (*, *) case_n
+select case (case_n)
+case(1)
+
+!	write (*, *) 'Enter the period input filename: '
+!	read  (101, *) Period
+
+!	write (*, *) 'Enter the Wave Height Input filename: '
+!	read  (102, *) Height
+
+!	write (*, *) 'Enter the Power Matrix Input filename: '
+!	read  (103, *) Height
+
+!	write (*, *) 'Enter the Device Width Input filename: '
+!	read  (104, *) Width_val
+
+    n_Tp=0.0 ! variable initilization
+    n_Hs=0.0
+    Width=0.0
+    n=0
+    i=0
+    j=0
+    k=0
+    c=0
+
+	Period="Period.txt"  ! fixed filenames
+	Height="WaveHeight.txt"
+    Power="Power.txt"
+    Width_val="Width.txt"
+
+	!open that file for reading.
+	open (101, file =Period, status='old')
+	open (102, file=Height, status='old')
+	open (103, file=Power, status='old')
+	open (104, file=Width_val, status='old')
+
+	read(101,*) n_Tp	! Number of values for period and height
+    read(102,*) n_Hs
+!1001 format (1(/),F6.3)     ! format limit on device width read
+!    read(104,1001) Width  ! Actual width of device
+    read(104,*)
+    read(104,*) Width
+    print*,Width
+    print*,n_Tp
+    print*,n_Hs
+
+allocate(x1a(n_Tp),x2a(n_Hs),ya(n_Hs,n_Tp))
+
+read(101,*) (x1a(i),i=1,n_Tp) !Period axis values [s]
+read(102,*) (x2a(i),i=1,n_Hs) !Hs axis values [m]
+
+do i=1,n_Hs
+    read(103,*) (ya(i,j),j=1,n_Tp) !Power Matrix values [kW]
+enddo
+
+x1=TP       !Input from SWAN model
+x2=HSIN
+
+!x1=9.4
+!x2=4.3
+
+!CALL polin2(x1a,x2a,ya,n_Tp,n_Hs,x1,x2,y1,dy)
+CALL polin2(x1a,x2a,ya,n_Tp,n_Hs,x1,x2,y1,dy) ! 2-D Interpolation for matrix
+
+Incident=0.42*HSIN*HSIN*TP !Estimate Incident wave power [kW/m]
+RCW=y1/Incident/Width      !Calculate RCW as Power (kW)/Device Width(m)/Incident(kW/m) []
+
+	close (101)
+	close (102)
+	close (103)
+	close (104)
+!***************************************************************************
+case(2)
+
+!	write (*, *) 'Enter the period input filename: '
+!	read  (101, *) Period
+
+!	write (*, *) 'Enter the Relative Capture Width Input filename: '
+!	read  (102, *) RelCapWidth
+
+    n_Tp=0.0
+    n_Hs=0.0
+    RCW=0.0
+    n=0
+    i=0
+    j=0
+    k=0
+    c=0
+
+	Period="Period.txt" ! 
+    RelCapWidth="Relative Capture Width.txt"
+
+	!open that file for reading.
+	open (101, file =Period, status='old')
+	open (102, file=RelCapWidth, status='old')
+
+	read(101,*) n_Tp	! Number of values for period and capture width
+    read(102,*) n_RCW
+    
+allocate(x1a(n_Tp),x2a(n_RCW))
+
+read(101,*) (x1a(i),i=1,n_Tp)
+read(102,*) (x2a(i),i=1,n_RCW)
+
+call polint(x1a,x2a,n_Tp,TP,RCW,dy)  ! 1-D interpolation from files
+
+close (101)
+close (102)
+
+end select
+
+endsubroutine
+
+ENDMODULE
+!ENDPROGRAM
+
+SUBROUTINE polin2(x1a,x2a,ya,m,n,x1,x2,y,dy)
+IMPLICIT NONE
+INTEGER m,n,NMAX,MMAX
+REAL dy,x1,x2,y,x1a(m),x2a(n),ya(n,m)
+PARAMETER (NMAX=100,MMAX=100) 
+! C USES polint
+! Given arrays x1a(1:m) and x2a(1:n) of independent variables, and an m by n array of
+! function values ya(1:m,1:n), tabulated at the grid points defined by x1a and x2a; and
+! given values x1 and x2 of the independent variables; this routine returns an interpolated
+! function value y, and an accuracy indication dy (based only on the interpolation in the x1
+! direction, however).
+INTEGER j,k
+REAL ymtmp(MMAX),yntmp(NMAX)
+!12 do j=1,m 
+!11 do k=1,n 
+!yntmp(k)=ya(j,k)
+!   enddo
+!call polint(x2a,yntmp,n,x2,ymtmp(j),dy) 
+!! Interpolate answer into temporary storenddo 12 age.
+!   enddo
+!call polint(x1a,ymtmp,m,x1,y,dy)
+!return
+
+do k=1,m
+yntmp=0.0
+
+ do j=1,n 
+   yntmp(j)=ya(j,k)
+ enddo
+   do j=1,m-1
+   if(x2>=x2a(j).AND.x2<(x2a(j+1))) then
+     call polint(x2a(j:j+1),yntmp(j:j+1),2,x2,ymtmp(k),dy) 
+     exit
+   endif
+   enddo
+   enddo
+! Interpolate answer into temporary storenddo 12 age.
+ do k=1,m-1
+   if(x1>=x1a(k).AND.x1<(x1a(k+1))) then
+   call polint(x1a(k:k+1),ymtmp(k:k+1),2,x1,y,dy) 
+   exit
+   endif
+   enddo
+
+END
+
+SUBROUTINE polint(xa,ya,n,x,y,dy)
+IMPLICIT NONE
+INTEGER n, NMAX
+REAL dy,x,y,xa(n),ya(n)
+PARAMETER (NMAX=20)
+! Given arrays xa and ya, each of lenth n, and given a value x, this routine returns a
+! value y, and an error estimate dy. If P(x) is the polynomial of degree N-1 such that
+! P(xa_i)=ya_i, i=1...,n, then returnd value y=P9x).
+INTEGER i,j,m,ns
+REAL den,dif,dift,ho,hp,w,c(NMAX),d(NMAX)
+ns=1
+c=1
+  y=ya(1)
+  do i = 2,n
+    if (xa(i).gt.x) then
+      y=(ya(i)-ya(i-1))/(xa(i)-xa(i-1))*(x-xa(i-1))+ya(i-1) !Craig's new interp
+      return
+    endif
+  end do
+  y=ya(n)
+
+goto 56
+dif=abs(x-xa(1))
+11 do i=1,n
+    dift=abs(x-xa(i))
+    if (dift.lt.dif) then
+        ns=i
+        dif=dift
+    endif
+    c(i)=ya(i)
+    d(i)=ya(i)
+  enddo
+y=ya(ns)
+ns=ns-1
+13 do m=1,n-1
+12    do i=1,n-m
+        ho=xa(i)-x
+        hp=xa(i+m)-x
+        w=c(i+1)-d(i)
+        den=ho-hp
+        if (den.eq.0) pause 'failure in polint'
+!         this error can occur only if 2 input xa's are (to within roundoff) identical.
+        den=w/den
+        d(i)=hp*den
+        c(i)=ho*den
+     enddo
+    if (2*ns.lt.n-m) then
+        dy=c(ns+1)
+    else
+        dy=d(ns)
+        ns=ns-1
+    endif
+    y=y+dy
+   enddo
+56 return
+END

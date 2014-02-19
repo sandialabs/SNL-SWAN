@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:57:59 2012
+        MODULE OCPINI__genmod
+          INTERFACE 
+            SUBROUTINE OCPINI(INIFIL,LREAD,INERR)
+              CHARACTER(*) :: INIFIL
+              LOGICAL(KIND=4) :: LREAD
+              INTEGER(KIND=4) :: INERR
+            END SUBROUTINE OCPINI
+          END INTERFACE 
+        END MODULE OCPINI__genmod

@@ -1,0 +1,12 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:02 2012
+        MODULE HSOBND__genmod
+          INTERFACE 
+            SUBROUTINE HSOBND(AC2,SPCSIG,HSIBC,KGRPNT)
+              USE SWCOMM3
+              REAL(KIND=4) :: AC2(MDC,MSC,MCGRD)
+              REAL(KIND=4) :: SPCSIG(MSC)
+              REAL(KIND=4) :: HSIBC(MCGRD)
+              INTEGER(KIND=4) :: KGRPNT(MXC,MYC)
+            END SUBROUTINE HSOBND
+          END INTERFACE 
+        END MODULE HSOBND__genmod

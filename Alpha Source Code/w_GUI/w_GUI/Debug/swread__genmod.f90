@@ -1,0 +1,8 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:57:57 2012
+        MODULE SWREAD__genmod
+          INTERFACE 
+            SUBROUTINE SWREAD(COMPUT)
+              CHARACTER(*) :: COMPUT
+            END SUBROUTINE SWREAD
+          END INTERFACE 
+        END MODULE SWREAD__genmod

@@ -1,0 +1,10 @@
+        !COMPILER-GENERATED INTERFACE MODULE: Thu Dec 20 11:58:03 2012
+        MODULE DTRETI__genmod
+          INTERFACE 
+            SUBROUTINE DTRETI(TSTRNG,IOPT,TIMESC)
+              CHARACTER(*) :: TSTRNG
+              INTEGER(KIND=4) :: IOPT
+              REAL(KIND=4) :: TIMESC
+            END SUBROUTINE DTRETI
+          END INTERFACE 
+        END MODULE DTRETI__genmod

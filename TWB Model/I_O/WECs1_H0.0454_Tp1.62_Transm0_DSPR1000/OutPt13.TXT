@@ -1,0 +1,8 @@
+%
+%
+% Run:TEST  Table:OutPt13           SWAN version:40.72ABCDE
+%
+%       Time               Xp            Yp            Depth         Botlev        Hsig          Hswell        PkDir         Dir           RTpeak        Period        Ubot          Urms          Wlen          Dspr     
+%       [ ]                [m]           [m]           [m]           [m]           [m]           [m]           [degr]        [degr]        [sec]         [sec]         [m/s]         [m/s]         [m]           [degr]   
+%
+                             13.           13.        1.3650        1.3650       0.04539       0.00000         1.000         0.000        1.6284        1.2490      0.017541      0.012403        2.0430        1.8108 
