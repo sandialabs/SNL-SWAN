@@ -31,7 +31,7 @@
 !
 !****************************************************************
 !
-      SUBROUTINE SWGEOM ( RDX, RDY, XCGRID, YCGRID, SWPDIR )
+      SUBROUTINE SWGEOM ( RDX, RDY, AREA, XCGRID, YCGRID, SWPDIR )
 !
 !****************************************************************
 !
@@ -106,7 +106,7 @@
 !
       INTEGER SWPDIR
       REAL    XCGRID(MXC,MYC), YCGRID(MXC,MYC),
-     &        RDX(10)        , RDY(10)
+     &        RDX(10)        , RDY(10), AREA
 !
 !  6. Local variables
 !
@@ -188,6 +188,7 @@
       ENDIF                                                               33.09
 !
       DET    =  DY2*DX1 - DY1*DX2
+      AREA = ABS(DET)
       RDX(1) =  DY2/DET
       RDY(1) = -DX2/DET
       RDX(2) = -DY1/DET
@@ -2075,7 +2076,7 @@
       SUBROUTINE STRSXY (         ISSTOP  ,IDCMIN  ,IDCMAX  ,CAX     ,
      &                   CAY     ,AC2     ,AC1     ,IMATRA  ,IMATDA  ,
      &                            RDX     ,RDY     ,                      33.09
-     &                   OBREDF  ,TRAC0   ,TRAC1   )
+     &                   OBREDF  ,TRAC0   ,TRAC1, CROSS, PABSORB, AREA)
 !
 !****************************************************************
 !
@@ -2083,6 +2084,7 @@
       USE SWCOMM3                                                         40.41
       USE SWCOMM4                                                         40.41
       USE OCPCOMM4                                                        40.41
+      USE M_GENARR, only : spcsig
 !
 !
 !
@@ -2244,6 +2246,10 @@
      &         OBREDF(MDC,MSC,2)                                         040697
       REAL  :: TRAC0(MDC,MSC,MTRNP)                                       40.85
       REAL  :: TRAC1(MDC,MSC,MTRNP)                                       40.85
+      INTEGER :: CROSS(2,MCGRD)
+      REAL :: PABSORB(NUMOBS)
+      REAL  :: CGO(MSC,MICMAX)
+
 !
       INTEGER  IDCMIN(MSC)                ,
      &         IDCMAX(MSC)                                                33.09
@@ -2300,6 +2306,27 @@
      &          + RDX(2) * CAX(ID,IS,3)* TCF2 * AC2(ID,IS,IND3)
      &          + RDY(1) * CAY(ID,IS,2)* TCF1 * AC2(ID,IS,IND2)
      &          + RDY(2) * CAY(ID,IS,3)* TCF2 * AC2(ID,IS,IND3)
+          ! record the amount of power lost to trans coefs
+          if (CROSS(1,KCGRD(1)) .ne. 0 ) then
+			! this term represents the action density lost due to the transmission coefficient
+			! action density is mutliplied by sigma to get energy
+			! then multiplied by sigma*(ds/sigma) * dtheta * dA
+			! for integration over frequency, direction and cell area
+			! this gives rate of energy absorption (power)
+            ! should be e/(rho*g)/s = P/(rho*g)
+            PABSORB( CROSS(1,KCGRD(1)) ) =
+     &         PABSORB( CROSS(1,KCGRD(1)) )+
+     &           (RDX(1) * CAX(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2)+
+     &            RDY(1) * CAY(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2))
+     &            * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
+          endif
+          if (CROSS(2,KCGRD(1)) .ne. 0 ) then
+            PABSORB( CROSS(2,KCGRD(1)) ) =
+     &         PABSORB( CROSS(2,KCGRD(1)) )+
+     &           (RDX(2) * CAX(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3)+
+     &            RDY(2) * CAY(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3))
+     &            * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
+          endif
           ELSE                                                            33.09
 !           spherical coordinates                                         33.09
 !
