@@ -2248,7 +2248,7 @@
       REAL  :: TRAC1(MDC,MSC,MTRNP)                                       40.85
       INTEGER :: CROSS(2,MCGRD)
       REAL :: PABSORB(NUMOBS)
-      REAL  :: CGO(MSC,MICMAX)
+      REAL  :: AREA
 
 !
       INTEGER  IDCMIN(MSC)                ,
@@ -2302,31 +2302,31 @@
 !
           IF (KSPHER.EQ.0) THEN                                           33.09
 !
-          FXY2 =  RDX(1) * CAX(ID,IS,2)* TCF1 * AC2(ID,IS,IND2)
-     &          + RDX(2) * CAX(ID,IS,3)* TCF2 * AC2(ID,IS,IND3)
-     &          + RDY(1) * CAY(ID,IS,2)* TCF1 * AC2(ID,IS,IND2)
-     &          + RDY(2) * CAY(ID,IS,3)* TCF2 * AC2(ID,IS,IND3)
-          ! record the amount of power lost to trans coefs
-          if (CROSS(1,KCGRD(1)) .ne. 0 ) then
-			! this term represents the action density lost due to the transmission coefficient
-			! action density is mutliplied by sigma to get energy
-			! then multiplied by sigma*(ds/sigma) * dtheta * dA
-			! for integration over frequency, direction and cell area
-			! this gives rate of energy absorption (power)
-            ! should be e/(rho*g)/s = P/(rho*g)
-            PABSORB( CROSS(1,KCGRD(1)) ) =
-     &         PABSORB( CROSS(1,KCGRD(1)) )+
-     &           (RDX(1) * CAX(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2)+
-     &            RDY(1) * CAY(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2))
-     &            * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
-          endif
-          if (CROSS(2,KCGRD(1)) .ne. 0 ) then
-            PABSORB( CROSS(2,KCGRD(1)) ) =
-     &         PABSORB( CROSS(2,KCGRD(1)) )+
-     &           (RDX(2) * CAX(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3)+
-     &            RDY(2) * CAY(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3))
-     &            * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
-          endif
+            FXY2 =  RDX(1) * CAX(ID,IS,2)* TCF1 * AC2(ID,IS,IND2)
+     &            + RDX(2) * CAX(ID,IS,3)* TCF2 * AC2(ID,IS,IND3)
+     &            + RDY(1) * CAY(ID,IS,2)* TCF1 * AC2(ID,IS,IND2)
+     &            + RDY(2) * CAY(ID,IS,3)* TCF2 * AC2(ID,IS,IND3)
+            ! record the amount of power lost to trans coefs
+            if (CROSS(1,KCGRD(1)) .ne. 0 ) then         ! if fluxing over an obstacle
+              ! this term represents the action density lost due to the transmission coefficient
+              ! action density is mutliplied by sigma to get energy
+              ! then multiplied by sigma*(ds/sigma) * dtheta * dA
+              ! for integration over frequency, direction and cell area
+              ! this gives rate of energy absorption (power)
+              ! should be e/(rho*g)/s = P/(rho*g)
+              PABSORB( CROSS(1,KCGRD(1)) ) =
+     &           PABSORB( CROSS(1,KCGRD(1)) )+
+     &             (RDX(1) * CAX(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2)+
+     &              RDY(1) * CAY(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2))
+     &              * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
+            endif
+            if (CROSS(2,KCGRD(1)) .ne. 0 ) then
+              PABSORB( CROSS(2,KCGRD(1)) ) =
+     &           PABSORB( CROSS(2,KCGRD(1)) )+
+     &             (RDX(2) * CAX(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3)+
+     &              RDY(2) * CAY(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3))
+     &              * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
+            endif
           ELSE                                                            33.09
 !           spherical coordinates                                         33.09
 !
@@ -2403,6 +2403,7 @@
         ENDDO
       END IF
 !     End of subroutine STRSXY
+
       RETURN
       END
 !****************************************************************

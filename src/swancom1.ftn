@@ -843,7 +843,7 @@
 !     Add variables for OMP thread parameters.                            40.31
 !$    INTEGER, EXTERNAL :: OMP_GET_NUM_THREADS, OMP_GET_THREAD_NUM        40.31
       INTEGER I1GRD,I2GRD,I1MYC,I2MYC                                     40.31
-      REAL, ALLOCATABLE :: PABSORB(:)
+      REAL, ALLOCATABLE :: PABSORB_PRV(:), PABSORB(:)
 !
 !-----------------------------------------------------------------------
 !                      End of variable definition
@@ -928,6 +928,7 @@
       ALLOCATE(ISLMIN(MCGRD))                                             40.23
       ALLOCATE(NFLIM(MCGRD))                                              40.23
       ALLOCATE(NRSCAL(MCGRD))                                             40.23
+
 !
       IF ( IQUAD .GE. 1) THEN
 !       *** quadruplets ***
@@ -968,6 +969,10 @@
       ELSE                                                                40.22
         ALLOCATE(SETPDA(0,0))                                             40.41 40.22
       END IF
+      if (numobs.ne.0) then
+        allocate(pabsorb(numobs))
+      endif
+
 
 !----------------------------------------------------------------------   40.22
 !     End allocate shared arrays.                                         40.22
@@ -1010,6 +1015,7 @@
 !$OMP+PRIVATE(I1GRD,I2GRD,I1MYC,I2MYC)                                    40.31
 !$OMP+PRIVATE(JDUM,JJ,III)                                                40.31
 !$OMP+PRIVATE(IS,IE,INCI,JS,JE,INCJ,JSD,JED,JNODE,JWFRS,JWFRE)            40.31
+!$OMP+PRIVATE(pabsorb_prv)
 !$OMP+COPYIN(ICMAX,CSETUP)
 !$OMP+COPYIN(COSLAT,PROPSL)
 !$OMP+COPYIN(IPTST,TESTFL)
@@ -1097,6 +1103,9 @@
 !
       ALLOCATE(OBREDF(MDC,MSC,2))                                         40.22
       ALLOCATE(REFLSO(MDC,MSC))                                           40.41
+      if (numobs.ne.0) then
+        allocate(pabsorb_prv(numobs))
+      endif
 
 !----------------------------------------------------------------------   40.22
 !     End allocate private arrays.                                        40.22
@@ -1199,11 +1208,10 @@
 !
 !TIMG      CALL SWTSTA(103)                                                    40.23
       DO 450 ITER = 1, ITERMX                                             30.00
-
         if (numobs.ne.0) then
-          allocate(pabsorb(numobs))
-          pabsorb=0.0
+          pabsorb_prv(1:numobs)=0.0
         endif
+
 !       initialise local (thread private) counter for SIP solver          40.31
         INOCNT = 0                                                        40.31
 !
@@ -1660,7 +1668,7 @@
      &            OBREDF           ,REFLSO           ,                    40.41 40.22
      &            ISLMIN           ,NFLIM            ,NRSCAL           ,  40.23
      &            CAX1             ,CAY1             ,                    40.22
-     &            PABSORB                                              )
+     &            PABSORB_PRV                                          )
 !TIMG                CALL SWTSTO(104)                                          40.23
 !MPI                IF (STPNOW()) RETURN                                      34.01
 
@@ -1864,6 +1872,7 @@
      &                   I1MYC         ,I2MYC           )                 40.93
         END IF                                                            40.41
 !TIMG        CALL SWTSTO(102)                                                  40.23
+
 !
 !----------------------------------------------------------------------   40.31
 !     Begin master thread region.                                         40.31
@@ -1872,16 +1881,6 @@
 !
 !       *** info regarding the iteration process and the accuracy ***
 !
-      if (numobs.ne.0) then
-        do n= 1,numobs
-          write(PRINTF,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
-     &                          n,' = ',pabsorb(n)*rho*grav,' W'
-          write(SCREEN,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
-     &                          n,' = ',pabsorb(n)*rho*grav,' W'
-        enddo
-        deallocate(pabsorb)
-      endif
-
         IF (PNUMS(21).EQ.1. .AND. ITER.EQ.1) THEN                         40.41
            WRITE(PRINTF,113)                                              40.41
            IF (NSTATC.EQ.0.AND.INODE.EQ.MASTER) WRITE(SCREEN,113)         40.41
@@ -1910,11 +1909,37 @@
 !$OMP END MASTER                                                          40.22
 !
 
+!----------------------------------------------------------------------
+!     Each thread calculates its own pabsorb_prv.  We need to sum      
+!     each of these into pabsorb(shared)                              
+!----------------------------------------------------------------------
+      if (numobs.ne.0) then
+        pabsorb(1:numobs)=0.0  ! set shared value to 0
+!$OMP BARRIER
+        do n= 1,numobs
+!$OMP ATOMIC                                                           
+          pabsorb(n)=pabsorb(n)+pabsorb_prv(n) ! sum private values into shared       
+        enddo
+      endif
+
+
 !----------------------------------------------------------------------   40.22
 !     Synchronize threads before checking accuracy and before             40.22
 !     starting next iteration.                                            40.22
 !----------------------------------------------------------------------   40.22
 !$OMP BARRIER                                                             40.22
+
+!$OMP MASTER                                                              40.31
+      if (numobs.ne.0) then
+        do n= 1,numobs
+          write(PRINTF,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
+     &                          n,' = ',pabsorb(n)*rho*grav,' W'
+          write(SCREEN,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
+     &                          n,' = ',pabsorb(n)*rho*grav,' W'
+        enddo
+      endif
+!$OMP END MASTER                                                          40.22
+
 !
 !       *** if accuracy has been reached then the iteration ***
 !       *** can be terminated ---> goto 470                 ***
@@ -1930,6 +1955,9 @@
 !     Begin deallocate private arrays.                                    40.22
 !----------------------------------------------------------------------   40.22
 !TIMG      CALL SWTSTA(101)                                                    40.23
+      if (numobs.ne.0) then
+        DEALLOCATE(PABSORB_PRV)
+      endif
       DEALLOCATE(IDCMIN)                                                  40.22
       DEALLOCATE(IDCMAX)                                                  40.22
       DEALLOCATE(ISCMIN)                                                  40.22
@@ -2001,6 +2029,9 @@
 !     Begin deallocate shared arrays.                                     40.22
 !----------------------------------------------------------------------   40.22
 !TIMG      CALL SWTSTA(101)                                                    40.23
+      if (numobs.ne.0) then
+        deallocate(pabsorb)
+      endif
       DEALLOCATE(SETPDA)                                                  40.22
       DEALLOCATE(HSAC1)                                                   40.22
       DEALLOCATE(HSAC2)                                                   40.22
@@ -2896,6 +2927,7 @@
 !
  333    CONTINUE
 !TIMG        CALL SWTSTA(136)                                                  40.23
+      itest=0
         IF (NUMOBS .NE. 0) THEN
 !
 !         *** OBREDF(:,:,2) are the transmission coeff for the two links ***
@@ -2937,6 +2969,7 @@
           ENDIF
 !
         ENDIF
+
 !TIMG        CALL SWTSTO(136)                                                  40.23
         IF (LPREDT) GOTO 330
 !
@@ -2978,6 +3011,7 @@
 !       *** compute transport of action and fill the matrix ***
 !
 !TIMG        CALL SWTSTA(118)                                                  40.23
+
         CALL ACTION (IDCMIN      ,IDCMAX            ,SPCSIG            ,  33.09
      &         AC2               ,CAX               ,CAY               ,
      &         CAS               ,CAD               ,SWMATR(1,1,JMATL) ,
@@ -2995,6 +3029,7 @@
      &         CAX1              ,CAY1              ,SPCDIR            ,  33.08
      &         CGO               ,SWMATR(1,1,JTRA0) ,SWMATR(1,1,JTRA1) ,  40.85 33.08
      &         CROSS, PABSORB, AREA                                    )
+
 !TIMG        CALL SWTSTO(118)                                                  40.23
 !
 !       matrix is computed now; updating action densities starts

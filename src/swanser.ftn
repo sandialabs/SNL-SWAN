@@ -2986,8 +2986,6 @@
       USE SwanGriddata                                                    40.80
       USE SwanCompdata                                                    40.80
 
-      USE Interp_v1  ! AJP Transmission coefficient determination
-
       IMPLICIT NONE                                                       40.09
 !
 !
@@ -3201,9 +3199,8 @@
       LOGICAL :: SwanCrossObstacle                                        40.80
       TYPE(OBSTDAT), POINTER :: COBST                                     40.31
 
-      REAL    ::RCW,POWER,PTEMP
-      INTEGER ::CASE_N
-      COMMON CASE_N
+      REAL    ::RCW,INCIDENT,PTEMP, err
+      integer :: itmp
 !
 !  8. Subroutines used
 !
@@ -3298,20 +3295,20 @@
               ENDDO
             ENDDO
           elseif (case_n.eq.1) then   ! Power matrix lookup table
-            call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
-            print*,RCW
+            !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
+            CALL polin2(Period(1:n_Tp), Height(1:n_Hs),
+     &                  PowerMat(1:n_Tp, 1:n_Hs),
+     &                  n_Tp, n_Hs, TP, HSIN, RCW, err) ! 2-D Interpolation
 ! Compute incident wave power
-            POWER=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            RCW=RCW/incident/Width
+            !print*,RCW
             !print*,TP
             !print*,HSIN
-            !print*,POWER
+            !print*,INCIDENT
 ! Use proportion of power taken off to estimate transmission coefficient
 ! OBHKT - actual transmission coefficient used by SWAN
-            if (RCW.EQ.0.0) then
-              OBHKT = 1.0
-            else
-              OBHKT = 1-RCW
-            endif
+            OBHKT = 1.0-RCW
             !print*,OBHKT
             WRITE (PRINTF,*) X1,Y1,OBHKT  ! Writes transmission coefficient (Kt) to main output file
 ! If using power as ratio do not use square
@@ -3323,20 +3320,15 @@
               ENDDO
             ENDDO
           elseif (case_n.eq.2) then   ! RCW table lookup
-            call RCW_lookup(TP,RCW,0)  ! Call subroutine for RCW values
-            !print*,RCW
+            itmp=0
+            call polint(Period(1:n_Tp), RelCapWidth(1:n_Tp, 1),
+     &                  n_Tp, TP, RCW, err)                     ! 1-D interpolation
 ! Compute incident wave power
-            !POWER=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
             !print*,TP
-            !print*,HSIN
-            !print*,POWER
+            !print*,RCW
 ! Use proportion of power taken off to estimate transmission coefficient
 ! OBHKT - actual transmission coefficient used by SWAN
-            if (RCW.EQ.0.0) then
-              OBHKT = 1.0
-            else
-              OBHKT = 1-RCW
-            endif
+            OBHKT = 1.0-RCW
             !print*,OBHKT
             WRITE (PRINTF,*) X1,Y1,OBHKT  ! Writes transmission coefficient (Kt) to main output file
 ! If using power as ratio do not use square
@@ -3348,39 +3340,48 @@
               ENDDO
             ENDDO
           elseif (case_n.eq.3) then   ! RCW Lookup using each individual frequency
-            !POWER=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
-            !print*,TP
-            !print*,HSIN
-            !print*,POWER
-            !open(unit=5979,file='RCW_v_freq.dat')
 !           assign values to array OBREDF
             DO IS = 1, MSC
-              PTEMP=2.*PI/SPCSIG(IS)
-              call RCW_lookup(PTEMP,RCW,0)  ! Call subroutine for RCW values
-              !write(5979,*) ptemp,rcw
+              PTEMP=2.*PI/SPCSIG(IS)  ! convert cyclic freqency into period
+              call polint(Period(1:n_Tp), RelCapWidth(1:n_Tp, 1),
+     &                    n_Tp, PTEMP, RCW, err)                     ! 1-D interpolation
+              OBHKT = 1.0-RCW
+              DO ID = 1, MDC
+                OBREDF(ID,IS,ILINK) = OBHKT  ! Ktp Not squared
+              ENDDO
+            ENDDO
+            !WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
+          elseif (case_n.eq.4) then   ! Power matrix lookup table
+            !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
+            incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            DO IS = 1, MSC
+              PTEMP=2.*PI/SPCSIG(IS) ! convert cyclic freqency into period
+              CALL polin2(Period(1:n_Tp), Height(1:n_Hs),
+     &                  PowerMat(1:n_Tp, 1:n_Hs),
+     &                  n_Tp, n_Hs, PTEMP, HSIN, RCW, err) ! 2-D Interpolation
+! Compute incident wave power
+              RCW=RCW/incident/Width
+              OBHKT = 1.0-RCW
+! If using power as ratio do not use square
+              TRCF  = OBHKT  ! Ktp Not squared
+!             assign values to array OBREDF
+              DO ID = 1, MDC
+                OBREDF(ID,IS,ILINK) = TRCF
+              ENDDO
+            ENDDO
+          elseif (case_n.eq.5) then   ! RCW Lookup using each individual frequency depending on which obstacle was crossed
+!           assign values to array OBREDF
+            itmp=LINK(ILINK)   !obstacle numer
+            DO IS = 1, MSC
+              PTEMP=2.*PI/SPCSIG(IS) ! convert cyclic freqency into period
+              !call RCW_lookup(PTEMP,RCW,LINK(ILINK))  ! Call subroutine for RCW values grabbing from the appropriate obstacle
+              call polint(Period(1:n_Tp), RelCapWidth(1:n_Tp, itmp),
+     &                    n_Tp, PTEMP, RCW, err)                     ! 1-D interpolation
               DO ID = 1, MDC
                 OBREDF(ID,IS,ILINK) = 1.0 - RCW  ! Ktp Not squared
               ENDDO
             ENDDO
             !WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
-            !close(5979)
-          elseif (case_n.eq.4) then   ! RCW Lookup using each individual frequency depending on which obstacle was crossed
-            !POWER=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
-            !print*,TP
-            !print*,HSIN
-            !print*,POWER
-            !open(unit=5979,file='RCW_v_freq.dat')
-!           assign values to array OBREDF
-            DO IS = 1, MSC
-              PTEMP=2.*PI/SPCSIG(IS)
-              call RCW_lookup(PTEMP,RCW,LINK(ILINK))  ! Call subroutine for RCW values grabbing from the appropriate obstacle
-              !write(5979,*) ptemp,rcw
-              DO ID = 1, MDC
-                OBREDF(ID,IS,ILINK) = 1.0 - RCW  ! Ktp Not squared
-              ENDDO
-            ENDDO
-            !WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
-            !close(5979)
           endif
         ELSE IF (ITRAS .EQ. 1) THEN
 !       transmission coefficient according to Goda and Seelig

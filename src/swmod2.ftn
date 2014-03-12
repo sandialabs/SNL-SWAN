@@ -621,6 +621,15 @@
 
       TYPE(OBSTDAT), SAVE, TARGET  :: FOBSTAC
 
+      ! RCW/Power matrix stuff
+      INTEGER :: Case_n
+      REAL :: width                             ! width
+      REAL, ALLOCATABLE :: Period(:)            ! period axis
+      REAL, ALLOCATABLE :: Height(:)            ! Height axis
+      REAL, ALLOCATABLE :: PowerMat(:,:)        ! Power matrix values
+      REAL, ALLOCATABLE :: RelCapWidth(:,:)     ! Power matrix values
+      integer ::n_Tp,n_Hs                       ! array sizes
+
 !  8. Subroutines and functions used
 !
 !     ---
