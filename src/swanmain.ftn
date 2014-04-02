@@ -2496,15 +2496,15 @@
         !read  (101, *) case_n
         !read  (101, *) Width
         !close (101)
-        if(case_n .eq. 1 .or. case_n .eq. 4) then  ! need power matrix information
+        if(case_n .eq. 1 .or. case_n .eq. 3) then  ! need power matrix information
           open (101, file=trim(FilePower), status='old')
           read(101,*) Width
-          read(101,*) n_Tp
-          allocate(Period(n_Tp))
-          read(101,*) (Period(i),i=1,n_Tp) !Period axis values [s]
           read(101,*) n_Hs
           allocate(Height(n_Hs))
           read(101,*) (Height(i),i=1,n_Hs) !Hs axis values [m]
+          read(101,*) n_Tp
+          allocate(Period(n_Tp))
+          read(101,*) (Period(i),i=1,n_Tp) !Period axis values [s]
           allocate(PowerMat(n_Hs,n_Tp))
           do i=1,n_Hs
             read(101,*) (PowerMat(i,j),j=1,n_Tp) !Power Matrix values [kW]
@@ -2512,7 +2512,7 @@
           close (101)
           close (101)
           close (101)
-        else if(case_n .eq. 2 .or. case_n .eq. 3) then  ! need RCW information
+        else if(case_n .eq. 2 .or. case_n .eq. 4) then  ! need RCW information
           open (101, file=trim(FileRCW), status='old')
           n_Tp=0
           do

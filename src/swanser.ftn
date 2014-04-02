@@ -3296,9 +3296,9 @@
             ENDDO
           elseif (case_n.eq.1) then   ! Power matrix lookup table
             !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
-            CALL polin2(Period(1:n_Tp), Height(1:n_Hs),
-     &                  PowerMat(1:n_Tp, 1:n_Hs),
-     &                  n_Tp, n_Hs, TP, HSIN, RCW, err) ! 2-D Interpolation
+            CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
+     &                  PowerMat(1:n_Hs, 1:n_Tp),
+     &                  n_Hs, n_Tp, HSIN, TP, RCW, err) ! 2-D Interpolation
 ! Compute incident wave power
             incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
             RCW=RCW/incident/Width
@@ -3339,7 +3339,30 @@
                 OBREDF(ID,IS,ILINK) = TRCF
               ENDDO
             ENDDO
-          elseif (case_n.eq.3) then   ! RCW Lookup using each individual frequency
+          elseif (case_n.eq.3) then   ! Power matrix lookup table
+            !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
+            incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            DO IS = 1, MSC
+              PTEMP=2.*PI/SPCSIG(IS) ! convert cyclic freqency into period
+              CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
+     &                  PowerMat(1:n_Hs, 1:n_Tp),
+     &                  n_Hs, n_Tp, HSIN, PTEMP, RCW, err) ! 2-D Interpolation
+! Compute incident wave power
+              WRITE (PRINTF,*) ''
+              WRITE (PRINTF,*) 'obdbg ',X1,Y1,IS,RCW  ! Writes transmission coefficient (Kt) to main output file
+              WRITE (PRINTF,*) 'P vals ',PTEMP, Period(1), Period(n_Tp)
+              WRITE (PRINTF,*) 'H vals ',HSIN,  Height(1), Height(n_Hs)
+              WRITE (PRINTF,*) ''
+              RCW=RCW/incident/Width
+              OBHKT = 1.0-RCW
+! If using power as ratio do not use square
+              TRCF  = OBHKT  ! Ktp Not squared
+!             assign values to array OBREDF
+              DO ID = 1, MDC
+                OBREDF(ID,IS,ILINK) = TRCF
+              ENDDO
+            ENDDO
+          elseif (case_n.eq.4) then   ! RCW Lookup using each individual frequency
 !           assign values to array OBREDF
             DO IS = 1, MSC
               PTEMP=2.*PI/SPCSIG(IS)  ! convert cyclic freqency into period
@@ -3351,24 +3374,6 @@
               ENDDO
             ENDDO
             !WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
-          elseif (case_n.eq.4) then   ! Power matrix lookup table
-            !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
-            incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
-            DO IS = 1, MSC
-              PTEMP=2.*PI/SPCSIG(IS) ! convert cyclic freqency into period
-              CALL polin2(Period(1:n_Tp), Height(1:n_Hs),
-     &                  PowerMat(1:n_Tp, 1:n_Hs),
-     &                  n_Tp, n_Hs, PTEMP, HSIN, RCW, err) ! 2-D Interpolation
-! Compute incident wave power
-              RCW=RCW/incident/Width
-              OBHKT = 1.0-RCW
-! If using power as ratio do not use square
-              TRCF  = OBHKT  ! Ktp Not squared
-!             assign values to array OBREDF
-              DO ID = 1, MDC
-                OBREDF(ID,IS,ILINK) = TRCF
-              ENDDO
-            ENDDO
           elseif (case_n.eq.5) then   ! RCW Lookup using each individual frequency depending on which obstacle was crossed
 !           assign values to array OBREDF
             itmp=LINK(ILINK)   !obstacle numer
