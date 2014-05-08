@@ -1,0 +1,43 @@
+real function Pincident ( spcsig, theta, cg, acloc )
+!    use ocpcomm4
+    use swcomm1
+    use swcomm3
+!
+    implicit none
+!
+!   Argument variables
+!
+    !
+    real, dimension(MDC,MSC), intent(in) :: acloc    ! action density at one location
+    real, dimension(MSC), intent(in)     :: spcsig   ! relative frequency bins
+    real, dimension(MDC), intent(in)     :: theta    ! spectral directions
+    real, dimension(MSC), intent(in)     :: cg       ! group velocity
+!
+!   Local variables
+!
+    integer                              :: id       ! loop counter over direction bins
+    integer                              :: isigm    ! loop counter over frequency bins
+    !
+    real                                 :: dsig     ! width of frequency bin
+    real                                 :: cs, cge
+
+    CGE = 0.0
+    DO ISIGM = 1, MSC
+      IF (ISIGM.EQ.1) THEN
+        DSIG = 0.5 * (SPCSIG(2) - SPCSIG(1))
+      ELSE IF (ISIGM.EQ.MSC) THEN
+        DSIG = 0.5 * (SPCSIG(MSC) - SPCSIG(MSC-1))
+      ELSE
+        DSIG = 0.5 * (SPCSIG(ISIGM+1) - SPCSIG(ISIGM-1))
+      ENDIF
+
+      CS   = CG(ISIGM)*SPCSIG(ISIGM)*DSIG
+
+      DO ID=1,MDC
+         CGE = CGE + CS * ACLOC(ID,ISIGM)
+      ENDDO
+    ENDDO
+    Pincident = CGE * RHO * GRAV * DDIR
+
+
+end function Pincident

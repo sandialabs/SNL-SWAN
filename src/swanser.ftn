@@ -3199,7 +3199,8 @@
       LOGICAL :: SwanCrossObstacle                                        40.80
       TYPE(OBSTDAT), POINTER :: COBST                                     40.31
 
-      REAL    ::RCW,INCIDENT,PTEMP, err
+      REAL    ::RCW,INCIDENT,PTEMP, err, Pincident
+      REAL    :: CGO(MSC)
       integer :: itmp
 !
 !  8. Subroutines used
@@ -3300,7 +3301,13 @@
      &                  PowerMat(1:n_Hs, 1:n_Tp),
      &                  n_Hs, n_Tp, HSIN, TP, RCW, err) ! 2-D Interpolation
 ! Compute incident wave power
-            incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            !write(*,*) 'Old incident', incident
+            CGO(:)=SQRT(CAX(1,:,(ILINK+1))**2+CAY(1,:,(ILINK+1))**2)
+            incident = Pincident(SPCSIG, SPCDIR, CGO(:), 
+     &                            AC2(:,:,KCGRD(ILINK+1))  )/1000.0     ! convert to Kw
+            !write(*,*) 'New incident', incident
+
             RCW=RCW/incident/Width
             !print*,RCW
             !print*,TP
@@ -3341,7 +3348,12 @@
             ENDDO
           elseif (case_n.eq.3) then   ! Power matrix lookup table
             !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
-            incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            !write(*,*) 'Old incident', incident
+            CGO(:)=SQRT(CAX(1,:,(ILINK+1))**2+CAY(1,:,(ILINK+1))**2)
+            incident = Pincident(SPCSIG, SPCDIR, CGO(:), 
+     &                            AC2(:,:,KCGRD(ILINK+1))  )/1000.0     ! convert to Kw
+            !write(*,*) 'New incident', incident
             DO IS = 1, MSC
               PTEMP=2.*PI/SPCSIG(IS) ! convert cyclic freqency into period
               CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
