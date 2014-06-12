@@ -33,6 +33,7 @@
       USE OUTP_DATA                                                       40.31
       USE M_PARALL                                                        40.31
       USE SwanGriddata                                                    40.80
+!PUN      USE SIZES, ONLY: MNPROC
 !
 !
 !
@@ -47,7 +48,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -269,11 +270,6 @@
 !
 !       ***** processing of output instructions *****
 !
-        IF (SCREEN.NE.PRINTF.AND.INODE.EQ.MASTER) WRITE (SCREEN, 15) IRQ  40.30
-  15    FORMAT ('+SWAN is processing output request ', I4)                40.41 30.00
-        IF (ITEST.GE.10) WRITE(PRINTF,16) IRQ
-  16    FORMAT (' SWAN is processing output request ', I4)                40.41
-!
         BKC   = 0
         NVOQP = 0
 !
@@ -289,6 +285,11 @@
            CORQ => CORQ%NEXTORQ                                           40.31
            GOTO 70                                                        40.31 30.00
         END IF
+!
+        IF (SCREEN.NE.PRINTF.AND.IAMMASTER) WRITE (SCREEN, 15) IRQ        40.30
+  15    FORMAT ('+SWAN is processing output request ', I4)                40.41 30.00
+        IF (ITEST.GE.10) WRITE(PRINTF,16) IRQ
+  16    FORMAT (' SWAN is processing output request ', I4)                40.41
 !
         CUOPS => FOPS                                                     40.31
         DO                                                                40.31
@@ -354,7 +355,10 @@
 !
         CALL SWOEXD (OQPROC, MIP, VOQ(1+2*MIP),                           40.31 30.90
      &               VOQ(1+3*MIP), VOQR, VOQ(1),                          40.31 30.90
-     &               COMPDA, KGRPNT, FORCE, CROSS, IONOD)                 40.86 40.80 40.31
+     &               COMPDA, KGRPNT, FORCE, CROSS, IONOD                  40.86 40.80 40.31
+!PUN     &               ,IRQ                                                 41.36
+     &              )
+!PUN        IF (STPNOW()) RETURN
 !
         DEALLOCATE(FORCE)                                                 40.80
 !
@@ -406,12 +410,14 @@
 !
 !       ***** block output *****
         IF (RTYPE(1:3) .EQ. 'BLK') THEN
-          IF (PARLL) THEN                                                 40.31
+!NPUN          IF (PARLL) THEN                                                 40.31
+!PUN          IF (MNPROC>1) THEN                                              41.36
              CALL SWBLKP ( CORQ%OQI, CORQ%IVTYP, MXK, MYK, VOQR,          40.31
      &                     VOQ(1), IONOD )                                40.51 40.31
           ELSE                                                            40.31
-             CALL SWBLOK ( RTYPE, CORQ%OQI, CORQ%IVTYP, CORQ%FAC,         40.31
-     &                     SNAME, MXK, MYK, IRQ, VOQR, VOQ(1) )           40.51 40.31
+             CALL SWBLOK ( RTYPE, CORQ%OQI, CORQ%OQR, CORQ%IVTYP,         41.40 40.31
+     &                     CORQ%FAC, SNAME, MXK, MYK, IRQ, VOQR,          40.51 40.31
+     &                     VOQ(1) )                                       40.51 40.31
           END IF                                                          40.31
           IF (STPNOW()) RETURN                                            34.01
           GOTO 68                                                         40.00
@@ -432,9 +438,9 @@
           ELSE
              ALLOCATE(AUX1(3*MSC))                                        40.31
           ENDIF
-          CALL SWSPEC ( RTYPE, CORQ%OQI, MIP, VOQR, VOQ(1), AC2, AUX1,    40.31
-     &                  SPCSIG, SPCDIR, COMPDA(1,JDP2), KGRPNT, CROSS,    40.90 40.31
-     &                  IONOD )                                           40.31
+          CALL SWSPEC ( RTYPE, CORQ%OQI, CORQ%OQR, MIP, VOQR, VOQ(1),     41.40 40.31
+     &                  AC2, AUX1, SPCSIG, SPCDIR, COMPDA(1,JDP2),        40.90 40.31
+     &                  KGRPNT, CROSS, IONOD )                            40.31
           IF (STPNOW()) RETURN                                            34.01
           DEALLOCATE(AUX1)                                                40.31
           GOTO 68                                                         40.00
@@ -462,10 +468,12 @@
 !***********************************************************************
 !
       USE TIMECOMM                                                        40.41
+!NCF      USE OCPCOMM2                                                        41.40
       USE OCPCOMM4                                                        40.41
       USE SWCOMM1                                                         40.41
       USE SWCOMM3                                                         40.41
       USE SWCOMM4                                                         40.41
+!NCF      USE OUTP_DATA                                                       41.40
       USE M_PARALL                                                        40.31
 !
 !
@@ -481,7 +489,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -599,6 +607,7 @@
       REAL       OUTR(*)                                                  30.00
       REAL       OURQT                                                    40.51
       LOGICAL    OQPROC(NMOVAR), LOGACT                                   30.00
+!NCF      LOGICAL    NCF                                                      41.40
       CHARACTER  PSNAME *(*), RTYPE *(*)                                  40.31 30.81
       SAVE IENT
       DATA IENT /0/                                                       40.31 30.81
@@ -610,15 +619,20 @@
 !       DIF  in case that timco is not a fraction of the
 !       computational period and the user do not ask for a periodic plots
         DIF = TFINC - TIMCO
-        TNEXT = OUTR(1)
+        IF (OUTR(1).LT.TINIC) THEN
+           TNEXT = TINIC
+        ELSE
+           TNEXT = OUTR(1)
+        ENDIF
         IF ( PARLL.AND.OURQT.EQ.-9999.) OURQT = OUTR(1)                   40.51 40.30
+!PUN        IF ( OURQT.EQ.-9999.) OURQT = OUTR(1)
         IF (ITEST.GE.60) WRITE (PRTEST, *) ' output times ', TNEXT,
      &        OUTR(2), DT, TFINC, TIMCO
         IF (ABS(DIF).LT.0.5*DT .AND. OUTR(2).LT.0.) THEN                  40.00
           OUTR(1) = TIMCO
           LOGACT = .TRUE.
         ELSE IF (OUTR(2).GT.0. .AND. TIMCO.GE.TNEXT) THEN                 40.00
-          OUTR(1) = TIMCO + OUTR(2)                                       40.00
+          OUTR(1) = TNEXT + OUTR(2)                                       40.00
           LOGACT = .TRUE.
         ELSE
           LOGACT = .FALSE.
@@ -717,7 +731,7 @@
          IF (IVTYPE.EQ.15 .OR. IVTYPE.EQ.17 .OR. IVTYPE.EQ.18 .OR.
      &       IVTYPE.EQ.19 .OR. IVTYPE.EQ.20 .OR. IVTYPE.EQ.28 .OR.        10.10
      &       IVTYPE.EQ.32 .OR. IVTYPE.EQ.33 .OR. IVTYPE.EQ.42 .OR.
-     &       IVTYPE.EQ.47 .OR. IVTYPE.EQ.59                        )      40.64 40.41 40.00
+     &       IVTYPE.EQ.47 .OR. IVTYPE.EQ.59 .OR. IVTYPE.EQ.71      )      41.15 40.64 40.41 40.00
      &   BKC = 2
 !
          IF (IVTYPE.EQ.11 .AND. ICUR.GT.0) BKC = 2                        20.36
@@ -752,6 +766,26 @@
           NVOQP     = NVOQP+2
         ENDIF
       ENDIF                                                               20.28
+!NCF!
+!NCF!     add significant wave height and wind to any netCDF file             41.40
+!NCF!
+!NCF      FILENM = OUTP_FILES(OUTI(2))                                        41.40
+!NCF      NCF    = INDEX( FILENM, '.NC' ).NE.0 .OR.
+!NCF     &         INDEX (FILENM, '.nc' ).NE.0
+!NCF      IF ( NCF ) THEN                                                     41.40
+!NCF!        significant wave height must be added
+!NCF         IF (.NOT.OQPROC(10)) THEN
+!NCF            NVOQP = NVOQP + 1
+!NCF            VOQR(10) = NVOQP
+!NCF            OQPROC(10)=.TRUE.
+!NCF         ENDIF
+!NCF!        wind must be added
+!NCF         IF (.NOT.OQPROC(26)) THEN
+!NCF            NVOQP = NVOQP + 2
+!NCF            VOQR(26) = NVOQP-1
+!NCF            OQPROC(26)=.TRUE.
+!NCF         ENDIF
+!NCF      ENDIF
 !
       RETURN
 !*    end of subroutine SWORDC   **
@@ -783,7 +817,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -1052,7 +1086,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -1346,10 +1380,13 @@
 !***********************************************************************
 !                                                                      *
       SUBROUTINE SWOEXD (OQPROC, MIP, XC, YC, VOQR, VOQ, COMPDA ,KGRPNT,  30.21
-     &                   FORCE, CROSS, IONOD )                            40.86 40.80 40.31
+     &                   FORCE, CROSS, IONOD                              40.86 40.80 40.31
+!PUN     &                   ,IRQ                                             41.36
+     &                  )
 !                                                                      *
 !***********************************************************************
 !
+!PUN      USE OCPCOMM2
       USE OCPCOMM4                                                        40.41
       USE SWCOMM1                                                         40.41
       USE SWCOMM2                                                         40.41
@@ -1361,6 +1398,7 @@
       USE OUTP_DATA
       USE SwanGriddata                                                    40.80
       USE SwanGridobjects                                                 40.91
+!PUN      USE SIZES
 !
 !
 !
@@ -1375,7 +1413,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -1404,6 +1442,7 @@
 !     40.61: Marcel Zijlema
 !     40.80: Marcel Zijlema
 !     40.86: Nico Booij
+!     41.12: Nico Booij
 !
 !  1. Updates
 !
@@ -1427,6 +1466,7 @@
 !     40.86, Feb. 08: interpolation near obstacles modified,
 !                     points on the other side of the obstacle not taken into account
 !                     calls of SWIPOL changed
+!     41.12, Apr. 10: output quantity NPL (type nr 70) added
 !
 !  2. Purpose
 !
@@ -1466,8 +1506,12 @@
       REAL       FORCE(nverts,2)                                          40.80
       INTEGER    VOQR(*), KGRPNT(MXC,MYC)
       INTEGER    IONOD(*)                                                 40.31
+!PUN      INTEGER    IRQ                                                      41.36
+!PUN      INTEGER    IVERTP, NOWNV
+!PUN      INTEGER    NREF, IOSTAT
       INTEGER, ALLOCATABLE :: KVERT(:)                                    41.07
       LOGICAL    OQPROC(*), EQREAL                                        30.72
+!PUN      LOGICAL    STPNOW
       LOGICAL    CROSS(4,MIP)                                             40.86
       LOGICAL, ALLOCATABLE :: LTMP(:)                                     40.91
       type(verttype), dimension(:), pointer :: vert                       40.91
@@ -1514,7 +1558,9 @@
                CALL SwanFindPoint ( VOQ(IP,1), VOQ(IP,2), KVERT(IP) )     41.07
             ENDDO
          ELSE
-            KVERT = 0
+            DO IP = 1, MIP
+               KVERT(IP) = IP
+            ENDDO
          ENDIF
 !
       ENDIF
@@ -1725,6 +1771,87 @@
           DO IP = 1, MIP
             F1 = VOQ(IP,VOQR(56))
             IF (.NOT.EQREAL(F1,OVEXCV(56))) VOQ(IP,VOQR(56))=F1*RHO*GRAV
+          END DO
+        ENDIF
+      ENDIF
+!
+!     vegetation dissipation
+!
+      IF (OQPROC(57)) THEN                                                40.61
+        IF (ITEST.GE.50 .OR. IOUTES .GE. 10) WRITE (PRTEST, 121) 57,
+     &  VOQR(57), JDSXV
+        IF (JDSXV.GT.1) THEN                                              40.65
+           IF (OPTG.NE.5) THEN                                            40.80
+              CALL SWIPOL(COMPDA(1,JDSXV),OVEXCV(57),XC, YC, MIP, CROSS,  40.86
+     &                    VOQ(1,VOQR(57)) ,KGRPNT, COMPDA(1,JDP2))
+           ELSE                                                           40.80
+              CALL SwanInterpolateOutput ( VOQ(1,VOQR(57)), VOQ(1,1),     40.80
+     &                                     VOQ(1,2), COMPDA(1,JDSXV),     40.80
+     &                                     MIP, KVERT, OVEXCV(57) )       40.80
+           ENDIF                                                          40.80
+        ELSE
+           DO IP = 1, MIP                                                 40.65
+             VOQ(IP,VOQR(57)) = OVEXCV(57)                                40.65
+           ENDDO                                                          40.65
+        ENDIF
+        IF (INRHOG.EQ.1) THEN
+          DO IP = 1, MIP
+            F1 = VOQ(IP,VOQR(57))
+            IF (.NOT.EQREAL(F1,OVEXCV(57))) VOQ(IP,VOQR(57))=F1*RHO*GRAV
+          END DO
+        ENDIF
+      ENDIF
+!
+!     turbulent dissipation
+!
+      IF (OQPROC(72)) THEN                                                40.35
+        IF (ITEST.GE.50 .OR. IOUTES .GE. 10) WRITE (PRTEST, 121) 72,
+     &  VOQR(72), JDSXT
+        IF (JDSXT.GT.1) THEN                                              40.35
+           IF (OPTG.NE.5) THEN                                            40.35
+              CALL SWIPOL(COMPDA(1,JDSXT),OVEXCV(72),XC, YC, MIP, CROSS,  40.35
+     &                    VOQ(1,VOQR(72)) ,KGRPNT, COMPDA(1,JDP2))
+           ELSE                                                           40.35
+              CALL SwanInterpolateOutput ( VOQ(1,VOQR(72)), VOQ(1,1),     40.35
+     &                                     VOQ(1,2), COMPDA(1,JDSXT),     40.35
+     &                                     MIP, KVERT, OVEXCV(72) )       40.35
+           ENDIF                                                          40.35
+        ELSE
+           DO IP = 1, MIP                                                 40.35
+             VOQ(IP,VOQR(72)) = OVEXCV(72)                                40.35
+           ENDDO                                                          40.35
+        ENDIF
+        IF (INRHOG.EQ.1) THEN
+          DO IP = 1, MIP
+            F1 = VOQ(IP,VOQR(72))
+            IF (.NOT.EQREAL(F1,OVEXCV(72))) VOQ(IP,VOQR(72))=F1*RHO*GRAV
+          END DO
+        ENDIF
+      ENDIF
+!
+!     fluid mud dissipation
+!
+      IF (OQPROC(74)) THEN                                                40.61
+        IF (ITEST.GE.50 .OR. IOUTES .GE. 10) WRITE (PRTEST, 121) 74,
+     &  VOQR(74), JDSXM
+        IF (JDSXM.GT.1) THEN                                              40.65
+           IF (OPTG.NE.5) THEN                                            40.80
+              CALL SWIPOL(COMPDA(1,JDSXM),OVEXCV(74),XC, YC, MIP, CROSS,  40.86
+     &                    VOQ(1,VOQR(74)) ,KGRPNT, COMPDA(1,JDP2))
+           ELSE                                                           40.80
+              CALL SwanInterpolateOutput ( VOQ(1,VOQR(74)), VOQ(1,1),     40.80
+     &                                     VOQ(1,2), COMPDA(1,JDSXM),     40.80
+     &                                     MIP, KVERT, OVEXCV(74) )       40.80
+           ENDIF                                                          40.80
+        ELSE
+           DO IP = 1, MIP                                                 40.65
+             VOQ(IP,VOQR(74)) = OVEXCV(74)                                40.65
+           ENDDO                                                          40.65
+        ENDIF
+        IF (INRHOG.EQ.1) THEN
+          DO IP = 1, MIP
+            F1 = VOQ(IP,VOQR(74))
+            IF (.NOT.EQREAL(F1,OVEXCV(74))) VOQ(IP,VOQR(74))=F1*RHO*GRAV
           END DO
         ENDIF
       ENDIF
@@ -1996,6 +2123,48 @@
             F1 = VOQ(IP,VOQR(69))
             IF (.NOT.EQREAL(F1,OVEXCV(69))) VOQ(IP,VOQR(69))=F1*RHO*GRAV
           END DO
+        ENDIF
+      ENDIF
+!
+!     number of plants per square meter
+!
+      IF (OQPROC(70)) THEN                                                41.12
+        IF (ITEST.GE.50 .OR. IOUTES .GE. 10) WRITE (PRTEST, 121) 70,
+     &  VOQR(70), JNPLA2
+        IF (JNPLA2.GT.1) THEN
+           IF (OPTG.NE.5) THEN
+              CALL SWIPOL(COMPDA(1,JNPLA2),OVEXCV(70),XC,YC, MIP, CROSS,
+     &                    VOQ(1,VOQR(70)) ,KGRPNT, COMPDA(1,JDP2))
+           ELSE
+              CALL SwanInterpolateOutput ( VOQ(1,VOQR(70)), VOQ(1,1),
+     &                                     VOQ(1,2), COMPDA(1,JNPLA2),
+     &                                     MIP, KVERT, OVEXCV(70) )
+           ENDIF
+        ELSE
+           DO IP = 1, MIP
+             VOQ(IP,VOQR(70)) = OVEXCV(70)
+           ENDDO
+        ENDIF
+      ENDIF
+!
+!     turbulent viscosity
+!
+      IF (OQPROC(73)) THEN                                                40.35
+        IF (ITEST.GE.50 .OR. IOUTES .GE. 10) WRITE (PRTEST, 121) 73,
+     &  VOQR(73), JTURB2
+        IF (JTURB2.GT.1) THEN
+           IF (OPTG.NE.5) THEN
+              CALL SWIPOL(COMPDA(1,JTURB2),OVEXCV(73),XC,YC, MIP, CROSS,
+     &                    VOQ(1,VOQR(73)) ,KGRPNT, COMPDA(1,JDP2))
+           ELSE
+              CALL SwanInterpolateOutput ( VOQ(1,VOQR(73)), VOQ(1,1),
+     &                                     VOQ(1,2), COMPDA(1,JTURB2),
+     &                                     MIP, KVERT, OVEXCV(73) )
+           ENDIF
+        ELSE
+           DO IP = 1, MIP
+             VOQ(IP,VOQR(73)) = OVEXCV(73)
+           ENDDO
         ENDIF
       ENDIF
 !
@@ -2312,6 +2481,7 @@
             IF (IBOT.EQ.1) F1 = PBOT(3)
             IF (IBOT.EQ.2) F1 = PBOT(2)
             IF (IBOT.EQ.3) F1 = PBOT(5)
+            IF (IBOT.EQ.5) F1 = PBOT(7)                                   41.51
             DO IP = 1, MIP
                IF (.NOT.EQREAL(F1,OVEXCV(27))) VOQ(IP,VOQR(27))=F1
             END DO
@@ -2358,30 +2528,24 @@
       IF (OQPROC(52)) THEN                                                40.51
         IF (ITEST.GE.50 .OR. IOUTES .GE. 10) WRITE (PRTEST, 121) 52,
      &  VOQR(52), JBOTLV
-        IF (JBOTLV.GT.1) THEN                                             40.65
-           IF (OPTG.NE.5) THEN                                            40.80
-!             interpolation done in all active and non-active points
-              RTMP=DEPMIN
-              DEPMIN=-10.*ABS(MINVAL(COMPDA(:,JDP2)))
-              CALL SWIPOL(COMPDA(1,JBOTLV),OVEXCV(52),XC,YC, MIP, CROSS,  40.86
-     &                    VOQ(1,VOQR(52)) ,KGRPNT, COMPDA(1,JDP2))
-              DEPMIN=RTMP
-           ELSE                                                           40.80
-!             interpolation done in all active and non-active points      40.91
-              ALLOCATE(LTMP(nverts))                                      40.91
-              LTMP(:) = vert(:)%active                                    40.91
-              vert(:)%active = .TRUE.                                     40.91
-              CALL SwanInterpolateOutput ( VOQ(1,VOQR(52)), VOQ(1,1),     40.80
-     &                                     VOQ(1,2), COMPDA(1,JBOTLV),    40.80
-     &                                     MIP, KVERT, OVEXCV(52) )       40.80
-              vert(:)%active = LTMP(:)                                    40.91
-              DEALLOCATE(LTMP)                                            40.91
-           ENDIF                                                          40.80
-        ELSE
-           DO IP = 1, MIP                                                 40.65
-             VOQ(IP,VOQR(52)) = OVEXCV(52)                                40.65
-           ENDDO                                                          40.65
-        ENDIF
+        IF (OPTG.NE.5) THEN                                               40.80
+!          interpolation done in all active and non-active points
+           RTMP=DEPMIN
+           DEPMIN=-10.*ABS(MINVAL(COMPDA(:,JDP2)))
+           CALL SWIPOL(COMPDA(1,JBOTLV),OVEXCV(52),XC,YC, MIP, CROSS,     40.86
+     &                 VOQ(1,VOQR(52)) ,KGRPNT, COMPDA(1,JDP2))
+           DEPMIN=RTMP
+        ELSE                                                              40.80
+!          interpolation done in all active and non-active points         40.91
+           ALLOCATE(LTMP(nverts))                                         40.91
+           LTMP(:) = vert(:)%active                                       40.91
+           vert(:)%active = .TRUE.                                        40.91
+           CALL SwanInterpolateOutput ( VOQ(1,VOQR(52)), VOQ(1,1),        40.80
+     &                                  VOQ(1,2), COMPDA(1,JBOTLV),       40.80
+     &                                  MIP, KVERT, OVEXCV(52) )          40.80
+           vert(:)%active = LTMP(:)                                       40.91
+           DEALLOCATE(LTMP)                                               40.91
+        ENDIF                                                             40.80
       ENDIF
 !
 !     correct problem coordinates with offset values
@@ -2414,8 +2578,41 @@
      &           IY.GE.IYB .AND. IY.LE.IYE ) IONOD(IP) = INODE            40.31
          END DO                                                           40.31
       END IF                                                              40.31
+!ADC!
+!ADC      IF (IRQ.EQ.-999) GOTO 900
+!PUN!
+!PUN      IF (MNPROC.EQ.1) GOTO 900
+!PUN!
+!PUN      NOWNV = 0
+!PUN      DO IP = 1, MIP
+!PUN         IF ( KVERT(IP).GT.0 ) THEN
+!PUN            IVERTP = ivertg(KVERT(IP))
+!PUN            IF ( IVERTP.GT.0 ) THEN
+!PUN               NOWNV = NOWNV + 1
+!PUN               IONOD(IP) = MYPROC
+!PUN            ENDIF
+!PUN         ENDIF
+!PUN      ENDDO
+!PUN!
+!PUN      IF (.NOT.LCOMPGRD) THEN
+!PUN         NREF   =  0
+!PUN         IOSTAT = -1
+!PUN         FILENM = TRIM(LOCALDIR)//DIRCH2//'output.set'
+!PUN         CALL FOR (NREF, FILENM, 'UU', IOSTAT)
+!PUN         IF (STPNOW()) RETURN
+!PUN         WRITE(NREF) IRQ, NOWNV
+!PUN         DO IP = 1, MIP
+!PUN            IF ( KVERT(IP).GT.0 ) THEN
+!PUN               IVERTP = ivertg(KVERT(IP))
+!PUN            ELSE
+!PUN               IVERTP = -1
+!PUN            ENDIF
+!PUN            IF ( IONOD(IP).EQ.MYPROC ) WRITE(NREF) IP, IVERTP
+!PUN         ENDDO
+!PUN         IF (IRQ.EQ.NREOQ) CLOSE(NREF)
+!PUN      ENDIF
 !
-      IF (ALLOCATED(KVERT)) DEALLOCATE(KVERT)                             41.07
+ 900  IF (ALLOCATED(KVERT)) DEALLOCATE(KVERT)                             41.07
 !
       RETURN
       END
@@ -2442,7 +2639,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -2566,8 +2763,8 @@
       LOGICAL OUTSID
       INTEGER  KGRPNT(MXC,MYC)                                            30.21
 !
-      REAL :: WW(1:4)    ! Interpolation weights for the 4 corners        40.86
-      REAL :: SUMWW      ! sum of the weights                             40.86
+      REAL*8 :: WW(1:4)  ! Interpolation weights for the 4 corners        40.86
+      REAL*8 :: SUMWW    ! sum of the weights                             40.86
       INTEGER :: JX(1:4), JY(1:4) ! grid counters for the 4 corners       40.86
       INTEGER :: INDX(1:4)     ! grid counters for the 4 corners          40.86
       INTEGER :: JC            ! corner counter                           40.86
@@ -2595,7 +2792,7 @@
         ENDIF                                                             30.21
         OUTSID = .FALSE.
         FOUTP(IP) = 0.
-        JX1 = INT(XC(IP)+3.) - 2
+        JX1 = INT(XC(IP)+3.001) - 2
         JX2 = JX1 + 1
         SX2 = XC(IP) + 1. - FLOAT(JX1)
         SX1 = 1. - SX2
@@ -2614,7 +2811,7 @@
           SY1 = 0.5                                                       40.86
           SY2 = 0.5                                                       40.86
         ELSE
-          JY1 = INT(YC(IP)+3.) - 2
+          JY1 = INT(YC(IP)+3.001) - 2
           JY2 = JY1 + 1
           SY2 = YC(IP) + 1. - FLOAT(JY1)
           SY1 = 1. - SY2
@@ -2706,7 +2903,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -2836,7 +3033,7 @@
 !
 ! 13. Source text
 !
-      PARAMETER  (NVOTP=21)                                               40.64 40.51 40.41 40.00
+      PARAMETER  (NVOTP=22)                                               41.15 40.64 40.51 40.41 40.00
       REAL       XC(MIP)        ,YC(MIP)       ,AC2(MDC,MSC,MCGRD),
      &           VOQ(MIP,*)     ,
      &           WK(*)          ,
@@ -2852,7 +3049,7 @@
       SAVE IENT, IVOTP
       DATA IENT /0/
       DATA IVOTP /10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 28, 32, 33,     20.61
-     &            42, 43, 44, 47, 48, 53, 58, 59/                         40.64 40.51 40.41 40.00
+     &            42, 43, 44, 47, 48, 53, 58, 59, 71/                     41.15 40.64 40.51 40.41 40.00
       CALL STRACE (IENT, 'SWOEXA')
 !
 !     loop over all output points
@@ -2886,6 +3083,7 @@
               CALL SwanInterpolateAc ( ACLOC, XP, YP, AC2, EXCPT )        40.80
            ELSE
               ACLOC(:,:) = AC2(:,:,IP)
+              EXCPT = .FALSE.
            ENDIF
         ENDIF                                                             40.80
         IF (EXCPT) GOTO 700                                               40.86
@@ -3214,7 +3412,7 @@
                 END IF
               END IF
            END DO
-           IF (ISIGM.GT.1) THEN
+           IF (ISIGM.GT.1 .AND. ISIGM.LT.MSC) THEN                        41.20
              SIG1 = SPCSIG(ISIGM-1)
              SIG2 = SPCSIG(ISIGM+1)
              SIG3 = SPCSIG(ISIGM  )
@@ -4170,6 +4368,29 @@
            ENDIF
         ENDIF
 !
+!       peak wave length                                                  41.15
+!
+        IVTYPE = 71
+        IF (OQPROC(IVTYPE)) THEN
+           EMAX = 0.
+           ISIGM = -1
+           DO IS = 1, MSC
+              ETD = 0.
+              DO ID = 1, MDC
+                ETD = ETD + WK(IS)*ACLOC(ID,IS)*DDIR
+              ENDDO
+              IF (ETD.GT.EMAX) THEN
+                EMAX  = ETD
+                ISIGM = IS
+              ENDIF
+           ENDDO
+           IF (ISIGM.GT.0) THEN
+             VOQ(IP,VOQR(IVTYPE)) = 2.*PI/WK(ISIGM)
+           ELSE
+             VOQ(IP,VOQR(IVTYPE)) = OVEXCV(IVTYPE)
+           ENDIF
+        ENDIF
+!
         GOTO 800
 !
 !       points on land: assign exception value
@@ -4211,7 +4432,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -4431,7 +4652,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as

@@ -23,9 +23,10 @@ include macros.inc
 
 SWAN_EXE = swan.exe
 
-SRCDIR=..\SNL-SWAN\src
-BINDIR=..\SNL-SWAN\bin
+SRCDIR=..\src
+BINDIR=..\bin
 
+#$(OBSDIR)\$(NCF_OBJS)
 SWAN_OBJS = \
 $(OBSDIR)\swmod1.$(EXTO) \
 $(OBSDIR)\swmod2.$(EXTO) \
@@ -36,7 +37,6 @@ $(OBSDIR)\mod_xnl4v5.$(EXTO) \
 $(OBSDIR)\SwanGriddata.$(EXTO) \
 $(OBSDIR)\SwanGridobjects.$(EXTO) \
 $(OBSDIR)\SwanCompdata.$(EXTO) \
-$(OBSDIR)\Bivariate_1.$(EXTO) \
 $(OBSDIR)\swanmain.$(EXTO) \
 $(OBSDIR)\swanpre1.$(EXTO) \
 $(OBSDIR)\swanpre2.$(EXTO) \
@@ -85,10 +85,17 @@ $(OBSDIR)\SwanFindObstacles.$(EXTO) \
 $(OBSDIR)\SwanCrossObstacle.$(EXTO) \
 $(OBSDIR)\SwanComputeForce.$(EXTO) \
 $(OBSDIR)\SwanIntgratSpc.$(EXTO) \
-$(OBSDIR)\Pincident.$(EXTO) \
+$(OBSDIR)\SwanBndStruc.$(EXTO) \
+$(OBSDIR)\SwanReadfort18.$(EXTO) \
+$(OBSDIR)\SwanPunCollect.$(EXTO) \
+$(OBSDIR)\SwanSumOverNodes.$(EXTO) \
+$(OBSDIR)\SwanMinOverNodes.$(EXTO) \
+$(OBSDIR)\SwanMaxOverNodes.$(EXTO) \
 $(OBSDIR)\ocpids.$(EXTO) \
 $(OBSDIR)\ocpcre.$(EXTO) \
-$(OBSDIR)\ocpmix.$(EXTO)
+$(OBSDIR)\ocpmix.$(EXTO) \
+$(OBSDIR)\Pincident.$(EXTO) \
+$(OBSDIR)\Bivariate_1.$(EXTO) \
 
 HCAT_EXE = hcat.exe
 HCAT_OBJS = swanhcat.$(EXTO)

@@ -14,8 +14,12 @@ if ($os =~ /WindowsNT/i || $os =~ /MSWin32/i) {
 $file2 = "Makefile";
 
 copy($file1, $file2); # or die "File cannot be copied.";
-unlink(macros.inc); # aka delete
-open($fh,'macros.inc'); # or die "cannot open macros.inc"; # create a blank macros file
+
+$macfile="macros.inc";
+if (-e $macfile ) {
+  unlink($macfile); # aka delete
+}
+open($fh,'>',$macfile); # or die "cannot open macros.inc"; # create a blank macros file
 close $fh;
 
 
