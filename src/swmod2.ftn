@@ -621,7 +621,7 @@
 
       TYPE(OBSTDAT), SAVE, TARGET  :: FOBSTAC
 
-      ! RCW/Power matrix stuff
+      ! RCW/Power matrix stuff                                          SNL-SWAN
       INTEGER :: Case_n
       REAL :: width                             ! width
       REAL, ALLOCATABLE :: Period(:)            ! period axis

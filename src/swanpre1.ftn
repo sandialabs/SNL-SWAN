@@ -1809,7 +1809,7 @@
          CALL INREAL ('GRAV',   GRAV,   'UNC', 0.)
          CALL INREAL ('RHO',    RHO,    'UNC', 0.)
          CALL ININTG ('INRHOG', INRHOG, 'UNC', 0)
-         CALL ININTG ('OBCASE', case_n, 'UNC', 0)
+         CALL ININTG ('OBCASE', case_n, 'UNC', 0)                         SNL-SWAN
          IF (INRHOG.EQ.0) THEN                                            30.20
            OVUNIT(7) = 'm2/s'
            OVUNIT(9) = 'm2/s'

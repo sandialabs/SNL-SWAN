@@ -2927,7 +2927,6 @@
 !
  333    CONTINUE
 !TIMG        CALL SWTSTA(136)                                                  40.23
-      itest=0
         IF (NUMOBS .NE. 0) THEN
 !
 !         *** OBREDF(:,:,2) are the transmission coeff for the two links ***
@@ -2969,7 +2968,6 @@
           ENDIF
 !
         ENDIF
-
 !TIMG        CALL SWTSTO(136)                                                  40.23
         IF (LPREDT) GOTO 330
 !
@@ -3011,7 +3009,6 @@
 !       *** compute transport of action and fill the matrix ***
 !
 !TIMG        CALL SWTSTA(118)                                                  40.23
-
         CALL ACTION (IDCMIN      ,IDCMAX            ,SPCSIG            ,  33.09
      &         AC2               ,CAX               ,CAY               ,
      &         CAS               ,CAD               ,SWMATR(1,1,JMATL) ,

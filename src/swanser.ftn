@@ -3199,9 +3199,9 @@
       LOGICAL :: SwanCrossObstacle                                        40.80
       TYPE(OBSTDAT), POINTER :: COBST                                     40.31
 
-      REAL    ::RCW,INCIDENT,PTEMP, err, Pincident
-      REAL    :: CGO(MSC)
-      integer :: itmp
+      REAL    ::RCW,INCIDENT,PTEMP, err, Pincident                        SNL-SWAN
+      REAL    :: CGO(MSC)                                                 SNL-SWAN
+      integer :: itmp                                                     SNL-SWAN
 !
 !  8. Subroutines used
 !
@@ -3250,8 +3250,7 @@
            GOTO 90
         END IF
 !*******************************************************************************
-!   AJP      compute peak frequency of incoming wave
-!   Earlier computation of peak freq
+!   Compute peak frequency of incoming wave                               SNL-SWAN
           EMAX = 0.
           ISIGM = -1
           DO IS = 1, MSC
@@ -3265,7 +3264,7 @@
              END IF
           END DO
           IF (ISIGM.LE.0) ISIGM=MSC
-          TP=2.*PI/SPCSIG(ISIGM)  ! Tp Peak Period
+          TP=2.*PI/SPCSIG(ISIGM)  ! Tp Peak Period                        SNL-SWAN
 !********************************************************************************
 !
 !       incoming wave height  HSIN =significant wave height
@@ -3279,11 +3278,9 @@
         END DO                                                            40.31
         ITRAS  = COBST%TRTYPE                                             40.31
         IF (ITRAS .EQ. 0) THEN
-!*********************************************************************************
-! AJP Calling Power Matrix Subroutine
-          !print*,case_n ! option for power model
-          if(case_n .eq. 0) then  !standard transmission coefficient squared (Kt^2)
-!***********************************************************************************        
+
+          ! case_n SNL-SWAN obstacle case
+          if(case_n .eq. 0) then  !standard transmission coefficient squared (Kt^2)       
 !           constant transmission coefficient
 !             User defined transmission coefficient concerns ratio of     40.09
 !             waveheights, so:                                            40.09
@@ -3428,7 +3425,7 @@
 !         Formulation of Goda/Seelig concerns ratio of waveheights.       40.09
 !         Here we use action density so:                                  40.09
           TRCF = OBHKT*OBHKT
-!         assign values to array OBREDF
+!         assign values to array OBREDF                                   SNL-SWAN
           DO IS = 1, MSC
             DO ID = 1, MDC
               OBREDF(ID,IS,ILINK) = TRCF
@@ -3463,8 +3460,6 @@
           L0P  = MAX(1.E-8,1.5613*TP*TP)
           XI0P = TAN(SLOPE*PI/180.)/SQRT(HSIN/L0P)
 !
-
-
 !         compute transmission coefficient
           FVH = WATHIG/HSIN
           BVH = BK/HSIN

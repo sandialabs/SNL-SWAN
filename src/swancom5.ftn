@@ -2403,7 +2403,6 @@
         ENDDO
       END IF
 !     End of subroutine STRSXY
-
       RETURN
       END
 !****************************************************************

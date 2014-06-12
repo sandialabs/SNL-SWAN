@@ -271,9 +271,7 @@
       REAL   , ALLOCATABLE :: AC1(:,:,:), COMPDA(:,:)                     40.31
 !
       REAL, ALLOCATABLE    :: BLKND(:), BLKNDC(:), OURQT(:)               40.51 40.41
-
 !
-      
 !  7. Common blocks used
 !
 !
@@ -666,7 +664,6 @@
       IF (ALLOCATED(CROSS )) DEALLOCATE(CROSS )                           40.31
       IF (ALLOCATED(OURQT )) DEALLOCATE(OURQT )                           40.51 40.30
       IF (ALLOCATED(BLKND )) DEALLOCATE(BLKND )                           40.41
-
       CALL SWCLME                                                         40.31
 !
       RETURN                                                              30.82
@@ -2476,7 +2473,7 @@
         ENDIF
       ENDIF
 
-!       Obstacle transmission coefficient stuff       
+!       Obstacle transmission coefficient stuff                         SNL-SWAN
 !   get the name of the file containing the data. 
         FileWidth="Width.txt"
         FilePeriod="Period.txt"
@@ -2545,7 +2542,7 @@
             enddo
             close (101)
           enddo
-        endif
+        endif                                                             SNL-SWAN
 
 !
       CURRBS => FBS                                                       40.31
