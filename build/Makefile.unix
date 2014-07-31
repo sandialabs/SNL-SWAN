@@ -195,7 +195,6 @@ $(SWAN_EXE): dircheck $(SWAN_OBJS)
 	$(CP) $(OBSDIR)/$(SWAN_EXE) $(BINDIR)/$(EXENAME)
 
 dircheck:
-	@echo "Testing 0" 
 	@echo $(OBSDIR) $(SRCDIR)
 	-@mkdir $(OBSDIR)
 	

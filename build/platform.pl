@@ -219,7 +219,8 @@ elsif ($os =~ /Linux/i) {
 #      print OUTFILE "FLAGS_OPT = -O2 -ipo -xW -mp1\n";
 #    }
 #    else {
-      print OUTFILE "FLAGS_OPT = -O2\n";
+    print OUTFILE "FLAGS_OPT = -O2\n";
+    #print OUTFILE "FLAGS_OPT = -g\n";
 #    }
 #    print OUTFILE "FLAGS_MSC = -W0 -assume byterecl -traceback -diag-disable remark\n";
     print OUTFILE "FLAGS_MSC = -W0 -assume byterecl -traceback -diag-disable 8290 -diag-disable 8291 -diag-disable 8293\n";
@@ -248,7 +249,7 @@ elsif ($os =~ /Linux/i) {
     print OUTFILE "O_DIR = ../work/odir4/\n";
     print OUTFILE "OUT = -o \n";
     print OUTFILE "EXTO = o\n";
-    print OUTFILE "MAKE = make\n";
+    print OUTFILE "MAKE = make -j\n";
     print OUTFILE "RM = rm -f\n";
     print OUTFILE "ifneq (\$(NETCDFROOT),)\n";
     print OUTFILE "  swch = -unix -impi -netcdf\n";
