@@ -3598,6 +3598,9 @@
             CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
      &                  PowerMat(1:n_Hs, 1:n_Tp),
      &                  n_Hs, n_Tp, HSIN, TP, RCW, err) ! 2-D Interpolation
+            ! limit RCW value
+            RCW = min(RCW,1.0)
+            RCW = max(RCW,0.0)
 ! Compute incident wave power
             !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
             !write(*,*) 'Old incident', incident
@@ -3628,6 +3631,9 @@
             itmp=0
             call polint(Period(1:n_Tp), RelCapWidth(1:n_Tp, 1),
      &                  n_Tp, TP, RCW, err)                     ! 1-D interpolation
+            ! limit RCW value
+            RCW = min(RCW,1.0)
+            RCW = max(RCW,0.0)
 ! Compute incident wave power
             !print*,TP
             !print*,RCW
@@ -3657,6 +3663,9 @@
               CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
      &                  PowerMat(1:n_Hs, 1:n_Tp),
      &                  n_Hs, n_Tp, HSIN, PTEMP, RCW, err) ! 2-D Interpolation
+              ! limit RCW value
+              RCW = min(RCW,1.0)
+              RCW = max(RCW,0.0)
 ! Compute incident wave power
               WRITE (PRINTF,*) ''
               WRITE (PRINTF,*) 'obdbg ',X1,Y1,IS,RCW  ! Writes transmission coefficient (Kt) to main output file
@@ -3678,6 +3687,9 @@
               PTEMP=2.*PI/SPCSIG(IS)  ! convert cyclic freqency into period
               call polint(Period(1:n_Tp), RelCapWidth(1:n_Tp, 1),
      &                    n_Tp, PTEMP, RCW, err)                     ! 1-D interpolation
+              ! limit RCW value
+              RCW = min(RCW,1.0)
+              RCW = max(RCW,0.0)
               OBHKT = 1.0-RCW
               DO ID = 1, MDC
                 OBREDF(ID,IS,ILINK) = OBHKT  ! Ktp Not squared
