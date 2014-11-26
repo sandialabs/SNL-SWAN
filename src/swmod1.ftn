@@ -484,6 +484,8 @@
 !              set by file SWANINIT
 ! PRINTF [  4] unit number for the file with standard output ('PRINT')
 !              set by file SWANINIT
+! POWERF [ 10] unit number for the file with standard output ('POWER')
+!              set by file SWANMAIN
 ! PRTEST [CAL] unit number for the print file containing test output
 !              =PRINTF
 !              set by file SWANINIT
@@ -492,7 +494,7 @@
 !
       INTEGER EXPORT, FUNHI , FUNLO , HIOPEN
       INTEGER IMPORT, INPUTF, ITMOPT, IUNMAX
-      INTEGER IUNMIN, PRINTF, PRTEST, SCREEN
+      INTEGER IUNMIN, PRINTF, PRTEST, SCREEN, POWERF
 
 !     *** test parameters ***
 !

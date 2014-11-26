@@ -185,6 +185,9 @@
         INPFIL = 'INPUT'
         PRINTF = 4
         OUTFIL = 'PRINT'
+
+        !POWFIL = 'POWER.DAT'
+
 !       unit ref. numbers for output to screen and to separate
 !       test print file:
         PRTEST = PRINTF
@@ -229,6 +232,10 @@
          CALL SWSYNC
          IF (STPNOW()) RETURN
       END IF
+
+!     Obstacle power files                                               SNL-SWAN
+      POWERF = 10
+
 
 !PUN      IAMMASTER = MYPROC.EQ.0                                             40.95
 !PUN      IF ( MNPROC==1 ) THEN                                               40.95

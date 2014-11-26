@@ -1958,12 +1958,13 @@
 !----------------------------------------------------------------------   40.22
 !$OMP BARRIER                                                             40.22
 
+!! FIXME remove this stuff and only write this out at the last iteration
+!!       put this stuff into its own file called POWER.dat
 !$OMP MASTER                                                              SNL-SWAN
       if (numobs.ne.0) then
+        write(POWERF,'(a,i7.0)') 'Iteration: ',ITER
         do n= 1,numobs
-          write(PRINTF,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
-     &                          n,' = ',pabsorb(n)*rho*grav,' W'
-          write(SCREEN,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
+          write(POWERF,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
      &                          n,' = ',pabsorb(n)*rho*grav,' W'
         enddo
       endif
@@ -2023,7 +2024,7 @@
 !     End deallocate private arrays.                                      40.22
 !----------------------------------------------------------------------   40.22
 
-!----------------------------------------------------------------------   40.22
+!---------------------------------------------------------OA-----------   40.22
 !     End parallel region.                                                40.22
 !----------------------------------------------------------------------   40.22
 !$OMP END PARALLEL                                                        40.22

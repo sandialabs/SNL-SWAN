@@ -739,6 +739,9 @@
 !
       INQUIRE(UNIT=PRINTF,OPENED=LOPEN)                                   40.30
       IF (LOPEN) CLOSE(PRINTF)                                            40.30
+
+      INQUIRE(UNIT=POWERF,OPENED=LOPEN)                                   SNL-SWAN
+      IF (LOPEN) CLOSE(POWERF)                                            SNL-SWAN
 !
 !     --- deallocate all allocated arrays                                 40.31
 
@@ -2646,6 +2649,11 @@
 !     *** in structured grids                                ***          40.80
 !
       IF (NUMOBS .GT. 0 .AND. OPTG.NE.5) THEN                             40.80
+
+        ! open a power output file
+        OPEN (UNIT=POWERF, FILE='POWER_ABS.OUT', STATUS='UNKNOWN', 
+     &                                       FORM='FORMATTED')           SNL_SWAN
+
         DO INDX = 1, MCGRD                                               040697
           CROSS(1,INDX) = 0                                              040697
           CROSS(2,INDX) = 0                                              040697
