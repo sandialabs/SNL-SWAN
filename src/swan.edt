@@ -4,9 +4,9 @@
 !            'title3'
 !
 !   SET  [level]  [nor]  [depmin]  [maxmes]                                 &
-!        [maxerr]  [grav]  [rho]  [inrhog]                                  &
+!        [maxerr]  [grav]  [rho] [cdcap] [inrhog]                           &
 !        [hsrerr]  CARTesian|NAUTical  [pwtail]                             &
-!        [froudmax]  [printf]  [prtest]
+!        [froudmax]  [sort]  [printf]  [prtest]
 !
 !   MODE  / STATIONARY \  / TWODimensional
 !         \ DYNAMIC    /  \ ONEDimensional
@@ -22,7 +22,7 @@
 !          \ SECtor [dir1] [dir2] /  [mdc]  [flow]  [fhig]  [msc]
 !
 !   INPgrid                                                                 &
-!      BOTtom | WLEVel | CURrent | VX | VY | FRiction | WInd | WX | WY      &
+!      BOT | WLEV | CUR | VX | VY | FR | WI | WX | WY | NPLA | TURB | MUDL  &
 !
 !      | REG [xpinp] [ypinp] [alpinp]  [mxinp] [myinp]  [dxinp] [dyinp] |
 !      |                                                                |
@@ -38,20 +38,22 @@
 !   READgrid UNSTRUCtured <  TRIAngle \
 !                          | EASYmesh / 'fname'
 !
-!   READinp    BOTtom|WLevel|CURrent|FRiction|WInd|COORdinates              &
+!   READinp    BOTtom|WLevel|CURrent|FRiction|WInd|COOR|NPLAnts|TURB|MUDL   &
 !        [fac]  / 'fname1'        \
 !               \ SERIES 'fname2' /  [idla] [nhedf] ([nhedt]) (nhedvec])    &
 !        FREE | FORMAT 'form' | [idfm] | UNFORMATTED
 !
-!   WIND  [vel] [dir]
+!                              | WU
+!   WIND  [vel] [dir]   DRAG  <  -> FIT
+!                              | SWELL
 !
 !                       |  JONswap  [gamma]  |
-!   BOUNd SHAPespec     |  PM                |
+!   BOUnd SHAPespec     |  PM                |
 !                      <   GAUSs  [sigfr]     >  PEAK|MEAN   DSPR  POWer|DEGRees
 !                       |  BIN               |
 !
 !              / -> SIDE  N|NW|W|SW|S|SE|E|NE | [k]  CCW|CLOCKWise       \
-!   BOUNdspec <                                                           > &
+!   BOUndspec <                                                           > &
 !              \    SEGment  / -> XY  < [x]  [y] >            \          /
 !                            \    IJ  < [i]  [j] > | < [k] >  /
 !
@@ -60,12 +62,12 @@
 !            \  VARiable  /  PAR  < [len] [hs] [per] [dir] [dd] >
 !                         \  FILE < [len] 'fname' [seq] >
 !
-!   BOUNdnest1  NEST 'fname'  CLOSed|OPEN
+!   BOUndnest1  NEst 'fname'  CLOSed|OPEN
 !
-!   BOUNdnest2  WAMNest 'fname' / UNFormatted  CRAY|WKstat  \
-!                               \ FREE                      /   [xgc] [ygc]
+!   BOUndnest2  WAMNest 'fname' / UNFormatted CRAY|WKstat \
+!                               \ FREE                    / [xgc] [ygc] [lwdate]
 !
-!   BOUNdnest3  WWIII 'fname'  CLOSed|OPEN  [xgc] [ygc]
+!   BOUndnest3  WWIII 'fname'  CLOSed|OPEN  [xgc] [ygc]
 !
 !             | -> DEFault
 !             |
@@ -73,9 +75,9 @@
 !             |
 !             |  PAR  [hs] [per] [dir] [dd]
 !             |
-!             |            | -> MULTiple |
-!             |  HOTStart <               >  'fname'
-!             |            |    SINGle   |
+!             |            | -> MULTiple |             | -> FREE
+!             |  HOTStart <               >  'fname'  <
+!             |            |    SINGle   |             | UNFormatted
 !
 !   GEN1  [cf10] [cf20] [cf30] [cf40] [edmlpm] [cdrag] [umin]
 !
@@ -102,7 +104,7 @@
 !         |
 !         |   AB       [cds2] [br] [p0] [powst] [powk]
 !
-!   QUADrupl [iquad] [limiter] [lambda] [cnl4] [csh1] [csh2] [csh3]
+!   QUADrupl [iquad] [lambda] [cnl4] [csh1] [csh2] [csh3]
 !
 !                             | CNL4 < [cnl4] >               |
 !   MDIA LAMbda < [lambda] > <                                 >
@@ -111,10 +113,14 @@
 !        | -> CON [alpha] [gamma]                                      |
 !        |                                                             |
 !        |    VAR [alpha] [gammin] [gammax] [gamneg] [coeff1] [coeff2] |
-!   BRE <                                                               > &
-!        |    RUE [alpha] [a] [b]                                      |
+!        |                                                             |
+!   BRE <     RUE [alpha] [a] [b]                                       > &
+!        |                                                             |
+!        |    BKD [alpha] [gamma0] [a1] [a2] [a3]                      |
 !        |                                                             |
 !        |    TG  [alpha] [gamma] [pown]                               |
+!
+!     ( DIRectionality [spread] )                                         &
 !
 !     ( FREQDep [power] [fmin] [fmax] )
 !
@@ -126,8 +132,16 @@
 !              |    COLLins [cfw] [cfc]
 !              |
 !              |    MADsen  [kn]
+!              |
+!              |    RIPples [S] [D]
 !
-!   TRIad   [trfac] [cutfr] [urcrit] [urslim]
+!   TRIad [itriad] [trfac] [cutfr] [a] [b] [urcrit] [urslim]
+!
+!   VEGEtation  < [height] [diamtr] [nstems] [drag] >
+!
+!   TURBulence  [ctb]  (CURrent [tbcur])
+!
+!   MUD  [layer]  [rhom]  [viscm]  [rhow]  [viscw]
 !
 !   LIMiter [ursell] [qb]
 !
@@ -152,9 +166,9 @@
 !   PROP   /  BSBT
 !          \  GSE  [waveage] SEC|MIN|HR|DAY
 !
-!             | -> ACCUR [drel] [dhoval] [dtoval] [npnts]               |
+!             | -> STOPC [dabs] [drel] [curvat] [npnts] [dtabs] [curvt] |
 !   NUMeric (<                                                           >  &
-!             |    STOPC [dabs] [drel] [curvat] [npnts] [dtabs] [curvt] |
+!             |    ACCUR [drel] [dhoval] [dtoval] [npnts]               |
 !
 !                    | -> STAT  [mxitst] [alfa] |
 !                   <                            >  [limiter]   )           &
@@ -167,6 +181,10 @@
 !              | -> SIGIMpl [css] [eps2] [outp] [niter]
 !           ( <                                                 )           &
 !              |    SIGEXpl [css] [cfl]
+!
+!           ( CTheta [cfl]                                      )           &
+!
+!           ( CSigma [cfl]                                      )           &
 !
 !           ( SETUP [eps2] [outp] [niter]                       )
 !
@@ -204,8 +222,9 @@
 !          <  HSIGN|HSWELL|DIR|PDIR|TDIR|TM01|RTM01|RTP|TM02|FSPR|DSPR|VEL| &
 !             FRCOEF|WIND|DISSIP|QB|TRANSP|FORCE|UBOT|URMS|WLEN|STEEPNESS|  &
 !             DHSIGN|DRTM01|LEAK|TSEC|XP|YP|DIST|SETUP|TMM10|RTMM10|DEPTH|  &
-!             TMBOT|QP|BFI|WATLEV|BOTLEV|TPS|DISBOT|DISSURF|DISWCAP|        &
-!             GENE|GENW|REDI|REDQ|REDT|PROPA|PROPX|PROPT|PROPS|RADS >       &
+!             TMBOT|QP|BFI|NPLANT|WATLEV|BOTLEV|TPS|DISBOT|DISSURF|DISWCAP| &
+!             GENE|GENW|REDI|REDQ|REDT|PROPA|PROPX|PROPT|PROPS|RADS|LWAVP|  &
+!             DISTUR|TURB|DISMUD >                                          &
 !             ([unit]) (OUTPUT [tbegblk] [deltblk] SEC|MIN|HR|DAY)
 !
 !   TABLE   'sname'  HEADER | NOHEADER | INDEXED 'fname'                    &
@@ -213,10 +232,12 @@
 !             FRCOEF|WIND|DISSIP|QB|TRANSP|FORCE|UBOT|URMS|WLEN|STEEPNESS|  &
 !             DHSIGN|DRTM01|LEAK|TIME|TSEC|XP|YP|DIST|SETUP|TMM10|RTMM10|   &
 !             DEPTH|TMBOT|QP|BFI|WATLEV|BOTLEV|TPS|DISBOT|DISSURF|DISWCAP|  &
-!             GENE|GENW|REDI|REDQ|REDT|PROPA|PROPX|PROPT|PROPS|RADS >       &
+!             GENE|GENW|REDI|REDQ|REDT|PROPA|PROPX|PROPT|PROPS|RADS|LWAVP|  &
+!             DISTUR|TURB|DISMUD >                                          &
 !             ([unit]) (OUTPUT [tbegtbl] [delttbl] SEC|MIN|HR|DAY)
 !
 !   SPECout 'sname'  SPEC1D|SPEC2D  ABS|REL   'fname'                       &
+!                    MONth  ESCAle  COMPress                                &
 !                    (OUTput [tbeg] [delt] SEC|MIN|HR|DAY)
 !
 !   NESTout 'sname'  'fname'                                                &
@@ -235,6 +256,8 @@
 !                                   |    HR   |
 !                                   |    DAy  |
 !
-!   HOTFile 'fname'
+!                     | -> FREE
+!   HOTFile 'fname'  <
+!                     | UNFormatted
 !
 !   STOP

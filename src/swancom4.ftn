@@ -33,16 +33,17 @@
 !     FILNL3 (fill main diagonal and right-hand side of the system with
 !             results of array MEMNL4)
 !
-!     RIAM_SLW (calculate nonlinear four wave interactions by means
-!               of the exact FD-RIAM technique)
-!
 !     SWINTFXNL (interface with SWAN model to compute nonlinear transfer
 !                with the XNL method for given action density spectrum)
 !
 !     *** nonlinear 3 wave-wave interactions ***
 !
+!     TCOEF  (compute coupling coefficients for SPB of Becq-Girard et al, 1999)
 !     SWLTA  (triad-wave interactions calculated with the Lumped Triad
 !             Approximation of Eldeberky, 1996)
+!     SWSPB  (triad-wave interactions calculated with the Stochastic
+!             Parametric model based on the Boussinesq eqs (SPB) of
+!             Becq-Girard et al, 1999)
 !
 !----------------------------------------------------------------------
 !
@@ -70,7 +71,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -512,7 +513,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -705,7 +706,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -1203,7 +1204,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -1605,7 +1606,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -1999,7 +2000,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -2405,7 +2406,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -2693,7 +2694,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -2808,739 +2809,6 @@
 !     End of FILNL3
       END
 !
-!********************************************************************
-!
-!     <<  Numerical Computations of the Nonlinear Energy Transfer
-!           of Gravity Wave Spectra in Finite Water Depth  >>
-!
-!                  << developed by Noriaki Hashimoto >>
-!
-!        References:  N. Hashimoto et al. (1998)
-!                     Komatsu and Masuda (2000) (in Japanese)
-!
-!
-!     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
-!
-!     This program is free software; you can redistribute it and/or
-!     modify it under the terms of the GNU General Public License as
-!     published by the Free Software Foundation; either version 2 of
-!     the License, or (at your option) any later version.
-!
-!     This program is distributed in the hope that it will be useful,
-!     but WITHOUT ANY WARRANTY; without even the implied warranty of
-!     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-!     GNU General Public License for more details.
-!
-!     A copy of the GNU General Public License is available at
-!     http://www.gnu.org/copyleft/gpl.html#SEC3
-!     or by writing to the Free Software Foundation, Inc.,
-!     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-!
-!
-      SUBROUTINE RIAM_SLW(LMAX,N,N2,G,H,DQ,DQ2,DT,DT2,W,P,ACT,SNL,MINT)   40.17
-
-      USE M_SNL4                                                          40.41
-
-!     LMAX
-!     N     : number of directional bins                                  40.17
-!     N2
-!     G     : gravitational acceleration                                  40.17
-!     H     : depth                                                       40.17
-!     DQ
-!     DQ2
-!     DT    : size of the directional bins (Delta Theta)                  40.17
-!     DT2
-!     W     : discretised frequency array                                 40.17
-!     P     : density of water                                            40.17
-!     ACT   : action density                                              40.17
-!     SNL   : Quadruplet source term                                      40.17
-!     MINT
-
-!     IW4   : counter for the 4th frequency                               40.17
-!     W4    : frequency of the fourth quadruplet component                40.17
-!     AK4   : wavenumber of the fourth quadruplet component               40.17
-!     DNA   : coefficient in eq. 17 of Hashimoto (98)                     40.17
-!             = 2 w4 k4 / Cg(k4)                                          40.17
-!     IW3L
-!     II
-!     JJ
-!     DI
-!     DJ
-!     CGK4  : group velocity for the fourth quadruplet component          40.17
-
-      REAL :: W(LMAX), ACT(LMAX,N), SNL(LMAX,N)                           40.17
-
-!     Initialisation of the quadruplet source term                        40.17
-
-      SNL(:,:) = 0.                                                       40.17
-!
-!     =================
-      DO 130 IW4=1,LMAX
-!     =================
-!
-      W4=W(IW4)
-
-!     WAVE converts nondimensional Sqr(w)d/g to nondimensional kd
-
-      AK4=WAVE(W4**2*H/G)/H
-
-!     CGCMP computes group velocity
-
-      CALL CGCMP(G,AK4,H,CGK4)
-
-!     Calculates the coefficient in equation (17) of Hashimoto (1998)
-
-      DNA=2.*W4*AK4/CGK4
-
-      IW3L=MAX0(1,NINT(IW4-ALOG(3.)/DQ))
-
-!     ------------------------------------------------------------
-      CALL PRESET(LMAX,N,IW3L,IW4,N2,G,H,W4,AK4,W,DQ,DQ2,DT,DT2,P)        40.41 40.17
-!     ------------------------------------------------------------
-!
-!     ==============
-      DO 130 IT4=1,N
-!     ==============
-!
-!     ================
-      CURRIAM => FRIAM                                                    40.41
-      DO                !    (W1 - W3 - W4 - W2)                          40.41
-!     ================
-!
-      K1=CURRIAM%II(1)+IW4                                                40.41
-      K2=CURRIAM%II(2)+IW4                                                40.41
-      K3=CURRIAM%II(3)+IW4                                                40.41
-!
-      IF(K1.LT.1   ) GO TO 120                                            40.17
-      IF(K2.GT.LMAX) GO TO 120                                            40.17
-!
-      GG=CURRIAM%SSS*DNA                                                  40.41
-!
-      M1P= CURRIAM%JJ(1)+IT4                                              40.41
-      M1N=-CURRIAM%JJ(1)+IT4                                              40.41
-      M2P= CURRIAM%JJ(2)+IT4                                              40.41
-      M2N=-CURRIAM%JJ(2)+IT4                                              40.41
-      M3P= CURRIAM%JJ(3)+IT4                                              40.41
-      M3N=-CURRIAM%JJ(3)+IT4                                              40.41
-!
-      M1P=MOD(M1P,N)
-      M1N=MOD(M1N,N)
-      M2P=MOD(M2P,N)
-      M2N=MOD(M2N,N)
-      M3P=MOD(M3P,N)
-      M3N=MOD(M3N,N)
-!
-      IF(M1P.LT.1) M1P=M1P+N
-      IF(M1N.LT.1) M1N=M1N+N
-      IF(M2P.LT.1) M2P=M2P+N
-      IF(M2N.LT.1) M2N=M2N+N
-      IF(M3P.LT.1) M3P=M3P+N
-      IF(M3N.LT.1) M3N=M3N+N
-!
-      A4=ACT(IW4,IT4)
-!
-      IF(MINT.EQ.1) THEN
-!
-        K01=0
-        K02=0
-        K03=0
-        M01=0
-        M02=0
-        M03=0
-        IF(CURRIAM%DI(1).LE.1.) K01= 1                                    40.41
-        IF(CURRIAM%DI(2).LE.1.) K02= 1                                    40.41
-        IF(CURRIAM%DI(3).LE.1.) K03= 1                                    40.41
-        IF(CURRIAM%DJ(1).LE.1.) M01=-1                                    40.41
-        IF(CURRIAM%DJ(2).LE.1.) M02=-1                                    40.41
-        IF(CURRIAM%DJ(3).LE.1.) M03=-1                                    40.41
-!
-        K11=K1+K01
-        K21=K2+K02
-        K31=K3+K03
-        IF(K11.GT.LMAX) K11=LMAX
-        IF(K21.GT.LMAX) K21=LMAX
-        IF(K31.GT.LMAX) K31=LMAX
-!
-        K111=K1+K01-1
-        K211=K2+K02-1
-        K311=K3+K03-1
-        IF(K111.LT.1) K111=1
-        IF(K211.LT.1) K211=1
-        IF(K311.LT.1) K311=1
-!
-        M1P1=M1P+M01
-        M2P1=M2P+M02
-        M3P1=M3P+M03
-        IF(M1P1.LT.1) M1P1=N
-        IF(M2P1.LT.1) M2P1=N
-        IF(M3P1.LT.1) M3P1=N
-!
-        M1N1=M1N-M01
-        M2N1=M2N-M02
-        M3N1=M3N-M03
-        IF(M1N1.GT.N) M1N1=1
-        IF(M2N1.GT.N) M2N1=1
-        IF(M3N1.GT.N) M3N1=1
-!
-        M1P11=M1P+M01+1
-        M2P11=M2P+M02+1
-        M3P11=M3P+M03+1
-        IF(M1P11.GT.N) M1P11=1
-        IF(M2P11.GT.N) M2P11=1
-        IF(M3P11.GT.N) M3P11=1
-!
-        M1N11=M1N-M01-1
-        M2N11=M2N-M02-1
-        M3N11=M3N-M03-1
-        IF(M1N11.LT.1) M1N11=N
-        IF(M2N11.LT.1) M2N11=N
-        IF(M3N11.LT.1) M3N11=N
-!
-        DI1=CURRIAM%DI(1)                                                 40.41
-        DI2=CURRIAM%DI(2)                                                 40.41
-        DI3=CURRIAM%DI(3)                                                 40.41
-        DJ1=CURRIAM%DJ(1)                                                 40.41
-        DJ2=CURRIAM%DJ(2)                                                 40.41
-        DJ3=CURRIAM%DJ(3)                                                 40.41
-!
-        A1P=(DI1*(DJ1*ACT(K11, M1P1)+ACT(K11, M1P11))                     40.41
-     &          + DJ1*ACT(K111,M1P1)+ACT(K111,M1P11))                     40.41
-     &          /((1.+DI1)*(1.+DJ1))                                      40.41
-!
-        A1N=(DI1*(DJ1*ACT(K11, M1N1)+ACT(K11, M1N11))                     40.41
-     &          + DJ1*ACT(K111,M1N1)+ACT(K111,M1N11))                     40.41
-     &          /((1.+DI1)*(1.+DJ1))                                      40.41
-!
-        A2P=(DI2*(DJ2*ACT(K21, M2P1)+ACT(K21, M2P11))                     40.41
-     &          + DJ2*ACT(K211,M2P1)+ACT(K211,M2P11))                     40.41
-     &          /((1.+DI2)*(1.+DJ2))                                      40.41
-!
-        A2N=(DI2*(DJ2*ACT(K21, M2N1)+ACT(K21, M2N11))                     40.41
-     &          + DJ2*ACT(K211,M2N1)+ACT(K211,M2N11))                     40.41
-     &          /((1.+DI2)*(1.+DJ2))                                      40.41
-!
-        A3P=(DI3*(DJ3*ACT(K31, M3P1)+ACT(K31, M3P11))                     40.41
-     &          + DJ3*ACT(K311,M3P1)+ACT(K311,M3P11))                     40.41
-     &          /((1.+DI3)*(1.+DJ3))                                      40.41
-!
-        A3N=(DI3*(DJ3*ACT(K31, M3N1)+ACT(K31, M3N11))                     40.41
-     &          + DJ3*ACT(K311,M3N1)+ACT(K311,M3N11))                     40.41
-     &          /((1.+DI3)*(1.+DJ3))                                      40.41
-!
-      ELSE
-!
-        IF(K1.LT.1) K1=1
-        IF(K2.LT.1) K2=1
-        IF(K3.LT.1) K3=1
-!
-        A1P=ACT(K1,M1P)
-        A1N=ACT(K1,M1N)
-        A2P=ACT(K2,M2P)
-        A2N=ACT(K2,M2N)
-        A3P=ACT(K3,M3P)
-        A3N=ACT(K3,M3N)
-!
-      ENDIF
-!
-      W1P2P=A1P+A2P
-      W1N2N=A1N+A2N
-      S1P2P=A1P*A2P
-      S1N2N=A1N*A2N
-      W3P4 =A3P+A4
-      W3N4 =A3N+A4
-      S3P4 =A3P*A4
-      S3N4 =A3N*A4
-!
-      XP=S1P2P*W3P4-S3P4*W1P2P
-      XN=S1N2N*W3N4-S3N4*W1N2N
-!
-      SNL( K1,M1P)=SNL( K1,M1P)-XP*GG
-      SNL( K1,M1N)=SNL( K1,M1N)-XN*GG
-      SNL( K2,M2P)=SNL( K2,M2P)-XP*GG
-      SNL( K2,M2N)=SNL( K2,M2N)-XN*GG
-      SNL( K3,M3P)=SNL( K3,M3P)+XP*GG
-      SNL( K3,M3N)=SNL( K3,M3N)+XN*GG
-      SNL(IW4,IT4)=SNL(IW4,IT4)+(XP+XN)*GG
-!
-! ============
-  120 CONTINUE
-      IF (.NOT.ASSOCIATED(CURRIAM%NEXTRIAM)) EXIT                         40.41
-      CURRIAM => CURRIAM%NEXTRIAM                                         40.41
-      END DO                                                              40.41
-! ============
-!
-! ============
-  130 CONTINUE
-! ============
-!
-      RETURN
-      END
-
-      SUBROUTINE PRESET(LMAX,N,IW3L,IW4,N2,G,H,W4,AK4,W,DQ,DQ2,DT,DT2,P)  40.41 40.17
-
-!     T1A   : Angle between theta_1 and theta_a
-!     T2A   : Angle between theta_2 and theta_a
-!     T34   : Angle between theta_3 and theta_4
-!     WA    : wa = w1 + w2 = w3 + w4 (resonance conditions)
-!     AKA   : absolute value of ka = k1 + k2 = k3 + k4 (resonance conditions)
-!     TA    : Angle theta_a representing vector ka
-
-      REAL :: W(LMAX)                                                     40.17
-!
-!     ================
-      DO 120 IT34=1,N2
-!     ================
-!
-      T34=DT*(IT34-1)
-      DT3=DT
-      IF(IT34.EQ.1.OR.IT34.EQ.N2) DT3=DT2
-!
-!     ===================
-      DO 110 IW3=IW3L,IW4
-!     ===================
-!
-      W3=W(IW3)
-      AK3=WAVE(W3**2*H/G)/H
-!
-      WA=W3+W4
-      AKA=SQRT(AK3*AK3+AK4*AK4+2.*AK3*AK4*COS(T34))
-      TA=ATAN2(AK3*SIN(T34),AK3*COS(T34)+AK4)
-      R=SQRT(G*AKA*TANH(AKA*H/2.))/WA-1./SQRT(2.)
-!
-      TL=0.
-      ACS=AKA/(2.*WAVE(WA**2*H/(4.*G))/H)
-      ACS=SIGN(1.,ACS)*MIN(1.,ABS(ACS))                                   40.41
-      IF(R.LT.0.) TL=ACOS(ACS)
-      IT1S=NINT(TL/DT)+1
-!
-!     ===================
-      DO 100 IT1A=IT1S,N2
-!     ===================
-!
-      T1A=DT*(IT1A-1)
-!
-      DT1=DT
-      IF(IT1A.EQ.1.OR.IT1A.EQ.N2) DT1=DT2
-!
-!     -----------------------------------------------------------------
-      CALL FINDW1W2(LMAX,IW3,W,G,H,W1,W2,W3,WA,AK1,AK2,AKA,T1A,T2A,IND)   40.17
-!     -----------------------------------------------------------------
-      IF(IND.LT.0) GO TO 100
-!
-      IF(W1.LE.W3.AND.W3.LE.W4.AND.W4.LE.W2) THEN
-        CALL KERNEL(N,G,H,W1,W2,W3,W4,AK1,AK2,AK3,AK4,AKA,
-     &              T1A,T2A,T34,TA,DQ,DT,DT1,DT3,P)                       40.41 40.17
-      ENDIF
-!
-! ============
-  100 CONTINUE
-  110 CONTINUE
-  120 CONTINUE
-! ============
-!
-      RETURN
-      END
-
-      SUBROUTINE FINDW1W2(LMAX,                                           40.17
-     &                    IW3,W,G,H,W1,W2,W3,WA,AK1,AK2,AKA,T1A,T2A,IND)  40.17
-      REAL  :: W(LMAX)                                                    40.17
-!
-      IND=0
-      EPS=0.0005
-!
-      X1=0.005
-      X2=W3
-!
-!     ---------------------------------------
-  110 CALL FDW1(G,H,AKA,T1A,WA,X1,X2,X,EPS,M)
-!     ---------------------------------------
-!
-      IF(M.EQ.0) GO TO 999
-!
-      W1=X
-!
-      AK1=WAVE(W1**2*H/G)/H
-      AK2=SQRT(AKA*AKA+AK1*AK1-2.*AKA*AK1*COS(T1A))
-      W2=SQRT(G*AK2*TANH(AK2*H))
-      IF(W1.GT.W2) GO TO 999
-      T2A=ATAN2(-AK1*SIN(T1A),AKA-AK1*COS(T1A))
-      RETURN
-!
-  999 IND=-999
-      RETURN
-      END
-
-      SUBROUTINE FDW1(G,H,AKA,T1A,WA,X1,X2,X,EPS,M)
-!
-      M=0
-      F1=FUNCW1(G,H,X1,AKA,T1A,WA)
-      F2=FUNCW1(G,H,X2,AKA,T1A,WA)
-   20 IF(F1*F2) 18,19,21
-   18 M=M+1
-      X=X2-((X2-X1)/(F2-F1)*F2)
-      IF((ABS(X-X2)/ABS(X))-EPS) 22,23,23
-   23 IF((ABS(X-X1)/ABS(X))-EPS) 22,24,24
-   22 RETURN
-   24 F=FUNCW1(G,H,X,AKA,T1A,WA)
-      FM=F*F1
-      IF(FM) 25,22,26
-   25 X2=X
-      F2=F
-      GO TO 20
-   26 X1=X
-      F1=F
-      GO TO 20
-   19 M=M+1
-      IF(F1) 17,16,17
-   16 X=X1
-      GO TO 22
-   17 X=X2
-      GO TO 22
-   21 M=0
-      RETURN
-      END
-
-      FUNCTION FUNCW1(G,H,X,AKA,T1A,WA)
-!
-      AK1=WAVE(X**2*H/G)/H
-      AK2=SQRT(AKA*AKA+AK1*AK1-2.*AKA*AK1*COS(T1A))
-      FUNCW1=WA-SQRT(G*AK1*TANH(AK1*H))-SQRT(G*AK2*TANH(AK2*H))
-!
-      RETURN
-      END
-
-      SUBROUTINE KERNEL(N,G,H,W1,W2,W3,W4,AK1,AK2,AK3,AK4,AKA,
-     &                  T1A,T2A,T34,TA,DQ,DT,DT1,DT3,P)                   40.41 40.17
-
-      USE M_SNL4                                                          40.41
-!
-      LOGICAL, SAVE :: LRIAM = .FALSE.                                    40.41
-      TYPE(RIAMDAT), POINTER :: RIAMTMP                                   40.41
-!
-      PI =4.*ATAN(1.)
-      PI2=2.*PI
-!
-!     ------------------------
-      CALL CGCMP(G,AK1,H,CGK1)
-      CALL CGCMP(G,AK2,H,CGK2)
-      CALL CGCMP(G,AK3,H,CGK3)
-!     ------------------------
-
-!     Calculate denominator S (eq. 14, Hashimoto (1998))
-
-      SS0=ABS(1.+CGK2/CGK1*(AK1-AKA*COS(T1A))/AK2)
-      IF(SS0.LE.1.E-7) RETURN
-
-!                        k1 k3 w3     G
-!     Kernel function  -------------  - dth3 dth1 dOm    (eq. 17)
-!                      Cg(k1) Cg(k3)  S
-
-!     where S defined in eq. 14 and G defined in eq. 5 (Hashimoto, 1998)
-
-      CF=AK1*AK3*W3/(CGK1*CGK3)/SS0
-     &   *9.*PI*G*G/(4.*P*P*W1*W2*W3*W4)*DT1*DT3*DQ
-
-!     --------------------------------------
-      CALL NONKDD(G,H,W3,W4,-W1,AK3,AK4,AK1,
-     &                T34,0.,T1A+TA+PI,DDD1)
-!     --------------------------------------
-      GGG1=CF*DDD1*DDD1
-!
-!     --------------------------------------
-      CALL NONKDD(G,H,W3,W4,-W1,AK3,AK4,AK1,
-     &               T34,0.,-T1A+TA+PI,DDD2)
-!     --------------------------------------
-      GGG2=CF*DDD2*DDD2
-!
-      I1=1-INTW(W1/W4,DQ)
-      I2=1-INTW(W2/W4,DQ)
-      I3=1-INTW(W3/W4,DQ)
-!
-      DI1=WEIGW(W1/W4,DQ)
-      DI2=WEIGW(W2/W4,DQ)
-      DI3=0.
-!
-!     ----------------------------
-!
-      TT1=T1A+TA
-      TT2=T2A+TA
-      TT3=T34
-!
-      ALLOCATE(RIAMTMP)                                                   40.41
-!
-      RIAMTMP%SSS  =GGG1                                                  40.41
-      RIAMTMP%II(1)=I1                                                    40.41
-      RIAMTMP%II(2)=I2                                                    40.41
-      RIAMTMP%II(3)=I3                                                    40.41
-      RIAMTMP%DI(1)=DI1                                                   40.41
-      RIAMTMP%DI(2)=DI2                                                   40.41
-      RIAMTMP%DI(3)=DI3                                                   40.41
-      RIAMTMP%JJ(1)=INTT(TT1,DT,PI2,N)-1                                  40.41
-      RIAMTMP%JJ(2)=INTT(TT2,DT,PI2,N)-1                                  40.41
-      RIAMTMP%JJ(3)=INTT(TT3,DT,PI2,N)-1                                  40.41
-      RIAMTMP%DJ(1)=WEIGT(TT1,DT,PI2,N)                                   40.41
-      RIAMTMP%DJ(2)=WEIGT(TT2,DT,PI2,N)                                   40.41
-      RIAMTMP%DJ(3)=0.                                                    40.41
-!
-      NULLIFY(RIAMTMP%NEXTRIAM)                                           40.41
-      IF ( .NOT.LRIAM ) THEN                                              40.41
-         FRIAM = RIAMTMP                                                  40.41
-         CURRIAM => FRIAM                                                 40.41
-         LRIAM = .TRUE.                                                   40.41
-      ELSE
-         CURRIAM%NEXTRIAM => RIAMTMP                                      40.41
-         CURRIAM => RIAMTMP                                               40.41
-      END IF
-!
-!     ----------------------------
-!
-      TT1=-T1A+TA
-      TT2=-T2A+TA
-      TT3= T34
-!
-      ALLOCATE(RIAMTMP)                                                   40.41
-!
-      RIAMTMP%SSS  =GGG2                                                  40.41
-      RIAMTMP%II(1)=I1                                                    40.41
-      RIAMTMP%II(2)=I2                                                    40.41
-      RIAMTMP%II(3)=I3                                                    40.41
-      RIAMTMP%DI(1)=DI1                                                   40.41
-      RIAMTMP%DI(2)=DI2                                                   40.41
-      RIAMTMP%DI(3)=DI3                                                   40.41
-      RIAMTMP%JJ(1)=INTT(TT1,DT,PI2,N)-1                                  40.41
-      RIAMTMP%JJ(2)=INTT(TT2,DT,PI2,N)-1                                  40.41
-      RIAMTMP%JJ(3)=INTT(TT3,DT,PI2,N)-1                                  40.41
-      RIAMTMP%DJ(1)=WEIGT(TT1,DT,PI2,N)                                   40.41
-      RIAMTMP%DJ(2)=WEIGT(TT2,DT,PI2,N)                                   40.41
-      RIAMTMP%DJ(3)=0.                                                    40.41
-!
-      NULLIFY(RIAMTMP%NEXTRIAM)                                           40.41
-      IF ( .NOT.LRIAM ) THEN                                              40.41
-         FRIAM = RIAMTMP                                                  40.41
-         CURRIAM => FRIAM                                                 40.41
-         LRIAM = .TRUE.                                                   40.41
-      ELSE
-         CURRIAM%NEXTRIAM => RIAMTMP                                      40.41
-         CURRIAM => RIAMTMP                                               40.41
-      END IF
-!
-      RETURN
-      END
-
-      FUNCTION INTW(W,DQ)
-      AA=ALOG(W)/DQ
-      INTW=1+NINT(-AA)
-      RETURN
-      END
-
-      FUNCTION WEIGW(W,DQ)
-      AA=ALOG(W)/DQ
-      L=1+INT(-AA)
-      A=DQ*(1-L)-ALOG(W)
-      IF(A.NE.0.) THEN
-        B=ALOG(W)+DQ*L
-        WEIGW=B/A
-      ELSE
-        WEIGW=1000.
-      ENDIF
-      RETURN
-      END
-
-      FUNCTION INTT(T,DT,PI2,MM)
-      T=AMOD(T,PI2)
-      IF(T.LT.0.) T=T+PI2
-      INTT=NINT(T/DT)+1
-      IF(INTT.GT.MM) INTT=INTT-MM
-      IF(INTT.LT.1)  INTT=INTT+MM
-      RETURN
-      END
-
-      FUNCTION WEIGT(T,DT,PI2,MM)
-      T=AMOD(T,PI2)
-      IF(T.LT.0.) T=T+PI2
-      N=INT(T/DT)+1
-      IF(N.GT.MM) N=N-MM
-      IF(N.LT.1)  N=N+MM
-      C=T-DT*(N-1)
-      IF(C.NE.0.) THEN
-        D=DT*N-T
-        WEIGT=D/C
-      ELSE
-        WEIGT=1000.
-      ENDIF
-      RETURN
-      END
-
-      SUBROUTINE NONKDD(G,H,W1,W2,W3,AK1,AK2,AK3,T1,T2,T3,DDD)
-
-!     See Herterich and Hasselmann (1980; p. 223, eq. B1)
-
-      CALL NONKD(G,H,W1,W2,W3,AK1,AK2,AK3,T1,T2,T3,DD1)
-      CALL NONKD(G,H,W2,W3,W1,AK2,AK3,AK1,T2,T3,T1,DD2)
-      CALL NONKD(G,H,W3,W1,W2,AK3,AK1,AK2,T3,T1,T2,DD3)
-!
-      DDD=(DD1+DD2+DD3)/3.
-!
-      RETURN
-      END
-
-      SUBROUTINE NONKD(G,H,W1,W2,W3,AK1,AK2,AK3,T1,T2,T3,DDD)
-
-!     GG    : square of acceleration of gravity (=g**2)
-!     G2    : twice the square of acceleration of gravity (=2g**2)
-!     WP23  : sum of w2 and w3 (=w2+w3)
-!     W123  : sum of w1, w2 and w3 (=w1+w2+w3)
-!     AKX1  : size of the x-component of wavenumber k1
-!     AKY1  : size of the y-component of wavenumber k1
-!     AKX2  : size of the x-component of wavenumber k2
-!     AKY2  : size of the y-component of wavenumber k2
-!     AKX3  : size of the x-component of wavenumber k3
-!     AKY3  : size of the y-component of wavenumber k3
-!     AK23  : dot product of wavenumbers k2 and k3
-!     W23   : frequency corresponding to wavenumber k2+k3
-
-
-      DDD=0.
-      GG=G*G
-      G2=2.*G*G
-!
-      AKX1=AK1*COS(T1)
-      AKY1=AK1*SIN(T1)
-!
-      AKX2=AK2*COS(T2)
-      AKY2=AK2*SIN(T2)
-!
-      AKX3=AK3*COS(T3)
-      AKY3=AK3*SIN(T3)
-!
-      AK23=SQRT((AKX2+AKX3)**2+(AKY2+AKY3)**2)
-      W23=SQRT(G*AK23*TANH(AK23*H))
-!
-      WP23=W2+W3
-      CF0=W23**2-WP23**2
-      IF(CF0.EQ.0.) RETURN
-!
-      W123=W1+W2+W3
-      AKXY23=AKX2*AKX3+AKY2*AKY3
-      AKXY123=AKX1*(AKX2+AKX3)+AKY1*(AKY2+AKY3)
-      CF1=0.
-      IF(AK1*H.LE.10.) CF1=AK1*AK1/COSH(AK1*H)**2
-!
-      CF2=0.
-      CF3=0.
-      IF(AK3*H.LE.10.) CF2=W2*AK3*AK3/COSH(AK3*H)**2
-      IF(AK2*H.LE.10.) CF3=W3*AK2*AK2/COSH(AK2*H)**2
-
-!     See Herterich and Hasselmann (1980), first eq. after eq. B2
-!     Equation is divided by I, to avoid complex numbers
-
-      DD=WP23*(AK2*AK3*TANH(AK2*H)*TANH(AK3*H)-AKXY23)-(CF2+CF3)/2.
-
-!     See Herterich and Hasselmann (1980), second eq. after eq. B2
-
-      EE=(AKXY23-W2*W3*(W2**2+W3**2+W2*W3)/GG)/(2.*G)
-
-      CF4=0.
-      IF(AK23*H.LE.10.) CF4=W1*AK23**2/COSH(AK23*H)**2
-
-!     Equation B1 of Herterich and Hasselmann (1980), where DD is
-!     multiplied by I, to compensate for the earlier division
-
-      DDD=-DD/CF0*(2.*W123*(W1**2*W23**2/GG-AKXY123)-CF4-WP23*CF1)
-     &    +DD*W1*(W1*W1+W23*W23)/GG
-     &    +EE*(W1**3*WP23/G-G*AKXY123-G*CF1)
-     &    +W1*AKXY23*(W123*(W2**2+W3**2)+W2*W3*WP23)/G2
-     &    -W1*W2*W2*AK3*AK3*(W123+W3)/G2
-     &    -W1*W3*W3*AK2*AK2*(W123+W2)/G2
-!
-      RETURN
-      END
-
-      SUBROUTINE CGCMP(G,AK,H,CG)
-
-!     Calculates group velocity Cg based on depth and wavenumber
-!     Includes a deep water limit for kd > 10.
-
-!     G     : gravitational acceleration
-!     AK    : wave number
-!     H     : depth
-!     CG    : group velocity
-!     AKH   : depth x Wave number (kd)
-!     RGK   : square root of gk
-!     SECH2 : the square of the secant Hyperbolic of kd
-!             = 1 - TANH(kd)**2
-
-!     Calculation of group velocity Cg
-
-      AKH=AK*H
-      IF(AKH.LE.10.) THEN                                                 40.33
-
-!     Shallow water:
-
-!     Cg = (1/2) (1 + (2 kd) / Sinh (2 kd)) (w / k)
-!        = (1/2) (1 + (kd SECH2) / Tanh (kd)) (w / k)
-!        = (1/2) (1 + (kd SECH2) / Tanh (kd)) (Sqrt (gk Tanh(kd)) / k)
-!        = (1/2) (Sqrt (gk) (Sqrt(Tanh (kd)) + kd SECH2 / Sqrt (Tanh (kd)) / k
-!        = (1/2) (Sqrt (k) g (Tanh (kd) + kd SECH2) / (k Sqrt (g Tanh (kd)))
-!        = (g Tanh(kd) + gkd SECH2) / (2 Sqrt(gk Tanh(kd))
-
-        SECH2=1.-TANH(AKH)**2
-        CG=(G*AKH*SECH2+G*TANH(AKH))/(2.*SQRT(G*AK*TANH(AKH)))
-
-      ELSE                                                                40.17
-
-!     Deep water:
-
-!     Cg = w / (2 k)
-!        = g / (2 Sqrt (gk))
-
-        RGK=SQRT(G*AK)
-        CG=G/(2.*RGK)
-
-      ENDIF                                                               40.17
-!
-      RETURN
-
-      END SUBROUTINE CGCMP
-
-      SUBROUTINE DCGCMP(G,AK,H,DCG)
-!
-      AKH=AK*H
-      IF(AKH.GT.10.) GO TO 100
-      SECH2=1-TANH(AKH)**2
-      SECH3=SECH2*SQRT(SECH2)
-      DCG=G*H*SECH3*(COSH(AKH)-AKH*SINH(AKH))/SQRT(G*AK*TANH(AKH))
-     &   -(G*AKH*SECH2+G*TANH(AKH))**2/(4.*SQRT(G*AK*TANH(AKH))**3)
-      RETURN
-!
-  100 RGK=SQRT(G*AK)
-      DCG=-G*G/(4.*RGK**3)
-!
-      RETURN
-      END
-
-      REAL FUNCTION WAVE(D)
-
-!     Transforms nondimensional Sqr(w)d/g into nondimensional kd using the
-!     dispersion relation and an iterative method
-
-      IF(D-10.) 2,2,1
-    1 XX=D
-      GO TO 6
-    2 IF(D-1.) 3,4,4
-    3 X=SQRT(D)
-      GO TO 5
-    4 X=D
-    5 COTHX=1.0/TANH(X)
-      XX=X-(X-D*COTHX)/(1.+D*(COTHX**2-1.))
-      E=1.-XX/X
-      X=XX
-      IF(ABS(E)-0.0005) 6,5,5
-    6 WAVE=XX
-      RETURN
-      END
-!
 !----------------------------------------------------------------------
       SUBROUTINE SWINTFXNL ( ASWAN,SIGMA,DIR,NDIR,NSIG,NGRID,DEPTH,
      &                       IQTYPE,SNL,KCGRD,ICMAX,IERROR )
@@ -3555,7 +2823,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -3736,6 +3004,140 @@
 !
       END SUBROUTINE SWINTFXNL
 !
+!********************************************************************
+!
+      SUBROUTINE TCOEF (W1, W2, W12, K1, K2, K12, DEP2, R, S, ICC)
+!
+!********************************************************************
+!
+      USE SWCOMM3
+
+      IMPLICIT NONE
+!
+!
+!
+!   --|-----------------------------------------------------------|--
+!     | Delft University of Technology                            |
+!     | Faculty of Civil Engineering                              |
+!     | Environmental Fluid Mechanics Section                     |
+!     | P.O. Box 5048, 2600 GA  Delft, The Netherlands            |
+!     |                                                           |
+!     | Programmers: The SWAN team                                |
+!   --|-----------------------------------------------------------|--
+!
+!
+!     SWAN (Simulating WAves Nearshore); a third generation wave model
+!     Copyright (C) 1993-2014  Delft University of Technology
+!
+!     This program is free software; you can redistribute it and/or
+!     modify it under the terms of the GNU General Public License as
+!     published by the Free Software Foundation; either version 2 of
+!     the License, or (at your option) any later version.
+!
+!     This program is distributed in the hope that it will be useful,
+!     but WITHOUT ANY WARRANTY; without even the implied warranty of
+!     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+!     GNU General Public License for more details.
+!
+!     A copy of the GNU General Public License is available at
+!     http://www.gnu.org/copyleft/gpl.html#SEC3
+!     or by writing to the Free Software Foundation, Inc.,
+!     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+!
+!
+!  0. Authors
+
+!     41.46: James Salmon
+
+!  1. Updates
+
+!     41.46, October 2013: new subroutine
+
+!  2. Purpose
+!
+!     Calculates coupling coefficients for SPB
+!
+!  3. Method
+!
+!     R_m,p-m = (k_m + k_p-m)^2 * [0.5 + (w_m*w_p-m / g*h*k_m*k_p-m)]
+!
+!     S_p     = -2/g * ( g*h*k_p + 2*B*g*h^3*k_p^3 - (B+(1/3))*h^2*w_p^2*k_p )
+!
+!     where: B = 1/15
+!
+!  4. Argument variables
+!
+!     ICC         type of coupling coefficient
+!          [1]  - Boussinesq: Freilich & Guza (1984), Herbers & Burton (1997)
+!          [2]  - Deterministic Boussinesq: Madsen & Sorensen (1993); suggested for SPB
+!
+!     W1, W2, W12 w_p, w_m, w_I
+!     K1, K2, K12 k_p, k_m, k_I      where I represents the sum or difference
+!     DEP2        water depth
+!
+      INTEGER ICC
+!
+      REAL :: W1, W2, W12
+      REAL :: K1, K2, K12
+!
+      REAL :: DEP2(MCGRD)
+!
+      REAL, INTENT(OUT) :: R
+      REAL, INTENT(OUT) :: S
+!
+!     Values from common
+!
+!  6. Local variables
+!
+      REAL :: DEP , DEP_2, DEP_3
+      REAL :: B   , B2   , B3
+!
+!  7. SUBROUTINES USED
+
+!  8. SUBROUTINES CALLING
+
+!     SWSPB
+
+!  9. ERROR MESSAGES
+
+!     ---
+
+! 10. REMARKS
+
+!     ---
+
+! 11. STRUCTURE
+
+!     -----------------------------------------------------------------
+
+!     -----------------------------------------------------------------
+
+! 13. Source text
+!
+      DEP   = DEP2(KCGRD(1))
+      DEP_2 = DEP**2
+      DEP_3 = DEP**3
+!
+      B     = 1./15.
+      B2    = 2.*B
+      B3    = (B + (1./3.))
+!
+      IF (ICC .EQ. 1) THEN !Boussinesq
+          R = 0.75 * (W2 + W12)
+          S = -DEP * SQRT(GRAV*DEP)
+!
+      ELSEIF (ICC .EQ. 2) THEN !Deterministic Boussinesq
+          R     =  (0.5 + ((W2*W12)/(GRAV*DEP*K2*K12))) * (K2 + K12)**2
+!
+          S     = (-2./GRAV) * (  (GRAV*DEP*K1)
+     &                          + (B2*GRAV*DEP_3*K1**3)
+     &                          - (B3*DEP_2*K1*W1**2)   )
+!
+      ENDIF
+!
+      RETURN
+      END subroutine TCOEF
+!
 !****************************************************************
 !
       SUBROUTINE SWLTA ( AC2   , DEP2  , CGO   , SPCSIG,
@@ -3764,7 +3166,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 2009  Delft University of Technology
+!     Copyright (C) 1993-2014  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -3784,13 +3186,15 @@
 !
 !  0. Authors
 !
-!     40.55: Marcel Zijlema
+!     40.56: Marcel Zijlema
 !     40.85: Marcel Zijlema
+!     41.44: James Salmon, Pieter Smit
 !
 !  1. Updates
 !
-!     40.55, Feb. 06: New subroutine
+!     40.56, Feb. 06: New subroutine
 !     40.85, Aug. 08: store triads for output purposes
+!     41.44, Oct. 13: consistency fix
 !
 !  2. Purpose
 !
@@ -3904,6 +3308,10 @@
 !     DEP_3 :     water depth to power 3
 !     E     :     energy density as function of frequency
 !     E0    :     energy density at central bin
+!     ED    :     integral energy density over directions                  41.44
+!     ED0   :     integral energy density over directions at central bin   41.44
+!     EDM   :     integral energy density over directions at               41.44
+!                 interacting bin
 !     EM    :     energy density at interacting bin
 !     FT    :     auxiliary real indicating multiplication factor
 !                 for triad contribution
@@ -3938,10 +3346,10 @@
 !
       INTEGER I1, I2, ID, IDDUM, IENT, II, IS, ISM, ISM1, ISMAX,
      &        ISP, ISP1
-      REAL    AUX1, AUX2, BIPH, C0, CM, DEP, DEP_2, DEP_3, E0, EM,
-     &        FT, RINT, SIGPI, SINBPH, STRI, WISM, WISM1, WISP, WISP1,
-     &        W0, WM, WN0, WNM, XIS, XISLN
-      REAL, ALLOCATABLE :: E(:), SA(:,:)
+      REAL    AUX1, AUX2, BIPH, C0, CM, DEP, DEP_2, DEP_3, E0, ED0, EDM,
+     &        EM, FT, RINT, SIGPI, SINBPH, STRI, WISM, WISM1, WISP,
+     &        WISP1, W0, WM, WN0, WNM, XIS, XISLN
+      REAL, ALLOCATABLE :: E(:), ED(:), SA(:,:)
 !
 !  9. Subroutines calling
 !
@@ -3988,8 +3396,10 @@
       WISM1  = 1. - WISM
 
       ALLOCATE (E (1:MSC))
+      ALLOCATE (ED(1:MSC))
       ALLOCATE (SA(1:MDC,1:MSC+ISP1))
       E  = 0.
+      ED = 0.
       SA = 0.
 !
 !     --- compute maximum frequency for which interactions are calculated
@@ -4011,6 +3421,10 @@
         BIPH   = (0.5*PI)*(TANH(PTRIAD(4)/URSELL(KCGRD(1)))-1.)
         SINBPH = ABS( SIN(BIPH) )
 !
+!       --- calculate integral of energy density over directions
+!
+        ED(:) = SUM(AC2(:,:,KCGRD(1)),DIM=1) * 2.*PI * SPCSIG(:) * DDIR   41.44
+!
         DO II = IDDLOW, IDDTOP
            ID = MOD ( II - 1 + MDC , MDC ) + 1
 !
@@ -4023,17 +3437,20 @@
            DO IS = 1, ISMAX
 
               E0  = E(IS)
+              ED0 = ED(IS)
               W0  = SPCSIG(IS)
               WN0 = KWAVE(IS,1)
               C0  = W0 / WN0
 
               IF ( IS.GT.-ISM1 ) THEN
                  EM  = WISM * E(IS+ISM1)       + WISM1 * E(IS+ISM)
+                 EDM = WISM * ED(IS+ISM1)      + WISM1 * ED(IS+ISM)
                  WM  = WISM * SPCSIG(IS+ISM1)  + WISM1 * SPCSIG(IS+ISM)
                  WNM = WISM * KWAVE(IS+ISM1,1) + WISM1 * KWAVE(IS+ISM,1)
                  CM  = WM / WNM
               ELSE
                  EM  = 0.
+                 EDM = 0.
                  WM  = 0.
                  WNM = 0.
                  CM  = 0.
@@ -4046,7 +3463,8 @@
               RINT = AUX1 / AUX2
               FT = PTRIAD(1) * C0 * CGO(IS,1) * RINT**2 * SINBPH
 
-              SA(ID,IS) = MAX(0., FT * ( EM * EM - 2. * EM * E0 ))
+!              SA(ID,IS) = MAX(0., FT * ( EM * EM - 2. * EM * E0 ))
+              SA(ID,IS) = MAX(0., FT * ( EDM * (EM - E0) - ED0 * EM ))    41.44
 
            END DO
         END DO
@@ -4092,7 +3510,676 @@
  2003    FORMAT (' SWLTA: SMEBRK HS B |SIN(B)|:',4E12.4)
       END IF
 
-      DEALLOCATE(E,SA)
+      DEALLOCATE(E,ED,SA)
 
       RETURN
       END SUBROUTINE SWLTA
+!
+!********************************************************************
+!
+      SUBROUTINE SWSPB ( AC2   , DEP2  , CGO   , SPCSIG,
+     &                   KWAVE , IMATRA, IMATDA, REDC0 , REDC1 ,
+     &                   IDDLOW, IDDTOP, ISSTOP, IDCMIN, IDCMAX,
+     &                   KMESPC, SMEBRK, ETOT  , PLTRI )
+!
+!********************************************************************
+!
+      USE OCPCOMM4
+      USE SWCOMM3
+      USE SWCOMM4
+
+      IMPLICIT NONE
+!
+!
+!
+!   --|-----------------------------------------------------------|--
+!     | Delft University of Technology                            |
+!     | Faculty of Civil Engineering                              |
+!     | Environmental Fluid Mechanics Section                     |
+!     | P.O. Box 5048, 2600 GA  Delft, The Netherlands            |
+!     |                                                           |
+!     | Programmers: The SWAN team                                |
+!   --|-----------------------------------------------------------|--
+!
+!
+!     SWAN (Simulating WAves Nearshore); a third generation wave model
+!     Copyright (C) 1993-2014  Delft University of Technology
+!
+!     This program is free software; you can redistribute it and/or
+!     modify it under the terms of the GNU General Public License as
+!     published by the Free Software Foundation; either version 2 of
+!     the License, or (at your option) any later version.
+!
+!     This program is distributed in the hope that it will be useful,
+!     but WITHOUT ANY WARRANTY; without even the implied warranty of
+!     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+!     GNU General Public License for more details.
+!
+!     A copy of the GNU General Public License is available at
+!     http://www.gnu.org/copyleft/gpl.html#SEC3
+!     or by writing to the Free Software Foundation, Inc.,
+!     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+!
+!
+!  0. Authors
+
+!     41.46: James Salmon
+
+!  1. Updates
+
+!     41.46, October 2013: new subroutine
+
+!  2. Purpose
+!
+!     Computes triad source term based on Becq-Girard et al. (1999)
+!
+!  3. Method
+!
+!     Expression given by Becq-Girard et al. (1999) for spatial evolution
+!     of the continuous variance density E(fp) of component p:
+!
+!     E(fp)' = <shoaling term> + 4 * <SUM> - 8 * <DIF.>
+!
+!     <SUM>   = (1/Sp) * INT{0,fp}  Rm,p-m  * Im(B(fm,fp-fm)) dfm
+!     <DIF>   = (1/Sp) * INT{0,inf} R-m,p+m * Im(B*(-fm,fp+fm)) dfm
+!
+!     Im(B(fm,fp-fm)) = 0.5 * [  Rm,p-m * E(fm) * E(fp-fm) / Sp
+!                              - Rp,-m  * E(fp) * E(fm)    / Sp-m
+!                              - Rp,m-p * E(fp) * E(fp-fm) / Sm   ] * MU
+!
+!     Im(B*(-fm,fp+fm)) = Im(B(fm,-(fp+fm))) = Im(fm,fp)
+!     Im(B(fm,fp))    = 0.5 * [  Rm,p   * E(fp) * E(fm)    / Sp+m
+!                              - Rp+m,-m* E(p+m)* E(fm)    / Sp
+!                              - Rp+m,-p* E(p+m)* E(fp)    / Sm   ] * MU
+!
+!     where Sx and Rx,y are coupling coeffients (see TCOEF)
+!
+!     MU = Im(1/(delta_k - iK)) = K / (delta_k^2 + K^2)
+!
+!     delta_k = k1,2 - k1 - k2 = kp-m + km -kp = kp+m -km - kp
+!     K       = (C1 * k_p) + C2
+!        where k_p is the peak wave number; defaults C1 = 0.95, C2 = - 0.75
+!
+!     The source term is then given by:     cg,p(4*<SUM> - 8*<DIF.>)
+!        where cg,p is the group velocity of component p, freq = fp
+!
+!     Note(1): in the literature occasionally the following form is given:
+!
+!      (cg,p*Rx,y/Rx+y) * [Ia,b - Ia+b,-a - Ia+b,-b]
+!
+!      where Ia,b = sqrt(cg|a+b|/cg|a|/cg|b|)*cg|a|*cg|b| * Ja,b
+!            Ja,b = Ra,b * E(a) * E(b) / Sa+b
+!
+!      The end summation is then divided by factor: sqrt(cg,p*cg,x*cg,y)
+!
+!      All the velocity terms cancel to simply a factor cg,p, i.e:
+!            (cg,p*Rx,y/Rx+y) * [Ja,b - Ja+b,-a - Ja+b,-b]
+!
+!    Note(2): the above expression is factored by a missing Df term
+!             from transforming from discrete to continuous
+!
+!  4. Argument variables
+
+!     AC2         action density
+!     CGO         group velocity
+!     DEP2        water depth
+!     IDCMIN      minimum counter in directional space
+!     IDCMAX      maximum counter in directional space
+!     IDDLOW      minimum direction that is propagated within a sweep
+!     IDDTOP      maximum direction that is propagated within a sweep
+!     IMATDA      main diagonal of the linear system
+!     IMATRA      right-hand side of system of equations
+!     ISSTOP      maximum frequency counter in a sweep
+!     KWAVE       wave number
+!     PLTRI       triad contribution in TEST points
+!     SPCSIG      relative frequencies in computational domain in sigma-space
+!
+      INTEGER IDDLOW, IDDTOP, ISSTOP
+      INTEGER IDCMIN(MSC), IDCMAX(MSC)
+!
+      REAL :: SMEBRK
+      REAL :: KMESPC
+      REAL :: ETOT
+      REAL :: AC2(MDC,MSC,MCGRD)
+!
+      REAL :: CGO(MSC,MICMAX)
+      REAL :: DEP2(MCGRD)
+      REAL :: IMATDA(MDC,MSC), IMATRA(MDC,MSC)
+      REAL :: SPCSIG(MSC)
+      REAL :: KWAVE(MSC,MICMAX)
+      REAL :: PLTRI(MDC,MSC,NPTST)
+      REAL :: REDC0(MDC,MSC,MREDS)
+      REAL :: REDC1(MDC,MSC,MREDS)
+!
+!     Values from common
+!     MDC       : Size of array in theta-direction
+!     MSC       : Size of array in sigma-direction
+!     PI        : Circular constant Pi
+!     PTRIAD    : Tunable coefficients for nonlinear triad sourceterms
+!
+!     PTRIAD(6) : value for proportionality coefficient K
+!     PTRIAD(7) : value for proportionality coefficient K
+!
+!  6. Local variables
+!
+      INTEGER ICC !Formulation for coupling coefficients (see TCOEF)
+      INTEGER IB  !Switch between mu of SPB or sin(beta) of LTA
+!
+      INTEGER IS, ID, ISIGM, II
+      INTEGER IP ,IM, IT
+!
+      REAL :: EMAX, ETD
+      REAL :: KP, K
+      REAL :: DEPLOC, URSLOC, BIPH, SINABS, BETA
+!
+      REAL :: K1, K2, K12, W1, W2, W12, C1, C2, C12
+      REAL :: V0, R0, S0 , MU, DK
+      REAL :: R1, R2, R3 , S1, S2, S3
+      REAL :: I1, I2, I3 , EE1, EE2, EE3
+!
+      REAL :: SIGPI, STRI
+!
+      REAL :: DUMMY, ET
+!
+      REAL, ALLOCATABLE :: E(:)         !E(f) in direction
+      REAL, ALLOCATABLE :: CONTS(:,:)   !Sum contribution
+      REAL, ALLOCATABLE :: CONTD(:,:)   !Diff. contribution
+!
+!  7. SUBROUTINES USED
+!
+!     Interaction coefficients are calculated in subroutine TCOEF
+
+!  8. SUBROUTINES CALLING
+
+!     SOURCE
+
+!  9. ERROR MESSAGES
+
+!     ---
+
+! 10. REMARKS
+
+!     ---
+
+! 11. STRUCTURE
+
+!     -----------------------------------------------------------------
+
+!     -----------------------------------------------------------------
+
+! 13. Source text
+!
+      ICC   = 2 ! 1 uses Boussinesq coupling coefficients
+                ! 2 uses Determisistic Boussinesq coupling coefficients
+      IB    = 1 ! 1 uses mu of SPB
+                ! 2 uses sin(beta) of LTA
+!
+      DEPLOC = DEP2(KCGRD(1))
+!
+      URSLOC = (GRAV*2.*SQRT(ETOT))/(SQRT(2.)*SMEBRK**2*DEPLOC**2)
+      BIPH   = 0.5 * PI * (TANH(PTRIAD(4)/URSLOC) - 1.)
+      SINABS = ABS(SIN(BIPH))
+!      BETA   = PTRIAD(1) / DEPLOC / DEPLOC * SINABS *
+!     &         KMESPC**(1.-PTRIAD(2))
+!
+! --- Determine k_p (peak wavenumber) and K
+!
+      EMAX  = 0.
+      ISIGM = -1
+      DO IS = 1, MSC
+          ETD = 0.
+          DO ID = 1, MDC
+              ETD = ETD + SPCSIG(IS)*AC2(ID,IS,KCGRD(1))*DDIR
+          ENDDO
+          IF (ETD .GT. EMAX) THEN
+              EMAX = ETD
+              ISIGM = IS
+          ENDIF
+      ENDDO
+      IF (ISIGM .GT. 0) THEN
+          KP = KWAVE(ISIGM,1)
+      ELSE
+          KP = 0.
+      ENDIF
+!
+      K = (PTRIAD(6) * KP) + PTRIAD(7)
+      !CALL KSCIP1(1,2.*PI*0.395,0.61,KP,DUMMY,DUMMY,DUMMY)
+      !K = (0.95 * KP) - 0.75
+!
+!     --- Allocate and initialize
+!
+      ALLOCATE (E(1:MSC))
+      ALLOCATE (CONTS(1:MDC,1:MSC))
+      ALLOCATE (CONTD(1:MDC,1:MSC))
+!
+      E     = 0.
+      CONTS = 0.
+      CONTD = 0.
+!
+! --- Start code to compute source term
+!
+! --- Loop over directions propagated within sweep
+      DO II = IDDLOW, IDDTOP
+          ID = MOD ( II - 1 + MDC , MDC ) + 1
+          ! initialize array with E(f) for given direction
+          DO IS = 1, MSC
+              E(IS) = AC2(ID,IS,KCGRD(1)) * SPCSIG(IS) * 2. * PI !Factor J
+          ENDDO
+          !
+          DO IP = 1, MSC
+              W1  = SPCSIG(IP)
+              K1  = KWAVE(IP,1)
+              C1  = CGO(IP,1)
+              !
+              ! --- Compute sum cont. (m, p - m)
+              !
+              IF (IP .GT. 1) THEN
+              DO IM = 1, IP-1 ! Eq. m
+                  ! --- Values for computation
+                  W2  = SPCSIG(IM)
+                  K2  = KWAVE(IM,1)
+                  C2  = CGO(IM,1)
+                  W12 = W1 - W2     ! Eq. p - m
+                  ! --- Compute outer coeffieicents
+                  CALL KSCIP1(1,W12,DEPLOC,K12,C12,DUMMY,DUMMY)
+                  !V0 = SQRT(C1 / C2 / C12)
+                  CALL TCOEF(W1,W2,W12,K1,K2,K12,DEP2,R0,S0,ICC)
+                  ! --- Compute imaginary part
+                  DK = K12 + K2 - K1
+                  IF (IB .EQ. 1) THEN
+                    MU = K / ((DK**2) + (K**2))
+                  ELSEIF (IB .EQ. 2) THEN
+                    MU = SINABS * (FRINTF*W2/(2.*PI)) / DK
+                  ENDIF
+                  !
+                  !I1 = SQRT(C1/C2/C12) * R0 / S0
+                  CALL TCOEF(W1,W2,W12,K1,K2,K12,DEP2,R1,S1,ICC)
+                  I1 = R1 / S1
+                  CALL TCOEF(W12,W1,-W2,K12,K1,-K2,DEP2,R2,S2,ICC)
+                  !I2 = SQRT(C12/C1/C2) * R2 / S2
+                  I2 = R2 / S2
+                  CALL TCOEF(W2,W1,-W12,K2,K1,-K12,DEP2,R3,S3,ICC)
+                  !I3 = SQRT(C2/C1/C12) * R3 / S3
+                  I3 = R3 / S3
+                  ! --- Compute energy products via interpolation
+                  EE1 = 0.
+                  EE2 = E(IP) * E(IM)
+                  EE3 = 0.
+                  IF (W12 .GT. SPCSIG(1)) THEN
+                      IT    = 0
+                      DUMMY = 0.
+                      DO WHILE (DUMMY .LT. W12)
+                          IT    = IT + 1
+                          DUMMY = SPCSIG(IT)
+                      ENDDO
+                      ET = E(IT-1)+((E(IT)-E(IT-1))*(W12-SPCSIG(IT-1))
+     &                              /(SPCSIG(IT)-SPCSIG(IT-1)) )
+                      EE1    = E(IM) * ET
+                      EE3    = E(IP) * ET
+                  ENDIF
+                  !
+                  EE1=EE1 * (FRINTF*(W2)/(2.*PI))
+                  EE2=EE2 * (FRINTF*(W2)/(2.*PI))
+                  EE3=EE3 * (FRINTF*(W2)/(2.*PI))
+                  !EE1=EE1 * (FRINTF*(W2*W12/W1)/(2.*PI))
+                  !EE2=EE2 * (FRINTF*(W2)/(2.*PI))
+                  !EE3=EE3 * (FRINTF*(W12)/(2.*PI))
+                  !
+                  CONTS(ID,IP) = CONTS(ID,IP) + 0.5 * MU * (R0/S0) *
+     &                 (I1*EE1 - I2*EE2 - I3*EE3) * C1 * PTRIAD(1)
+              ENDDO
+              ENDIF
+              !
+              ! --- Compute diff. cont. (p + m, m)
+              !
+              DO IM = 1, MSC  ! Eq. m
+                  W2 = SPCSIG(IM)
+                  K2 = KWAVE(IM,1)
+                  C2 = CGO(IM,1)
+                  W12 = W1 + W2
+                  !
+                  CALL KSCIP1(1,W12,DEPLOC,K12,C12,DUMMY,DUMMY)
+                  CALL TCOEF(W1,-W2,W12,K1,-K2,K12,DEP2,R0,S0,ICC)
+                  !
+                  DK = K12 - K2 - K1
+                  IF (IB .EQ. 1) THEN
+                    MU = K / ((DK**2) + (K**2))
+                  ELSEIF (IB .EQ. 2) THEN
+                    MU = SINABS * (FRINTF*W2/(2.*PI)) / DK
+                  ENDIF
+                  !
+                  CALL TCOEF(W12,W1,W2,K12,K1,K2,DEP2,R1,S1,ICC)
+                  I1 = R1 / S1
+                  CALL TCOEF(W2,-W1,W12,K2,-K1,K12,DEP2,R2,S2,ICC)
+                  I2 = R2 / S2
+                  CALL TCOEF(W1,-W2,W12,K1,-K2,K12,DEP2,R3,S3,ICC)
+                  I3 = R3 / S3
+                  !
+                  EE1 = E(IP) * E(IM)
+                  EE2 = 0.
+                  EE3 = 0.
+                  IF (W12 .LT. SPCSIG(MSC)) THEN
+                      IT = 0
+                      DUMMY = 0.
+                      DO WHILE (DUMMY .LT. W12)
+                          IT = IT + 1
+                          DUMMY = SPCSIG(IT)
+                      ENDDO
+                      ET = E(IT-1)+((E(IT)-E(IT-1))*(W12-SPCSIG(IT-1))
+     &                              /(SPCSIG(IT)-SPCSIG(IT-1)) )
+                      EE2    = E(IP) * ET
+                      EE3    = E(IM) * ET
+                  ENDIF
+                  !
+                  EE1=EE1 * (FRINTF*(W2)/(2.*PI))
+                  EE2=EE2 * (FRINTF*(W2)/(2.*PI))
+                  EE3=EE3 * (FRINTF*(W2)/(2.*PI))
+                  !EE1=EE1 * (FRINTF*(W2)/(2.*PI))
+                  !EE2=EE2 * (FRINTF*(W12)/(2.*PI))
+                  !EE3=EE3 * (FRINTF*(W2*W12/W1)/(2.*PI))
+                  !
+                  CONTD(ID,IP) = CONTD(ID,IP) + 0.5 * MU * (R0/S0) *
+     &                 (I1*EE1 - I2*EE2 - I3*EE3) * C1 * PTRIAD(1)
+              ENDDO
+          ENDDO
+      ENDDO
+!
+!     --- Compute total contribution
+!
+      DO IS = 1, ISSTOP
+          SIGPI = SPCSIG(IS) * 2. * PI ! Factor to convert back to N(sigma)
+          DO II = IDCMIN(IS), IDCMAX(IS)
+              ID = MOD ( II - 1 + MDC , MDC ) + 1
+              !
+              STRI = (4. * CONTS(ID,IS)) - (8. * CONTD(ID,IS))
+              !
+              IF(TESTFL) PLTRI(ID,IS,IPTST) = STRI / SIGPI
+              !
+              ! --- store results in RHS and main diagonal according
+              !     to Patankar-rules
+              !
+              IF (STRI .GT. 0.) THEN
+                 IMATRA(ID,IS) = IMATRA(ID,IS) + STRI / SIGPI
+                 REDC0(ID,IS,2)= REDC0(ID,IS,2)+ STRI / SIGPI
+              ELSE
+                 IMATDA(ID,IS) = IMATDA(ID,IS) - STRI /
+     &                           MAX(1.E-18,AC2(ID,IS,KCGRD(1))*SIGPI)
+                 REDC1(ID,IS,2)= REDC1(ID,IS,2)+ STRI /
+     &                           MAX(1.E-18,AC2(ID,IS,KCGRD(1))*SIGPI)
+              ENDIF
+          ENDDO
+      ENDDO
+!
+      DEALLOCATE(E,CONTS,CONTD)
+!
+      RETURN
+      END subroutine SWSPB
+!
+!********************************************************************
+!
+      SUBROUTINE STRICL (ACLOC   ,DEPLOC  ,SPCSIG  ,KWAVE   ,
+     &                   IDDLOW  ,IDDTOP  ,ANYBIN  ,IMATDA  ,IMATRA,
+     &                   CGO     ,KMESPC  ,ETOT    ,SMEBRK          )   40.45
+!
+!********************************************************************
+!
+      USE OCPCOMM4
+      USE SWCOMM3
+      USE SWCOMM4
+
+      IMPLICIT NONE
+!
+!
+!
+!   --|-----------------------------------------------------------|--
+!     | Delft University of Technology                            |
+!     | Faculty of Civil Engineering                              |
+!     | Environmental Fluid Mechanics Section                     |
+!     | P.O. Box 5048, 2600 GA  Delft, The Netherlands            |
+!     |                                                           |
+!     | Programmers: The SWAN team                                |
+!   --|-----------------------------------------------------------|--
+!
+!
+!     SWAN (Simulating WAves Nearshore); a third generation wave model
+!     Copyright (C) 1993-2014  Delft University of Technology
+!
+!     This program is free software; you can redistribute it and/or
+!     modify it under the terms of the GNU General Public License as
+!     published by the Free Software Foundation; either version 2 of
+!     the License, or (at your option) any later version.
+!
+!     This program is distributed in the hope that it will be useful,
+!     but WITHOUT ANY WARRANTY; without even the implied warranty of
+!     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+!     GNU General Public License for more details.
+!
+!     A copy of the GNU General Public License is available at
+!     http://www.gnu.org/copyleft/gpl.html#SEC3
+!     or by writing to the Free Software Foundation, Inc.,
+!     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+!
+!
+!  0. Authors
+
+!     40.45: Nico Booij
+!     40.96: Matthijs Benit
+!     41.45: James Salmon
+
+!  1. Updates
+
+!     40.45, July 04: new subroutine
+!     41.45, October 2013: energy conservative form
+
+!  2. Purpose
+
+!     In this subroutine the triad-wave interactions are calculated
+!     with the empiric distributed colinear approximation.
+
+!  3. Method
+
+!     Transfer of action between two components under influence of a
+!     third one is formulated as follows:
+
+!                  P+1          P+1
+!     M * N  (Sigma   N  - Sigma   N  )
+!          3       1   1        2   2
+
+!     in which:
+
+!     M      is a dimensional coefficient
+!     N      is action density
+!     Sigma  spectral (angular) frequency
+
+!     Dimensions:
+!     ACLOC#: m2s2
+!     KW#   : 1/m
+!     SIG#  : 1/s
+!     SDIA# : 1/s
+
+!  4. Argument variables
+
+      REAL, INTENT(IN)      :: ACLOC(1:MDC,1:MSC)                       ! local action density spectrum
+      REAL, INTENT(IN)      :: DEPLOC                                   ! Depth at gridpoint ix,iy (obtained from SWANCOM1)
+      REAL, INTENT(IN)      :: SPCSIG(1:MSC)                            ! Relative frequencies in computational domain in sigma-space
+      REAL                  :: KWAVE(1:MSC)                             ! Wave number in stencil points
+      INTEGER, INTENT(IN)   :: IDDLOW                                   ! Minimum counter in directional space
+      INTEGER, INTENT(IN)   :: IDDTOP                                   ! Maximum counter in directional space
+      LOGICAL, INTENT(IN)   :: ANYBIN(1:MDC,1:MSC)                      ! if True this bin is going to be updated using the matrix
+      REAL                  :: IMATDA(1:MDC,1:MSC)                      ! IMATDA: Diagonal of matrix
+      REAL                  :: IMATRA(1:MDC,1:MSC)                      ! IMATRA: Right hand vector of matrix
+      REAL, INTENT(IN)      :: CGO(1:MSC)                               ! Group velocities in stencil points
+      REAL, INTENT(IN)      :: KMESPC                                   ! Mean wave number of the spectrum
+      REAL, INTENT(IN)      :: ETOT                                     !
+      REAL, INTENT(IN)      :: SMEBRK                                   !
+
+!     Values from common
+
+!     MDC       : Size of array in theta-direction
+!     MSC       : Size of array in sigma-direction
+!     PI        : Circular constant Pi
+!     PTRIAD(1) : Interaction coefficient (lambda)
+!     PTRIAD(2) : Power of the tail of the spectrum (p)
+!     PTRIAD(4) : xxx (delta)
+
+!  6. Local variables
+
+      INTEGER, SAVE     :: IENT=0                                       ! Number of entries into this subroutine
+      INTEGER           :: ID                                           ! Grid counter in spectral space (direction)
+      INTEGER           :: II                                           ! Counter
+      INTEGER           :: IS1, IS2, IS3                                ! Grid counter for spectral frequency
+      REAL              :: SIG1, SIG2, SIG3                             ! frequencies of 3 components
+      REAL              :: E1, E2, E3                                   ! energy densities of 2 components
+      REAL              :: KW1, KW2, KW3                                ! wave numbers of 3 components
+      REAL              :: CG1, CG2                                     ! wave group velocities at interacting frequencies
+      REAL              :: RS3, SS                                      ! aux. var. for determining SIG3
+      REAL              :: DSIG                                         ! frequency increment
+      REAL              :: SIGMEAN                                      ! mean freq of the 3 components
+      REAL              :: KMEAN                                        ! mean wave number
+      REAL              :: SDIA1, SDIA2                                 ! source term to diagonal
+      REAL              :: SRHS
+      REAL              :: DISPC                                        ! dispersion coefficient
+      REAL              :: BETA
+      REAL              :: SINABS
+      REAL              :: BIPH
+      REAL              :: URSLOC                                       ! auxiliary coefficients
+!
+      REAL              :: ED1, ED2, ED3                                ! integration of energy density over all directions
+      REAL              :: SDIA1B, SDIA2B
+      REAL              :: F(2)
+      INTEGER           :: ISHAP
+      REAL              :: SMEAN
+      REAL              :: SHAP(2)                                      ! coefficient for shape
+!
+      REAL, ALLOCATABLE :: ED(:)                                        ! integration of energy density over all directions
+
+!  7. SUBROUTINES USED
+
+!  8. SUBROUTINES CALLING
+
+!     SOURCE
+
+!  9. ERROR MESSAGES
+
+!     ---
+
+! 10. REMARKS
+
+!     ---
+
+! 11. STRUCTURE
+
+!     -----------------------------------------------------------------
+!     For all active directions do
+!         For all first components do
+!             determine frequency and wave number of component
+!             For all second components do
+!                 determine frequency and wave number of components
+!                 determine frequency of third resonating component
+!                 If this frequency is within spectral range
+!                 Then determine source terms
+!                      determine contributions to matrix
+!     -----------------------------------------------------------------
+
+! 13. Source text
+
+      IF (LTRACE) CALL STRACE (IENT,'STRICL')
+!
+      ISHAP = 0
+!
+      URSLOC = (GRAV*2.*SQRT(ETOT))/(SQRT(2.)*SMEBRK**2*DEPLOC**2)
+      BIPH   = 0.5 * PI * (TANH(PTRIAD(4)/URSLOC) - 1.)
+      SINABS = ABS(SIN(BIPH))
+      BETA   = PTRIAD(1) / DEPLOC / DEPLOC * SINABS *
+     &         KMESPC**(1.-PTRIAD(2))
+
+      ALLOCATE(ED(MSC))
+      ED = 0.
+!
+!     --- calculate integral of energy density over directions
+!
+      ED(:) = SUM(ACLOC(:,:),DIM=1) * DDIR
+
+!     first loop over all directions
+      DO II = IDDLOW, IDDTOP
+         ID = MOD (II - 1 + MDC, MDC) + 1
+!        first loop over all frequencies
+         DO IS1 = 1, MSC
+            SIG1 = SPCSIG(IS1)
+!           second loop over all higher frequencies
+            DO IS2 = IS1+1, MSC
+              SIG2 = SPCSIG(IS2)
+!             determine properties of 3rd component
+              SIG3 = SIG2 - SIG1
+              IF (SIG3.GT.SPCSIG(1)) THEN
+
+              SS  = ALOG(SIG3/SPCSIG(1)) / FRINTF
+              IS3 = INT(SS) + 1
+              RS3 = SS - REAL(IS3 - 1)
+!
+!             --- convert action densities to energy densities
+!
+              E1 = ACLOC(ID,IS1) * SIG1
+              E2 = ACLOC(ID,IS2) * SIG2
+              E3 =   RS3        * ACLOC(ID,IS3+1) * SPCSIG(IS3+1)
+     &             + (1. - RS3) * ACLOC(ID,IS3  ) * SPCSIG(IS3  )
+              !
+              KW1  = KWAVE(IS1)
+              KW2  = KWAVE(IS2)
+              KW3  = RS3 * KWAVE(IS3+1) + (1. - RS3) * KWAVE(IS3)
+              CG1  = CGO(IS1)
+              CG2  = CGO(IS2)
+!             determine properties of triad
+              KMEAN = (KW1 + KW2 + KW3)/3.
+
+              DISPC = TANH(2.*KMEAN * DEPLOC) / (2.*KMEAN * DEPLOC)
+
+              F(1)  = 1. !(SIG1 ) / SMEAN
+              F(2)  = 1. !(SIG2 ) / SMEAN
+
+              SDIA1 = BETA * E3  * CG1 * KW1**(PTRIAD(2)) * DISPC
+              SDIA2 = BETA * E3  * CG2 * KW2**(PTRIAD(2)) * DISPC
+!
+!             --- integrals over all directions
+!
+              ED1 = ED(IS1) * SIG1
+              ED2 = ED(IS2) * SIG2
+              ED3 =   RS3        * ED(IS3+1) * SPCSIG(IS3+1)
+     &              + (1. - RS3) * ED(IS3  ) * SPCSIG(IS3  )
+
+              SDIA1B= BETA * ED3 * SIG1 * CG1 * KW1**(PTRIAD(2)) * DISPC
+              SDIA2B= BETA * ED3 * SIG2 * CG2 * KW2**(PTRIAD(2)) * DISPC
+!
+!             --- apply shape function to relaxation
+!
+              IF (ISHAP.EQ.1) THEN
+                 SHAP(1) = EXP(-1.25*((SIG1/(2.*PI))/0.4)**-4)
+                 SHAP(2) = EXP(-1.25*((SIG2/(2.*PI))/0.4)**-4)
+                 !
+                 SDIA1  = SDIA1  / SHAP(1)
+                 SDIA2  = SDIA2  / SHAP(2)
+                 SDIA1B = SDIA1B / SHAP(1)
+                 SDIA2B = SDIA2B / SHAP(2)
+              ENDIF
+              !
+              IF (ANYBIN(ID,IS1)) THEN
+                  DSIG = (FRINTF * SIG2) / SIG1
+                  DSIG = DSIG * F(1)
+                  SRHS = 0.5 * (SDIA2B*E2 + SDIA2*ED2 - SDIA1*ED1)
+                  IMATDA(ID,IS1) = IMATDA(ID,IS1) + SDIA1B * DSIG * 0.5
+                  IMATRA(ID,IS1) = IMATRA(ID,IS1) + SRHS   * DSIG
+              ENDIF
+              IF (ANYBIN(ID,IS2)) THEN
+                  DSIG = (FRINTF * SIG1) / SIG2
+                  DSIG = DSIG * F(2)
+                  SRHS = 0.5 * (SDIA1B*E1 + SDIA1*ED1 - SDIA2*ED2)
+                  IMATDA(ID,IS2) = IMATDA(ID,IS2) + SDIA2B * DSIG * 0.5
+                  IMATRA(ID,IS2) = IMATRA(ID,IS2) + SRHS   * DSIG
+              ENDIF
+              ENDIF
+            ENDDO
+         ENDDO
+      ENDDO
+      DEALLOCATE(ED)
+      RETURN
+      END subroutine STRICL

@@ -21,6 +21,7 @@ real function Pincident ( spcsig, theta, cg, acloc )
     real                                 :: dsig     ! width of frequency bin
     real                                 :: cs, cge
 
+    ! total power transport
     CGE = 0.0
     DO ISIGM = 1, MSC
       IF (ISIGM.EQ.1) THEN
@@ -31,12 +32,16 @@ real function Pincident ( spcsig, theta, cg, acloc )
         DSIG = 0.5 * (SPCSIG(ISIGM+1) - SPCSIG(ISIGM-1))
       ENDIF
 
+      ! groupvel * sigma * ds
       CS   = CG(ISIGM)*SPCSIG(ISIGM)*DSIG
 
       DO ID=1,MDC
+         !   groupvel * sigma * ds * action density
          CGE = CGE + CS * ACLOC(ID,ISIGM)
+         ! = energy * groupvel * ds
       ENDDO
     ENDDO
+    !         = rho * grav * energy * groupvel * ds * dtheta
     Pincident = CGE * RHO * GRAV * DDIR
 
 

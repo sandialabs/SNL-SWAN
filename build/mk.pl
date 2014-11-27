@@ -1,36 +1,43 @@
 #!/usr/bin/perl
 use File::Copy;
 
+
+# wrapper for making SNL-SWAN
+# Automatically finds architechture, configures macros, and runs make
+
+
 $os = $^O;
 #print $os;
 
-$arg = $ARGV[0];  # ser, omp, etc.
+$arg = $ARGV[0];  # ser, omp, mpi, etc.
 
 if ($os =~ /WindowsNT/i || $os =~ /MSWin32/i) {
   $file1 = "Makefile.win";
+  $make_command="nmake"
 } else {
   $file1 = "Makefile.unix";
+  $make_command="make"
 }
-$file2 = "Makefile";
 
+
+# use correct Makefile
+$file2 = "Makefile";
 copy($file1, $file2); # or die "File cannot be copied.";
-unlink(macros.inc); # aka delete
-open($fh,'macros.inc'); # or die "cannot open macros.inc"; # create a blank macros file
+
+
+# create an empty macros file
+$macfile="macros.inc";
+if (-e $macfile ) {
+  unlink($macfile); # aka delete
+}
+open($fh,'>',$macfile); # or die "cannot open macros.inc";
 close $fh;
 
 
-if ($os =~ /WindowsNT/i || $os =~ /MSWin32/i) {
-  system("nmake", "config");
-  if ($#ARGV < 0) {
-    system("nmake");
-  } else {
-    system("nmake", $arg);
-  }
+# run make with given arguments
+system($make_command, "config");
+if ($#ARGV < 0) {
+  system($make_command);
 } else {
-  system("make", "config");
-  if ($#ARGV < 0) {
-    system("make");
-  } else {
-    system("make", $arg);
-  }
+  system($make_command, $arg);
 }
