@@ -1,0 +1,12 @@
+Instructions for quick installation of SWAN
+-------------------------------------------
+
+1) Ensure that the Perl package is available on your computer.
+   In most cases, it is available for Linux and a Unix operating
+   system. Check it by typing 'perl -v'. Otherwise, you may
+   download a free distribution for Linux, Solaris and Windows
+   called ActivePerl (www.activestate.com/activeperl/downloads).
+   The Perl version should be at least 5.0.0 or higher!
+
+2) From the 'build' directory, type 'mk.pl ser' for a serial compilation.
+   Type 'mk.pl omp' for an openMP compilation
