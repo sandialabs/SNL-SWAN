@@ -126,7 +126,7 @@ ser:
 	$(MAKE) FOR=$(F90_SER) FFLAGS="$(FLAGS_OPT) $(FLAGS_MSC) $(FLAGS_SER)" \
 	        FFLAGS90="$(FLAGS_OPT) $(FLAGS90_MSC) $(FLAGS_SER)" \
                 INCS="$(INCS_SER)" LIBS="$(LIBS_SER)" OBSDIR=obs-$(F90_SER)-$(arch)-ser \
-		EXENAME="swan-$(arch)-ser-$(F90_SER).exe" $(SWAN_EXE)
+		EXENAME="snl-swan-$(arch)-ser-$(F90_SER).exe" $(SWAN_EXE)
 #	$(MAKE) hcat
 
 omp:
@@ -134,7 +134,7 @@ omp:
 	@$(MAKE) FOR=$(F90_OMP) FFLAGS="$(FLAGS_OPT) $(FLAGS_MSC) $(FLAGS_OMP)" \
 	        FFLAGS90="$(FLAGS_OPT) $(FLAGS90_MSC) $(FLAGS_OMP)" \
                 INCS="$(INCS_OMP)" LIBS="$(LIBS_OMP)" OBSDIR=obs-$(F90_OMP)-$(arch)-omp \
-		EXENAME="swan-$(arch)-omp-$(F90_OMP).exe" $(SWAN_EXE)
+		EXENAME="snl-swan-$(arch)-omp-$(F90_OMP).exe" $(SWAN_EXE)
 #	$(MAKE) hcat
 
 mpi:
@@ -142,7 +142,7 @@ mpi:
 	$(MAKE) FOR=$(F90_MPI) FFLAGS="$(FLAGS_OPT) $(FLAGS_MSC) $(FLAGS_MPI)" \
 	        FFLAGS90="$(FLAGS_OPT) $(FLAGS90_MSC) $(FLAGS_MPI)" \
                 INCS="$(INCS_MPI)" LIBS="$(LIBS_MPI)" OBSDIR=obs-$(F90_MPI)-$(arch)-mpi \
-		EXENAME="swan-$(arch)-mpi-$(F90_MPI).exe" $(SWAN_EXE)
+		EXENAME="snl-swan-$(arch)-mpi-$(F90_MPI).exe" $(SWAN_EXE)
 #	$(MAKE) hcat
 
 hcat:
