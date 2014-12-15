@@ -1,0 +1,117 @@
+SUBROUTINE polin2(x1a,x2a,ya,ni,nj,x1,x2,y,dy)
+IMPLICIT NONE
+INTEGER ni,nj
+REAL dy,x1,x2,y,x1a(ni),x2a(nj),ya(ni,nj)
+REAL yitmp(ni),yjtmp(nj)
+
+! C USES polint
+! Given arrays x1a(1:ni) and x2a(1:nj) of independent variables, and an ni by nj array of
+! function values ya(1:ni,1:nj), tabulated at the grid points defined by x1a and x2a; and
+! given values x1 and x2 of the independent variables; this routine returns an interpolated
+! function value y, and an accuracy indication dy (based only on the interpolation in the x1
+! direction, however).
+
+INTEGER i,j
+
+if ( x1 < x1a(1) .or. x1 >x1a(ni) .or.		&
+     x2 < x2a(1) .or. x2 >x2a(nj) ) then
+  y=0.0
+  dy=0.0
+  !write(*,*) 'warning interpolation value out of range'
+  return
+endif
+
+do i=1,ni
+  yjtmp(1:nj)=ya(i,1:nj)
+
+  do j=1,nj-1
+    if( x2>=x2a(j) .AND. x2<x2a(j+1) )then
+      call polint(x2a(j:j+1),yjtmp(j:j+1),2,x2,yitmp(i),dy) 
+      exit
+    endif
+  enddo
+enddo
+
+! Interpolate answer into temporary storage.
+do i=1,ni-1
+  if ( x1>=x1a(i) .AND. x1<x1a(i+1) ) then
+    call polint(x1a(i:i+1),yitmp(i:i+1),2,x1,y,dy) 
+    exit
+  endif
+enddo
+
+!write(*,*) 'p, h',x1,x2,i,j
+!write(*,*) 'interp values',yitmp(i:i+1),x1a(i:i+1)
+!write(*,*) 'interp values',yjtmp(j:j+1),x2a(j:j+1)
+!write(*,*) 'output',y
+!write(*,*) ya(:,1)
+!pause
+
+END
+
+!*****************************************************************************************************
+
+SUBROUTINE polint(xa,ya,n,x,y,dy)
+IMPLICIT NONE
+INTEGER n, NMAX
+REAL dy,x,y,xa(n),ya(n)
+! Given arrays xa and ya, each of lenth n, and given a value x, this routine returns a
+! value y, and an error estimate dy. If P(x) is the polynomial of degree N-1 such that
+! P(xa_i)=ya_i, i=1...,n, then returnd value y=P9x).
+INTEGER i,j,m,ns
+REAL den,dif,dift,ho,hp,w,c(n),d(n)
+
+
+! no extrapolation
+if ( x>xa(n).or.x<xa(1) ) then
+  y=0
+  return
+endif
+
+
+ns=1
+c=1
+  y=ya(1)
+  do i = 2,n
+    if (xa(i).gt.x) then
+      y=(ya(i)-ya(i-1))/(xa(i)-xa(i-1))*(x-xa(i-1))+ya(i-1) !Craig's new interp
+      return
+    endif
+  end do
+  y=ya(n)
+
+goto 56
+dif=abs(x-xa(1))
+11 do i=1,n
+    dift=abs(x-xa(i))
+    if (dift.lt.dif) then
+        ns=i
+        dif=dift
+    endif
+    c(i)=ya(i)
+    d(i)=ya(i)
+  enddo
+y=ya(ns)
+ns=ns-1
+13 do m=1,n-1
+12    do i=1,n-m
+        ho=xa(i)-x
+        hp=xa(i+m)-x
+        w=c(i+1)-d(i)
+        den=ho-hp
+        if (den.eq.0) pause 'failure in polint'
+!         this error can occur only if 2 input xa's are (to within roundoff) identical.
+        den=w/den
+        d(i)=hp*den
+        c(i)=ho*den
+     enddo
+    if (2*ns.lt.n-m) then
+        dy=c(ns+1)
+    else
+        dy=d(ns)
+        ns=ns-1
+    endif
+    y=y+dy
+   enddo
+56 return
+END
