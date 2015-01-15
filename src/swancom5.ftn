@@ -207,6 +207,7 @@
           RDY(IXY) = RDY(IXY) / LENDEG                                    33.09
           RDX(IXY) = RDX(IXY) / (COSLAT(1) * LENDEG)                      33.09
         ENDDO
+        AREA = AREA * LENDEG**2                                             SNL-SWAN
       ENDIF
 !
       IF (TESTFL .AND. ITEST .GE. 30) THEN
@@ -2992,6 +2993,7 @@
      &            + RDY(1) * CAY(ID,IS,2)* TCF1 * AC2(ID,IS,IND2)
      &            + RDY(2) * CAY(ID,IS,3)* TCF2 * AC2(ID,IS,IND3)
             ! record the amount of power lost to trans coefs              SNL-SWAN
+            if (numobs .gt. 0) then
             if (CROSS(1,KCGRD(1)) .ne. 0 ) then         ! if fluxing over an obstacle
               ! this term represents the action density lost due to the transmission coefficient
               ! action density is mutliplied by sigma to get energy
@@ -3004,6 +3006,11 @@
      &             (RDX(1) * CAX(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2)+
      &              RDY(1) * CAY(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2))
      &              * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
+!              write(*,*) 'testing ccc',
+!     &             (RDX(1) * CAX(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2)+
+!     &              RDY(1) * CAY(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2))
+!     &              * SPCSIG(IS)**2 , FRINTF , DDIR , AREA
+!
             endif
             if (CROSS(2,KCGRD(1)) .ne. 0 ) then
               PABSORB( CROSS(2,KCGRD(1)) ) =
@@ -3011,6 +3018,11 @@
      &             (RDX(2) * CAX(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3)+
      &              RDY(2) * CAY(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3))
      &              * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
+!              write(*,*) 'testing ccc', 
+!     &             (RDX(2) * CAX(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3)+
+!     &              RDY(2) * CAY(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3))
+!     &              * SPCSIG(IS)**2 , FRINTF , DDIR , AREA
+            endif
             endif                                                         SNL-SWAN
           ELSE                                                            33.09
 !           spherical coordinates                                         33.09
@@ -3023,6 +3035,31 @@
      &              AC2(ID,IS,KCGRD(IC))
      &            + RDY(IC-1) * CAY(ID,IS,IC) * TRSCF(IC) *
      &              AC2(ID,IS,KCGRD(IC)) * COSLAT(IC) / COSLAT(1)
+              if (numobs .gt. 0) then
+                if (CROSS(IC-1,KCGRD(1)) .ne. 0 ) then         ! if fluxing over an obstacle
+                  ! this term represents the action density lost due to the transmission coefficient
+                  ! action density is mutliplied by sigma to get energy
+                  ! then multiplied by sigma*(ds/sigma) * dtheta * dA
+                  ! for integration over frequency, direction and cell area
+                  ! this gives rate of energy absorption (power)
+                  ! should be e/(rho*g)/s = P/(rho*g)
+                  PABSORB( CROSS(IC-1,KCGRD(1)) ) =
+     &            PABSORB( CROSS(IC-1,KCGRD(1)) )+
+     &                 (RDX(IC-1) * CAX(ID,IS,IC)* (1.0-TRSCF(IC)) *
+     &             AC2(ID,IS,KCGRD(IC))+
+     &                  RDY(IC-1) * CAY(ID,IS,IC)* (1.0-TRSCF(IC)) *
+     &             AC2(ID,IS,KCGRD(IC))) * COSLAT(IC) / COSLAT(1)
+     &                  * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
+
+!                write(*,*) 'testing ccc', 
+!     &                 (RDX(IC-1) * CAX(ID,IS,IC)* (1.0-TRSCF(IC)) *
+!     &             AC2(ID,IS,KCGRD(IC))+
+!     &                  RDY(IC-1) * CAY(ID,IS,IC)* (1.0-TRSCF(IC)) *
+!     &             AC2(ID,IS,KCGRD(IC))) * SPCSIG(IS)**2 * FRINTF * DDIR
+!     &                  , COSLAT(IC) / COSLAT(1) , AREA
+                endif
+              endif                                                         SNL-SWAN
+
             ENDDO
           ENDIF
 !

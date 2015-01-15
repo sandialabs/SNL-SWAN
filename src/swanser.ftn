@@ -3598,9 +3598,6 @@
             CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
      &                  PowerMat(1:n_Hs, 1:n_Tp),
      &                  n_Hs, n_Tp, HSIN, TP, RCW, err) ! 2-D Interpolation
-            ! limit RCW value
-            RCW = min(RCW,1.0)
-            RCW = max(RCW,0.0)
 ! Compute incident wave power
             !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
             !write(*,*) 'Old incident', incident
@@ -3609,11 +3606,17 @@
      &                            AC2(:,:,KCGRD(ILINK+1))  )/1000.0     ! convert to Kw
             !write(*,*) 'New incident', incident
 
+            !print*,'p-abs',RCW
+            !print*,'tp',TP
+            !print*,'hsig',HSIN
+            !print*,'incident',INCIDENT
+            !print*,'ip-abs/w',RCW/width
             RCW=RCW/incident/Width
-            !print*,RCW
-            !print*,TP
-            !print*,HSIN
-            !print*,INCIDENT
+            !print*,'ratio',RCW
+
+            ! limit RCW value
+            RCW = min(RCW,1.0)
+            RCW = max(RCW,0.0)
 ! Use proportion of power taken off to estimate transmission coefficient
 ! OBHKT - actual transmission coefficient used by SWAN
             OBHKT = 1.0-RCW
@@ -3663,17 +3666,18 @@
               CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
      &                  PowerMat(1:n_Hs, 1:n_Tp),
      &                  n_Hs, n_Tp, HSIN, PTEMP, RCW, err) ! 2-D Interpolation
-              ! limit RCW value
-              RCW = min(RCW,1.0)
-              RCW = max(RCW,0.0)
 ! Compute incident wave power
               WRITE (PRINTF,*) ''
               WRITE (PRINTF,*) 'obdbg ',X1,Y1,IS,RCW  ! Writes transmission coefficient (Kt) to main output file
               WRITE (PRINTF,*) 'P vals ',PTEMP, Period(1), Period(n_Tp)
               WRITE (PRINTF,*) 'H vals ',HSIN,  Height(1), Height(n_Hs)
-              WRITE (PRINTF,*) ''
               RCW=RCW/incident/Width
+              ! limit RCW value
+              RCW = min(RCW,1.0)
+              RCW = max(RCW,0.0)
               OBHKT = 1.0-RCW
+              WRITE (PRINTF,*) 'Trans Coef ',OBHKT
+              WRITE (PRINTF,*) ''
 ! If using power as ratio do not use square
               TRCF  = OBHKT  ! Ktp Not squared
 !             assign values to array OBREDF
