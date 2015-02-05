@@ -1964,8 +1964,9 @@
       if (numobs.ne.0) then
         write(POWERF,'(a,i7.0)') 'Iteration: ',ITER
         do n= 1,numobs
-          write(POWERF,'(a,i3.0,a,f,a)') 'Power absorbed by obstacle ',
-     &                          n,' = ',pabsorb(n)*rho*grav,' W'
+            write(POWERF,'(a,i3.0,a,es15.8,a)') 
+     &          'Power absorbed by obstacle ',
+     &          n,' = ',pabsorb(n)*rho*grav,' W'
         enddo
       endif
 !$OMP END MASTER                                                          SNL-SWAN
