@@ -3503,6 +3503,8 @@
       REAL    ::RCW,INCIDENT,PTEMP, err, Pincident                        SNL-SWAN
       REAL    :: CGO(MSC)                                                 SNL-SWAN
       integer :: itmp                                                     SNL-SWAN
+      real :: kloc(MSC),cgloc(MSC),n(MSC),nd(MSC)
+      real :: fmax, fmin, ecs, SwanIntgratSpc
 !
 !  8. Subroutines used
 !
@@ -3577,6 +3579,16 @@
            IF (.NOT.ASSOCIATED(COBST%NEXTOBST)) EXIT                      40.31
            COBST => COBST%NEXTOBST                                        40.31
         END DO                                                            40.31
+
+
+          IF(OPTG.NE.5) THEN
+            X1 = XCGRID(IXCGRD(2),IYCGRD(2))
+            Y1 = YCGRID(IXCGRD(2),IYCGRD(2))
+          ELSE
+            X1 = xcugrd(vs(2))
+            Y1 = ycugrd(vs(2))
+          ENDIF
+
         ITRAS  = COBST%TRTYPE                                             40.31
         IF (ITRAS .EQ. 0) THEN
 
@@ -3602,9 +3614,27 @@
             !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
             !write(*,*) 'Old incident', incident
             CGO(:)=SQRT(CAX(1,:,(ILINK+1))**2+CAY(1,:,(ILINK+1))**2)
+!            call KSCIP1 (MSC,spcsig,WLEV2(KCGRD(ILINK+1)),
+!     &                                      kloc,cgo,n,nd)
             incident = Pincident(SPCSIG, SPCDIR, CGO(:), 
      &                            AC2(:,:,KCGRD(ILINK+1))  )/1000.0     ! convert to Kw
             !write(*,*) 'New incident', incident
+
+            !WRITE (PRINTF,*) 'Incident wave height:',HSIN
+            !WRITE (PRINTF,*) 'Incident Peak period:',TP
+            !WRITE (PRINTF,*) 'Absorbed Power:      ',RCW
+            !WRITE (PRINTF,*) 'Absorbed Power flux: ',RCW/width
+            !WRITE (PRINTF,*) 'Incident Power flux: ',Incident
+
+!!            fmin = 0.
+!!            fmax = 1000.
+!!            ecs  = 1.
+!!            WRITE (PRINTF,*) 'ccc DEBUG',
+!!     &        SwanIntgratSpc(1.   , fmin, fmax, spcsig, ecs,
+!!     &             cgloc, ecs , 0.  , 0.    , ac2(:,:,KCGRD(ILINK+1)),
+!!     &                       4    )
+
+
 
             !print*,'p-abs',RCW
             !print*,'tp',TP
@@ -3613,6 +3643,7 @@
             !print*,'ip-abs/w',RCW/width
             RCW=RCW/incident/Width
             !print*,'ratio',RCW
+            !WRITE (PRINTF,*) 'TCoef:               ',1.0-RCW
 
             ! limit RCW value
             RCW = min(RCW,1.0)
@@ -3621,7 +3652,7 @@
 ! OBHKT - actual transmission coefficient used by SWAN
             OBHKT = 1.0-RCW
             !print*,OBHKT
-            WRITE (PRINTF,*) X1,Y1,OBHKT  ! Writes transmission coefficient (Kt) to main output file
+            !WRITE (PRINTF,*) X1,Y1,OBHKT  ! Writes transmission coefficient (Kt) to main output file
 ! If using power as ratio do not use square
             TRCF  = OBHKT  ! Ktp Not squared
 !           assign values to array OBREDF
@@ -3644,7 +3675,7 @@
 ! OBHKT - actual transmission coefficient used by SWAN
             OBHKT = 1.0-RCW
             !print*,OBHKT
-            WRITE (PRINTF,*) X1,Y1,OBHKT  ! Writes transmission coefficient (Kt) to main output file
+            !WRITE (PRINTF,*) X1,Y1,OBHKT  ! Writes transmission coefficient (Kt) to main output file
 ! If using power as ratio do not use square
             TRCF  = OBHKT  ! Ktp Not squared
 !           assign values to array OBREDF
@@ -3667,10 +3698,10 @@
      &                  PowerMat(1:n_Hs, 1:n_Tp),
      &                  n_Hs, n_Tp, HSIN, PTEMP, RCW, err) ! 2-D Interpolation
 ! Compute incident wave power
-              WRITE (PRINTF,*) ''
-              WRITE (PRINTF,*) 'obdbg ',X1,Y1,IS,RCW  ! Writes transmission coefficient (Kt) to main output file
-              WRITE (PRINTF,*) 'P vals ',PTEMP, Period(1), Period(n_Tp)
-              WRITE (PRINTF,*) 'H vals ',HSIN,  Height(1), Height(n_Hs)
+              !WRITE (PRINTF,*) ''
+              !WRITE (PRINTF,*) 'obdbg ',X1,Y1,IS,RCW  ! Writes transmission coefficient (Kt) to main output file
+              !WRITE (PRINTF,*) 'P vals ',PTEMP, Period(1), Period(n_Tp)
+              !WRITE (PRINTF,*) 'H vals ',HSIN,  Height(1), Height(n_Hs)
               RCW=RCW/incident/Width
               ! limit RCW value
               RCW = min(RCW,1.0)

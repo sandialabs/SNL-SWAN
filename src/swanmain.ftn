@@ -2648,11 +2648,14 @@
 !     *** find obstacles crossing the points in the stencil  ***
 !     *** in structured grids                                ***          40.80
 !
-      IF (NUMOBS .GT. 0 .AND. OPTG.NE.5) THEN                             40.80
+      IF (NUMOBS .GT. 0 ) THEN 
 
         ! open a power output file
         OPEN (UNIT=POWERF, FILE='POWER_ABS.OUT', STATUS='UNKNOWN', 
      &                                       FORM='FORMATTED')           SNL_SWAN
+      ENDIF
+
+      IF (NUMOBS .GT. 0 .AND. OPTG.NE.5) THEN                             40.80
 
         DO INDX = 1, MCGRD                                               040697
           CROSS(1,INDX) = 0                                              040697

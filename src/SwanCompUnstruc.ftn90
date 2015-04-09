@@ -106,6 +106,8 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
                                                              ! (*,5): cosine*sine of spectral directions
                                                              ! (*,6): sine^2 of spectral directions
     real, dimension(MSC), intent(in)               :: spcsig ! relative frequency bins
+    real  :: area
+    REAL, ALLOCATABLE :: PABSORB(:), PABSORB_PRV(:)                     !SNL-SWAN
 !
 !   Local variables
 !
@@ -258,6 +260,7 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
     !
     type(celltype), dimension(:), pointer :: cell      ! datastructure for cells with their attributes
     type(verttype), dimension(:), pointer :: vert      ! datastructure for vertices with their attributes
+    integer                               :: n         ! loop counter
     !
 !$  integer, external                     :: omp_get_num_threads ! number of OpenMP threads being used
 !$  integer, external                     :: omp_get_thread_num  ! get thread number
@@ -325,6 +328,10 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
     else
        allocate(memnl4(0,0,0))
     endif
+    if (numobs.ne.0) then                                               !SNL-SWAN
+      allocate(pabsorb(numobs))
+      pabsorb = 0.0
+    endif
     !
     !$ allocate(tlist(nverts))
 !TIMG    call SWTSTO(101)
@@ -354,7 +361,9 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
     !$omp private(ivert, nupdv, jc, k, j, icell, v, vu, l, swpnr, rdx, rdy, lpredt, vb, ve, iface, link, inocnt) &
     !$omp private(iddlow, iddtop, idtot, isslow, isstop, istot) &
     !$omp private(abrbot, kmespc, idwmin, idwmax, hs, etot, qbloc, ufric, fpm, thetaw, hm, wind10, smebrk) &
+    !$omp private(pabsorb_prv) &
     !$omp copyin(ICMAX, COSLAT, IPTST, TESTFL)
+    !
     !
     ! print number of threads set by environment
     !
@@ -405,6 +414,10 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
     allocate( trac0(MDC,MSC,MTRNP))
     allocate( trac1(MDC,MSC,MTRNP))
     allocate(leakcf(MDC,MSC      ))
+
+    if (numobs.ne.0) then                                               !SNL-SWAN
+      allocate(pabsorb_prv(numobs))
+    endif
     !
     ! calculate ranges of spectral space for arrays related to 4 wave-wave interactions
     !
@@ -481,6 +494,9 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
     !
 !TIMG    call SWTSTA(103)
     iterloop: do iter = 1, ITERMX
+       if (numobs.ne.0) then                                             !SNL-SWAN
+         pabsorb_prv(1:numobs)=0.0
+       endif
        !
        ! some initializations
        !
@@ -868,12 +884,13 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
                      ! compute the transport part of the action balance equation
                      !
 !TIMG                     call SWTSTA(118)
+                     area = cell(icell)%attr(CELLAREA)
                      call SwanTranspAc ( amat  , rhs   , leakcf, ac2   , ac1   , &
                                          cgo   , cax   , cay   , cad   , cas   , &
                                          anybin, rdx   , rdy   , spcsig, spcdir, &
                                          obredf, idcmin, idcmax, iscmin, iscmax, &
                                          iddlow, iddtop, isslow, isstop, anyblk, &
-                                         trac0 , trac1 )
+                                         trac0 , trac1, link, area, pabsorb_prv )
 !TIMG                     call SWTSTO(118)
                      !
                      ! compute the source part of the action balance equation
@@ -1260,6 +1277,29 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
           if ( acnrms(1) < stopcr ) exit iterloop
           !
        endif
+       !----------------------------------------------------------------------   SNL-SWAN
+       !     Each thread calculates its own pabsorb_prv.  We need to sum      
+       !     each of these into pabsorb(shared)                              
+       !----------------------------------------------------------------------
+       if (numobs.ne.0) then
+         pabsorb(1:numobs)=0.0  ! set shared value to 0
+       !$omp barrier
+         do n= 1,numobs
+       !$omp atomic
+           pabsorb(n)=pabsorb(n)+pabsorb_prv(n) ! sum private values into shared       
+         enddo
+       endif
+       !$omp barrier
+       !$omp master
+       if (numobs.ne.0) then
+         write(POWERF,'(a,i7.0)') 'Iteration: ',ITER
+         do n= 1,numobs
+             write(POWERF,'(a,i3.0,a,es15.8,a)')     &
+                 'Power absorbed by obstacle ',      &
+                 n,' = ',pabsorb(n)*rho*grav,' W'
+         enddo
+       endif
+       !$omp end master
        !
     enddo iterloop
 !TIMG    call SWTSTO(103)
@@ -1267,6 +1307,9 @@ subroutine SwanCompUnstruc ( ac2, ac1, compda, spcsig, spcdir, xytst, cross, it 
     ! deallocation of private arrays
     !
 !TIMG    call SWTSTA(101)
+    if (numobs.ne.0) then                                               !SNL-SWAN
+      DEALLOCATE(PABSORB_PRV)
+    endif
     deallocate(  cad)
     deallocate(  cas)
     deallocate(  cax)
