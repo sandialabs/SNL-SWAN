@@ -1,45 +1,44 @@
 ##############################################################################
-# IA32_Intel/EM64T_Intel:	Intel Pentium with MS Windows using Intel compiler 11.
+# IA32_Intel/x86-64_Intel:	Intel Pentium with Linux using Intel compiler 11.
 ##############################################################################
 F90_SER = ifort
 F90_OMP = ifort
-F90_MPI = ifort
-FLAGS_OPT = /O2
-FLAGS_MSC = /assume:byterecl /traceback /nowarn /nologo /Qdiag-disable:8290 /Qdiag-disable:8291 /Qdiag-disable:8293
+F90_MPI = mpif90
+FLAGS_OPT = -g
+FLAGS_MSC = -W0 -assume byterecl -traceback -diag-disable 8290 -diag-disable 8291 -diag-disable 8293
 FLAGS90_MSC = $(FLAGS_MSC)
 FLAGS_SER =
-FLAGS_OMP = /Qopenmp /Qopenmp-link:static
+FLAGS_OMP = -openmp
 FLAGS_MPI =
-#NETCDFROOT = C:\PROGRA~2\netcdf
-!IF DEFINED(NETCDFROOT)
-INCS_SER = /include:$(NETCDFROOT)
-INCS_OMP = /include:$(NETCDFROOT)
-INCS_MPI = /include:"C:\PROGRA~1\MPICH2\include" /include:$(NETCDFROOT)
-LIBSC = /link /NODEFAULTLIB:MSVCRT.lib /NODEFAULTLIB:LIBC.lib
-LIBS_SER = $(NETCDFROOT)\f90_netcdf.lib $(NETCDFROOT)\f77_netcdf.lib $(NETCDFROOT)\netcdf.lib $(LIBSC)
-LIBS_OMP = $(NETCDFROOT)\f90_netcdf.lib $(NETCDFROOT)\f77_netcdf.lib $(NETCDFROOT)\netcdf.lib $(LIBSC)
-LIBS_MPI = C:\PROGRA~1\MPICH2\lib\fmpich2.lib $(NETCDFROOT)\f90_netcdf.lib $(NETCDFROOT)\f77_netcdf.lib $(NETCDFROOT)\netcdf.lib $(LIBSC)
-NCF_OBJS = nctablemd.obj agioncmd.obj swn_outnc.obj
-!ELSE
-INCS_SER =
-INCS_OMP =
-INCS_MPI = /include:"C:\PROGRA~1\MPICH2\include"
-LIBS_SER =
-LIBS_OMP =
-LIBS_MPI = C:\PROGRA~1\MPICH2\lib\fmpich2.lib
-NCF_OBJS =
-!ENDIF
-O_DIR =
-OUT = /exe:
-EXTO = obj
-MAKE = nmake
-RM = del
-!IF DEFINED(NETCDFROOT)
-swch = -dos -impi -cvis -netcdf
-!ELSE
-swch = -dos -impi -cvis
-!ENDIF
-MV = move
-CP = copy
-MOD = /module:
-arch = win
+NETCDFROOT =
+ifneq ($(NETCDFROOT),)
+  INCS_SER = -I$(NETCDFROOT)/include
+  INCS_OMP = -I$(NETCDFROOT)/include
+  INCS_MPI = -I$(NETCDFROOT)/include
+  LIBS_SER = -L$(NETCDFROOT)/lib -lnetcdf -lnetcdff
+  LIBS_OMP = -L$(NETCDFROOT)/lib -lnetcdf -lnetcdff
+  LIBS_MPI = -L$(NETCDFROOT)/lib -lnetcdf -lnetcdff
+  NCF_OBJS = nctablemd.o agioncmd.o swn_outnc.o
+else
+  INCS_SER =
+  INCS_OMP =
+  INCS_MPI =
+  LIBS_SER =
+  LIBS_OMP =
+  LIBS_MPI =
+  NCF_OBJS =
+endif
+O_DIR = ../work/odir4/
+OUT = -o 
+EXTO = o
+MAKE = make -j
+RM = rm -f
+ifneq ($(NETCDFROOT),)
+  swch = -unix -impi -netcdf
+else
+  swch = -unix -impi
+endif
+MV = mv
+CP = cp
+MOD = -module 
+arch = unix

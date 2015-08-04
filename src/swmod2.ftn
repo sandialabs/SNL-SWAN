@@ -613,13 +613,15 @@
       TYPE(OBSTDAT), SAVE, TARGET  :: FOBSTAC
 
       ! RCW/Power matrix stuff                                          SNL-SWAN
-      INTEGER :: Case_n
+      INTEGER :: iobcase, irflcase
       REAL :: width                             ! width
       REAL, ALLOCATABLE :: Period(:)            ! period axis
       REAL, ALLOCATABLE :: Height(:)            ! Height axis
       REAL, ALLOCATABLE :: PowerMat(:,:)        ! Power matrix values
       REAL, ALLOCATABLE :: RelCapWidth(:,:)     ! Power matrix values
-      integer ::n_Tp,n_Hs                       ! array sizes
+      REAL, ALLOCATABLE :: ReflPeriod(:)            ! period axis
+      REAL, ALLOCATABLE :: ReflFunc(:,:)     ! Power matrix values
+      integer ::n_Tp,n_Hs, n_TpRFL              ! array sizes
 
 !  8. Subroutines and functions used
 !

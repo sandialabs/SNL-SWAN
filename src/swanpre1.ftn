@@ -1851,7 +1851,8 @@
 !   SET  [level]  [nor]  [depmin]  [maxmes]        &
 !        [maxerr]  [grav]  [rho] [cdcap] [inrhog]  &
 !        [hsrerr]  CARTesian/NAUTical  [pwtail]    &
-!        [froudmax]  [sort]  [printf]  [prtest] [obcase]
+!        [froudmax]  [sort]  [printf]  [prtest]    &
+!        [obcase] [rflcase]
 !
 ! =============================================================
 !
@@ -1865,7 +1866,8 @@
          CALL INREAL ('RHO',    RHO,    'UNC', 0.)
          CALL INREAL ('CDCAP',  CDCAP,  'UNC', 0.)
          CALL ININTG ('INRHOG', INRHOG, 'UNC', 0)
-         CALL ININTG ('OBCASE', case_n, 'UNC', 0)                         SNL-SWAN
+         CALL ININTG ('OBCASE', iobcase, 'UNC', 0)                        SNL-SWAN
+         CALL ININTG ('RFLCASE', irflcase, 'UNC', 0)                      SNL-SWAN
          IF (INRHOG.EQ.0) THEN                                            30.20
            OVUNIT(7) = 'm2/s'
            OVUNIT(9) = 'm2/s'

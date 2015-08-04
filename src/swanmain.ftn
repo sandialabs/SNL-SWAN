@@ -2556,8 +2556,7 @@
       SAVE IENT
       DATA IENT/0/
       integer :: i, j, iobs, ierr                                         SNL-SWAN
-      character*80 :: FileWidth, FilePeriod, FileHeight, FilePower,       SNL-SWAN
-     &                     FileRCW                                        SNL-SWAN
+      character*80 :: FileWidth, FilePower, FileRCW, FileRFL              SNL-SWAN
 
       CALL STRACE (IENT, 'SWPREP')
 !
@@ -2708,11 +2707,9 @@
 
 !       Obstacle transmission coefficient stuff                         SNL-SWAN
 !   get the name of the file containing the data. 
-        FileWidth="Width.txt"
-        FilePeriod="Period.txt"
-        FileHeight="WaveHeight.txt"
         FilePower="Power.txt"
         FileRCW="Relative_Capture_Width.txt"
+        FileRFL="Refrection_vs_Freq.txt"
 
         ! these arrays should not be allocated yet
         ! but swprep is inside a do loop that I don't understand
@@ -2721,12 +2718,11 @@
         IF (ALLOCATED(Height )) DEALLOCATE(Height )
         IF (ALLOCATED(PowerMat )) DEALLOCATE(PowerMat )
         IF (ALLOCATED(RelCapWidth )) DEALLOCATE(RelCapWidth )
+        IF (ALLOCATED(ReflPeriod )) DEALLOCATE(ReflPeriod )
+        IF (ALLOCATED(ReflFunc )) DEALLOCATE(ReflFunc )
 
-        !open (101, file=FileWidth, status='old') !0=Trans, 1=Power Matrix, 2=RCW
-        !read  (101, *) case_n
-        !read  (101, *) Width
-        !close (101)
-        if(case_n .eq. 1 .or. case_n .eq. 3) then  ! need power matrix information
+        ! read in obstacle case files
+        if(iobcase .eq. 1 .or. iobcase .eq. 3) then  ! need power matrix information
           open (101, file=trim(FilePower), status='old')
           read(101,*) Width
           read(101,*) n_Hs
@@ -2742,7 +2738,7 @@
           close (101)
           close (101)
           close (101)
-        else if(case_n .eq. 2 .or. case_n .eq. 4) then  ! need RCW information
+        else if(iobcase .eq. 2 .or. iobcase .eq. 4) then  ! need RCW information
           open (101, file=trim(FileRCW), status='old')
           n_Tp=0
           do
@@ -2757,7 +2753,7 @@
             !write(*,*) Period(i),RelCapWidth(i,1)
           enddo
           close (101)
-        else if(case_n .eq. 5) then  ! need RCW information (undocumented, unsupported separate RCWs per obst)
+        else if(iobcase .eq. 5) then  ! need RCW information (undocumented, unsupported separate RCWs per obst)
           do iobs=1,NUMOBS
             write(FileRCW,'(a,i3.3,a)') 'RCW-',iobs,'.txt'  ! different file for each obstacle
             open (101, file=trim(FileRCW), status='old')
@@ -2775,6 +2771,24 @@
             enddo
             close (101)
           enddo
+        endif   ! obstacle case stuff
+
+        ! read in reflection coefficient file stuff
+        if(irlfcase .eq. 1) then  ! need Reflectionl information
+          open (101, file=trim(FileRFL), status='old')
+          n_TpRFL=0
+          do
+            read(101,*,iostat=ierr)
+            if (ierr.ne.0) exit
+            n_TpRFL=n_TpRFL+1  ! line count of RCW file
+          enddo
+          rewind(101)
+          allocate(ReflPeriod(n_TpRFL),ReflFunc(n_TpRFL,1))
+          do i=1,n_TpRFL
+            read(101,*) ReflPeriod(i),ReflFunc(i,1) !ReflPeriod axis values [s]
+          enddo
+          close (101)
+ 
         endif                                                             SNL-SWAN
 
 !
@@ -7469,6 +7483,7 @@
       IF (ALLOCATED(Height )) DEALLOCATE(Height )
       IF (ALLOCATED(PowerMat )) DEALLOCATE(PowerMat )
       IF (ALLOCATED(RelCapWidth )) DEALLOCATE(RelCapWidth )
+      IF (ALLOCATED(ReflFunc )) DEALLOCATE(ReflFunc )
 
       RETURN
       END
