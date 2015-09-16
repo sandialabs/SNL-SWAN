@@ -607,6 +607,8 @@
          REAL                   :: RFCOEF(6)
          INTEGER                :: NCRPTS
          REAL, POINTER          :: XCRP(:), YCRP(:)
+         INTEGER                :: NNRMLS                               SNL-SWAN
+         REAL, POINTER          :: XNOR(:), YNOR(:), ANGNOR(:)          SNL-SWAN
          TYPE(OBSTDAT), POINTER :: NEXTOBST
       END TYPE OBSTDAT
 

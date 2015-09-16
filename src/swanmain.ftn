@@ -2709,7 +2709,7 @@
 !   get the name of the file containing the data. 
         FilePower="Power.txt"
         FileRCW="Relative_Capture_Width.txt"
-        FileRFL="Refrection_vs_Freq.txt"
+        FileRFL="Reflection_vs_Freq.txt"
 
         ! these arrays should not be allocated yet
         ! but swprep is inside a do loop that I don't understand

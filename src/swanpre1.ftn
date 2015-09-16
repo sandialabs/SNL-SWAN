@@ -307,7 +307,8 @@
       TYPE(OPSDAT), POINTER :: OPSTMP                                     40.31
 
       TYPE XYPT                                                           40.31
-        REAL                :: X, Y
+        !REAL                :: X, Y
+        REAL                :: X, Y, ANGL                                 SNL-SWAN
         TYPE(XYPT), POINTER :: NEXTXY
       END TYPE XYPT
 
@@ -1050,6 +1051,7 @@
           ENDDO
         ENDIF
  101    OBSTMP%NCRPTS = NUMCOR                                            40.31
+
 !       store coordinates for corner points in array of obstacle data     40.31
         ALLOCATE(OBSTMP%XCRP(NUMCOR))                                     40.31
         ALLOCATE(OBSTMP%YCRP(NUMCOR))                                     40.31
@@ -1060,6 +1062,51 @@
             CURR => CURR%NEXTXY                                           40.31
         END DO                                                            40.31
         DEALLOCATE(TMP)                                                   40.31
+
+!
+!       obstacle normals
+!
+        ! optional key word
+        NUMNOR = 0
+        CALL INKEYW ('STA', '  ')
+        IF (KEYWIS ('NOR')) THEN
+          FRST%X = 0.                                                     SNL-SWAN
+          FRST%Y = 0.                                                     SNL-SWAN
+          FRST%ANGL = 0.                                                  SNL-SWAN
+          NULLIFY(FRST%NEXTXY)                                            SNL-SWAN
+          CURR => FRST                                                    SNL-SWAN
+          DO
+!           read coordinates of one corner point of the obstacle
+            CALL READXY ('XP', 'YP', XP, YP, 'REP', -1.E10, -1.E10)
+            IF (XP.LT.-.9E10) GOTO 102
+            CALL INREAL ('ANGL',ANGL,'REQ',0.)
+            NUMNOR = NUMNOR + 1
+            ALLOCATE(TMP)                                                 SNL-SWAN
+            ! normalize XP and YP
+            nmag = sqrt(XP**2+YP**2) 
+            TMP%X = XP/nmag                                                    SNL-SWAN
+            TMP%Y = YP/nmag                                                    SNL-SWAN
+            TMP%ANGL = ANGL                                               SNL-SWAN
+            NULLIFY(TMP%NEXTXY)                                           SNL-SWAN
+            CURR%NEXTXY => TMP                                            SNL-SWAN
+            CURR => TMP                                                   SNL-SWAN
+          ENDDO
+        ENDIF
+ 102    OBSTMP%NNRMLS = NUMNOR                                            SNL-SWAN
+!       store coordinates for normals and angles in array of obstacle data     SNL-SWAN
+        ALLOCATE(OBSTMP%XNOR(NUMNOR))                                     SNL-SWAN
+        ALLOCATE(OBSTMP%YNOR(NUMNOR))                                     SNL-SWAN
+        ALLOCATE(OBSTMP%ANGNOR(NUMNOR))                                     SNL-SWAN
+        CURR => FRST%NEXTXY                                               SNL-SWAN
+        DO JJ = 1, NUMNOR                                                 SNL-SWAN
+            OBSTMP%XNOR(JJ) = CURR%X                                      SNL-SWAN
+            OBSTMP%YNOR(JJ) = CURR%Y                                      SNL-SWAN
+            OBSTMP%ANGNOR(JJ) = CURR%ANGL                                  SNL-SWAN
+            CURR => CURR%NEXTXY                                           SNL-SWAN
+        END DO                                                            SNL-SWAN
+        DEALLOCATE(TMP)                                                   SNL-SWAN
+
+
         NULLIFY(OBSTMP%NEXTOBST)                                          40.31
         IF (NUMCOR .LE. 1) THEN
           CALL MSGERR(1,'No corner points for obstacle were found')
@@ -1076,6 +1123,7 @@
           END IF                                                          40.31
         ENDIF
 !
+
         GO TO 100
       ENDIF
 !
