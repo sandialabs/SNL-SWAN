@@ -36,9 +36,9 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'WEC-Sim'
-copyright = u'2015, National Renewable Energy Laboratory and Sandia Corporation'
-author = u'Michael Lawson, Kelley Ruehl, Yi-Hsiang Yu, Carlos Michelen'
+project = u'SNL-SWAN'
+copyright = u'2015, Sandia Corporation'
+author = u'Kelley Ruehl, Ari Posener, Chris Chartrand, Aaron Porter, Helen Smith, Jesse Roberts'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

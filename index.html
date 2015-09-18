@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Project Overview &mdash; WEC-Sim 1.1 documentation</title>
+  <title>Project Overview &mdash; SNL-SWAN 1.1 documentation</title>
   
 
   
@@ -30,7 +30,7 @@
   
 
   
-    <link rel="top" title="WEC-Sim 1.1 documentation" href="#"/>
+    <link rel="top" title="SNL-SWAN 1.1 documentation" href="#"/>
         <link rel="next" title="Release Notes" href="release_notes.html"/> 
 
   
@@ -48,7 +48,7 @@
         
 
         
-          <a href="#" class="icon icon-home"> WEC-Sim
+          <a href="#" class="icon icon-home"> SNL-SWAN
         
 
         
@@ -78,34 +78,6 @@
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#features-under-development">Features Under Development</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="theory.html">Theory</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#coordinate-system">Coordinate System</a></li>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#boundary-element-method">Boundary Element Method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#time-domain-numerical-method">Time-Domain Numerical Method</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="theory.html#sinusoidal-steady-state-response-scenario">Sinusoidal Steady-State Response Scenario</a></li>
-<li class="toctree-l3"><a class="reference internal" href="theory.html#convolution-integral-formulation">Convolution Integral Formulation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="theory.html#state-space-representation-of">State Space Representation of <span class="math">\(K_{r}\)</span></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="theory.html#calculation-of-from-state-space-matrices">Calculation of <span class="math">\(K_{r}\)</span> from State Space Matrices</a></li>
-<li class="toctree-l4"><a class="reference internal" href="theory.html#laplace-transform-and-transfer-function">Laplace Transform and Transfer Function</a></li>
-<li class="toctree-l4"><a class="reference internal" href="theory.html#realization-theory">Realization Theory</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="theory.html#wave-spectrum">Wave Spectrum</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="theory.html#pierson-moskowitz">Pierson&#8211;Moskowitz</a></li>
-<li class="toctree-l4"><a class="reference internal" href="theory.html#bretschneider-spectrum">Bretschneider Spectrum</a></li>
-<li class="toctree-l4"><a class="reference internal" href="theory.html#jonswap-joint-north-sea-wave-project-spectrum">JONSWAP (Joint North Sea Wave Project) Spectrum</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="theory.html#ramp-function">Ramp Function</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#power-take-off-forces">Power Take-off Forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#mooring-forces">Mooring Forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#damping-forces">Damping Forces</a></li>
-<li class="toctree-l2"><a class="reference internal" href="theory.html#references">References</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#matlab-toolbox-requirements">MATLAB Toolbox Requirements</a></li>
 <li class="toctree-l2"><a class="reference internal" href="getting_started.html#downloading-and-installing-bemio">Downloading and Installing BEMIO</a></li>
@@ -133,112 +105,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="code_structure.html">Code Structure</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code_structure.html#code-conventions">Code Conventions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code_structure.html#input-file-structure">Input File Structure</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#simulation-class">Simulation Class</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#wave-class">Wave Class</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#body-class">Body Class</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#constraint-class">Constraint Class</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#pto-class">PTO Class</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="code_structure.html#input-parameters">Input Parameters</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#simulationclass">simulationClass</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#waveclass">waveClass</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#nowave">noWave</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#nowavecic">noWaveCIC</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#regular">regular</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#regularcic">regularCIC</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#irregular">irregular</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#irregularimport">irregularImport</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#bodyclass">bodyClass</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#constraintclass">constraintClass</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#ptoclass">ptoClass</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="code_structure.html#library-structure">Library Structure</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#body-elements-sublibrary">Body Elements Sublibrary</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#rigid-body-block">Rigid Body Block</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#frames-sublibrary">Frames Sublibrary</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#global-reference-frame-block">Global Reference Frame Block</a></li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#constraints-sublibrary">Constraints Sublibrary</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#floating-block">Floating Block</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#heave-block">Heave Block</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#surge-block">Surge Block</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#pitch-block">Pitch Block</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#fixed-block">Fixed Block</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#ptos-sublibrary">PTOs Sublibrary</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#translation-pto-local-z-block">Translation PTO (Local Z) Block</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#translation-pto-local-x-block">Translation PTO (Local X) Block</a></li>
-<li class="toctree-l4"><a class="reference internal" href="code_structure.html#rotational-pto-local-ry-block">Rotational PTO (Local RY) Block</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="code_structure.html#other-simmechanics-blocks">Other SimMechanics Blocks</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#rm3-two-body-point-absorber">RM3 Two-Body Point Absorber</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#geometry-definition">Geometry Definition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#hydrodynamic-data-pre-processing">Hydrodynamic Data Pre-Processing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#modeling-rm3-in-wec-sim">Modeling RM3 in WEC-Sim</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#simulink-model">Simulink Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#input-file">Input File</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#simulation">Simulation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#outputs-and-postprocessing">Outputs and Postprocessing</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#running-different-wave-cases">Running Different Wave Cases</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#rm3-with-pto-sim">RM3 with PTO-Sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#rm3-with-hydraulic-pto">RM3 with Hydraulic PTO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#modeling-rm3-with-hydraulic-pto">Modeling RM3 with Hydraulic PTO</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#id5">Simulink Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#id7">Input File</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#simulation-and-postprocessing">Simulation and Postprocessing</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#rm3-with-mechanical-pto">RM3 with Mechanical PTO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#modeling-rm3-with-mechanical-pto">Modeling RM3 with Mechanical PTO</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#id8">Simulink Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#input-file-simulation-and-postprocessing">Input File, Simulation, and Postprocessing</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#oscillating-surge-pitch-device">Oscillating Surge-Pitch Device</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#id9">Geometry Definition</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#id10">Hydrodynamic Data Pre-Processing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#modeling-oswec-in-wec-sim">Modeling OSWEC in WEC-Sim</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#oswec-simulink-model-file">OSWEC Simulink Model File</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#oswec-matlab-input-file">OSWEC MATLAB Input File</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#oswec-wec-sim-simulation">OSWEC WEC-Sim Simulation</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#oswec-with-pto-sim">OSWEC with PTO-Sim</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#oswec-with-hydraulic-pto">OSWEC with Hydraulic PTO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="tutorials.html#modeling-of-oswec-with-hydraulic-pto">Modeling of OSWEC with Hydraulic PTO</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#id13">Simulink Model</a></li>
-<li class="toctree-l4"><a class="reference internal" href="tutorials.html#id14">Input File, Simulation, and Postprocessing</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#other-pto-sim-tutorials">Other PTO-Sim Tutorials</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials.html#references">References</a></li>
-</ul>
-</li>
 <li class="toctree-l1"><a class="reference internal" href="online_forum.html">Online Forum</a></li>
 <li class="toctree-l1"><a class="reference internal" href="references.html">References</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="references.html#publications">Publications</a></li>
@@ -259,7 +125,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href="#">WEC-Sim</a>
+        <a href="#">SNL-SWAN</a>
       </nav>
 
 
@@ -284,38 +150,13 @@
           <div role="main" class="document">
             
   <div class="figure">
-<a class="reference external image-reference" href="https://github.com/WEC-Sim/WEC-Sim"><img alt="_images/wec_sim_header.png" src="_images/wec_sim_header.png" /></a>
+<a class="reference external image-reference" href="https://github.com/SNL-WaterPower/SNL-SWAN"><img alt="_images/snl_swan_header.jpg" src="_images/snl_swan_header.jpg" /></a>
 </div>
 <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="project-overview">
 <h1>Project Overview<a class="headerlink" href="#project-overview" title="Permalink to this headline">¶</a></h1>
-<p>WEC-Sim is an open-source wave energy converter (WEC) simulation tool. The code is developed in MATLAB/SIMULINK using the multi-body dynamics solver SimMechanics. WEC-Sim has the ability to model devices that are comprised of rigid bodies, power-take-off systems, and mooring systems. Simulations are performed in the time-domain by solving the governing WEC equations of motion in 6 degrees-of-freedom. The WEC-Sim project is funded by the U.S. Department of Energy’s Wind and Water Power Technologies Office and the code development effort is a collaboration between the <a class="reference external" href="http://www.nrel.gov/water/">National Renewable Energy Laboratory (NREL)</a> and <a class="reference external" href="http://energy.sandia.gov/energy/renewable-energy/water-power/wec-sim-wave-energy-converter-simulator/">Sandia National Laboratories (SNL)</a>.</p>
-</div>
-<div class="section" id="principal-developers">
-<h1>Principal Developers<a class="headerlink" href="#principal-developers" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li>Michael Lawson (PI - NREL)</li>
-<li>Kelley Ruehl (PI - SNL)</li>
-<li>Yi-Hsiang Yu (NREL)</li>
-<li>Carlos Michelen (SNL)</li>
-<li>Nathan Tom (NREL)</li>
-</ul>
-<div class="section" id="contributors">
-<h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Ratanak So (Oregon State University)</li>
-<li>Adam Nelessen (Georgia Tech)</li>
-<li>Sam Kanner (University of California at Berkeley)</li>
-<li>Chris McComb (Carnegie Mellon University)</li>
-</ul>
-</div>
-</div>
-<div class="section" id="funding">
-<h1>Funding<a class="headerlink" href="#funding" title="Permalink to this headline">¶</a></h1>
-<p>The WEC-Sim project is sponsored by the U.S. Department of Energy’s Wind and Water Power Technologies Office. WEC-Sim code development is a collaboration between the National Renewable Energy Laboratory (NREL) and Sandia National Laboratories (SNL).</p>
-<p>The National Renewable Energy Laboratory is a national laboratory of the U.S. Department of Energy, Office of Energy Efficiency and Renewable Energy, operated by the Alliance for Sustainable Energy, LLC. under contract No. DE-AC36-08GO28308.</p>
-<p>Sandia National Laboratories is a multi-program laboratory managed and operated by Sandia Corporation, a wholly owned subsidiary of Lockheed Martin Corporation, for the U.S. Department of Energy’s National Nuclear Security Administration under contract DE-AC04-94AL85000.</p>
+<p>SNL-SWAN (Sandia National Laboratories – Simulating WAves Nearshore) is an open source wave energy converter (WEC) array simulation tool. The code is a modification of the open source code, SWAN (Simulating WAves Nearshore) developed by TU Delft. The SNL-SWAN code includes the addition of a WEC Module which improves how SWAN accounts for power performance of WECs and the effects on the wave field. For more information on the implementation and application of SNL-SWAN, please refer to the SNL-SWAN Manual. The SNL-SWAN project is funded by the U.S. Department of Energy’s Wind and Water Power Technologies Office. To submit feedback on the development of SNL-SWAN.</p>
 </div>
 
 
@@ -334,7 +175,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2015, National Renewable Energy Laboratory and Sandia Corporation.
+        &copy; Copyright 2015, Sandia Corporation.
     </p>
   </div>
   Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.

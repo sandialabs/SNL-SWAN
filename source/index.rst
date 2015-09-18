@@ -7,10 +7,7 @@
 
 
    release_notes.rst
-   theory.rst
    getting_started.rst
-   code_structure.rst
-   tutorials.rst
    online_forum.rst
    references.rst
    license.rst
