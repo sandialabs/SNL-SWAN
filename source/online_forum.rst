@@ -1,5 +1,5 @@
 Online Forum
 =================
 
-For questions about WEC-Sim, refer to our `WEC-Sim Online Forum <https://github.com/WEC-Sim/WEC-Sim/issues>`_
+For questions about SNL-SWAN, refer to the `SNL-SWAN Online Forum <https://github.com/SNL-WaterPower/SNL-SWAN/issues>`_
 
