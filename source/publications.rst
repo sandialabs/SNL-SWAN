@@ -1,8 +1,5 @@
-References
-===========
-
 Publications
---------------   
+===========
    
 SNL-SWAN Development
 ~~~~~~~~~~~~~~~~~~~~
@@ -27,7 +24,8 @@ SNL-SWAN Application
    
    
 News Articles
---------------
+~~~~~~~~~~~~~~~~~~~~
+
 * Febuary 3, 2015 – Annex IV Tethys Webinar, `Effects of Energy Removal on Physical Systems <http://tethys.pnnl.gov/events/effects-energy-removal-physical-systems-webinar/>`_
 * February 23, 2015 – Tethys Story, `Planning for Effects of Wave Energy Development Before Going to Sea <http://tethys.pnnl.gov/tethys-stories/planning-effects-wave-energy-development-going-sea/>`_
 * February 24, 2015 – Tidal Energy Today, `DoE has released new WEC array simulation tool <http://tidalenergytoday.com/2015/02/24/doe-has-released-new-wec-array-simulation-tool/>`_
