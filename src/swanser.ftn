@@ -3485,7 +3485,7 @@
       INTEGER    ID, IENT, ILINK, ITRAS, IS, JP, ICGRD, LREFL,
      &           NUMCOR, NMPO, ISIGM
       INTEGER    NUMNOR, inorm                                            SNL-SWAN
-      REAL       XD, YD, XN, YN                                           SNL-SWAN
+      REAL       XD, YD, XN, YN, prod                                     SNL-SWAN
       INTEGER    LREFDIFF, LRFRD                                          40.31
       REAL       ALOW, BUPL, FVH, HGT, HSIN, OBET, OBHKT,
      &           SLOPE, BK, L0P, XI0P, BVH, EMAX, ETD, TP,                40.66
@@ -3617,7 +3617,8 @@
                   do inorm = 1, numnor
                     xn=COBST%XNOR(inorm)
                     yn=COBST%YNOR(inorm)
-                    if (acos(xn*xd+yn*yd) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
+                    prod = -(xn*xd+yn*yd)    ! A dot B (reverse normal to point towards wave)
+                    if (acos(prod) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
                       inside=1
                       exit ! inside at least one angle range, break inorm loop
                     endif
@@ -3698,7 +3699,8 @@
                   do inorm = 1, numnor
                     xn=COBST%XNOR(inorm)
                     yn=COBST%YNOR(inorm)
-                    if (acos(xn*xd+yn*yd) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
+                    prod = -(xn*xd+yn*yd)    ! A dot B (reverse normal to point towards wave)
+                    if (acos(prod) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
                       inside=1
                       exit ! inside at least one angle range, break inorm loop
                     endif
@@ -3746,7 +3748,8 @@
                   do inorm = 1, numnor
                     xn=COBST%XNOR(inorm)
                     yn=COBST%YNOR(inorm)
-                    if (acos(xn*xd+yn*yd) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
+                    prod = -(xn*xd+yn*yd)    ! A dot B (reverse normal to point towards wave)
+                    if (acos(prod) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
                       inside=1
                       exit ! inside at least one angle range, break inorm loop
                     endif
@@ -3801,7 +3804,8 @@
                   do inorm = 1, numnor
                     xn=COBST%XNOR(inorm)
                     yn=COBST%YNOR(inorm)
-                    if (acos(xn*xd+yn*yd) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
+                    prod = -(xn*xd+yn*yd)    ! A dot B (reverse normal to point towards wave)
+                    if (acos(prod) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
                       inside=1
                       exit ! inside at least one angle range, break inorm loop
                     endif
@@ -3828,7 +3832,33 @@
               RCW = max(RCW,0.0)
               OBHKT = 1.0-RCW
               DO ID = 1, MDC
-                OBREDF(ID,IS,ILINK) = OBHKT  ! Ktp Not squared
+                !
+                ! directional dependence stuff is in here
+                !
+                inside=0
+                xd=SPCDIR (ID,2)
+                yd=SPCDIR (ID,3)
+                if (numnor==0) then ! everything is inside
+                  inside=1
+                else
+                  do inorm = 1, numnor
+                    xn=COBST%XNOR(inorm)
+                    yn=COBST%YNOR(inorm)
+                    prod = -(xn*xd+yn*yd)    ! A dot B (reverse normal to point towards wave)
+                    if (acos(prod) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
+                      inside=1
+                      exit ! inside at least one angle range, break inorm loop
+                    endif
+                  enddo
+                endif
+                !
+                ! end directional dependence stuff
+                !
+                if (inside == 1) then
+                  OBREDF(ID,IS,ILINK) = OBHKT  ! Ktp Not squared
+                else
+                  OBREDF(ID,IS,ILINK) = 1.0
+                endif
               ENDDO
             ENDDO
             !WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
