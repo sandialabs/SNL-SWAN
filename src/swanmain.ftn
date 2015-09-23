@@ -2774,7 +2774,7 @@
         endif   ! obstacle case stuff
 
         ! read in reflection coefficient file stuff
-        if(irlfcase .eq. 1) then  ! need Reflectionl information
+        if(irflcase .eq. 1) then  ! need Reflectionl information
           open (101, file=trim(FileRFL), status='old')
           n_TpRFL=0
           do
