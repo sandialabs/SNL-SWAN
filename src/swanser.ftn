@@ -3770,28 +3770,30 @@
             !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
             !write(*,*) 'Old incident', incident
             CGO(:)=SQRT(CAX(1,:,(ILINK+1))**2+CAY(1,:,(ILINK+1))**2)
-            incident = Pincident(SPCSIG, SPCDIR, CGO(:), 
+            incident = Pincident(SPCSIG, SPCDIR, CGO(:),
      &                            AC2(:,:,KCGRD(ILINK+1))  )/1000.0     ! convert to Kw
             !write(*,*) 'New incident', incident
             DO IS = 1, MSC
               PTEMP=2.*PI/SPCSIG(IS) ! convert cyclic freqency into period
-              DO ID = 1, MDC
-
-                              ! action density * sigma = E(f,d)
-                Htmp = sqrt( 8.0*
-     &                     AC2(IS,ID,KCGRD(ILINK+1))*SPCSIG(ISIGM) )
-                CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
+              CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
      &                  PowerMat(1:n_Hs, 1:n_Tp),
-     &                  n_Hs, n_Tp, Htmp, PTEMP, RCW, err) ! 2-D Interpolation
+     &                  n_Hs, n_Tp, HSIN, PTEMP, RCW, err) ! 2-D Interpolation
 ! Compute incident wave power
-                RCW=RCW/incident/Width
-                ! limit RCW value
-                RCW = min(RCW,1.0)
-                RCW = max(RCW,0.0)
-                OBHKT = 1.0-RCW
+              WRITE (PRINTF,*) ''
+              WRITE (PRINTF,*) 'obdbg ',X1,Y1,IS,RCW  ! Writes transmission coefficient (Kt) to main output file
+              WRITE (PRINTF,*) 'P vals ',PTEMP, Period(1), Period(n_Tp)
+              WRITE (PRINTF,*) 'H vals ',HSIN,  Height(1), Height(n_Hs)
+              RCW=RCW/incident/Width
+              ! limit RCW value
+              RCW = min(RCW,1.0)
+              RCW = max(RCW,0.0)
+              OBHKT = 1.0-RCW
+              WRITE (PRINTF,*) 'Trans Coef ',OBHKT
+              WRITE (PRINTF,*) ''
 ! If using power as ratio do not use square
-                TRCF  = OBHKT  ! Ktp Not squared
+              TRCF  = OBHKT  ! Ktp Not squared
 !             assign values to array OBREDF
+              DO ID = 1, MDC
                 !
                 ! directional dependence stuff is in here
                 !
@@ -3862,7 +3864,64 @@
               ENDDO
             ENDDO
             !WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
-          elseif (iobcase.eq.5) then   ! RCW Lookup using each individual frequency depending on which obstacle was crossed
+          elseif (iobcase.eq.5) then   ! Power matrix lookup table
+            !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
+            !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
+            !write(*,*) 'Old incident', incident
+            CGO(:)=SQRT(CAX(1,:,(ILINK+1))**2+CAY(1,:,(ILINK+1))**2)
+            incident = Pincident(SPCSIG, SPCDIR, CGO(:), 
+     &                            AC2(:,:,KCGRD(ILINK+1))  )/1000.0     ! convert to Kw
+            !write(*,*) 'New incident', incident
+            DO IS = 1, MSC
+              PTEMP=2.*PI/SPCSIG(IS) ! convert cyclic freqency into period
+              DO ID = 1, MDC
+
+                              ! action density * sigma = E(f,d)
+                Htmp = sqrt( 8.0*
+     &                     AC2(IS,ID,KCGRD(ILINK+1))*SPCSIG(ISIGM) )
+                CALL polin2(Height(1:n_Hs), Period(1:n_Tp),
+     &                  PowerMat(1:n_Hs, 1:n_Tp),
+     &                  n_Hs, n_Tp, Htmp, PTEMP, RCW, err) ! 2-D Interpolation
+! Compute incident wave power
+                RCW=RCW/incident/Width
+                ! limit RCW value
+                RCW = min(RCW,1.0)
+                RCW = max(RCW,0.0)
+                OBHKT = 1.0-RCW
+! If using power as ratio do not use square
+                TRCF  = OBHKT  ! Ktp Not squared
+!             assign values to array OBREDF
+                !
+                ! directional dependence stuff is in here
+                !
+                inside=0
+                xd=SPCDIR (ID,2)
+                yd=SPCDIR (ID,3)
+                if (numnor==0) then ! everything is inside
+                  inside=1
+                else
+                  do inorm = 1, numnor
+                    xn=COBST%XNOR(inorm)
+                    yn=COBST%YNOR(inorm)
+                    prod = -(xn*xd+yn*yd)    ! A dot B (reverse normal to point towards wave)
+                    if (acos(prod) < COBST%ANGNOR(inorm)) then   ! A dot B = |A|*|B|*Cos(theta)
+                      inside=1
+                      exit ! inside at least one angle range, break inorm loop
+                    endif
+                  enddo
+                endif
+                !
+                ! end directional dependence stuff
+                !
+                if (inside == 1) then
+                  OBREDF(ID,IS,ILINK) = TRCF
+                else
+                  OBREDF(ID,IS,ILINK) = 1.0
+                endif
+              ENDDO
+            ENDDO
+
+          elseif (iobcase.eq.6) then   ! RCW Lookup using each individual frequency depending on which obstacle was crossed
 !           assign values to array OBREDF
             itmp=LINK(ILINK)   !obstacle numer
             DO IS = 1, MSC
@@ -4076,11 +4135,12 @@
      &  F8.3)                                                             40.03
   90  CONTINUE
       IF (.NOT.REFLTST) THEN                                              40.13
-        CALL MSGERR(3,'Kt^2 + Kr^2 > 1 ')                                 40.13
+        CALL MSGERR(3,'Kt^2 + Kr^2 > 1 ')                                 40.13  ! SNL-SWAN raised error level to 4
         IF (ITEST.LT.50) THEN                                             40.13
           WRITE (PRTEST, 74) IXCGRD(1)-1, IYCGRD(1)-1                     40.13
   74      FORMAT (' Kt^2 + Kr^2 > 1 in grid point:', 2I4)                 40.13
         ENDIF                                                             40.13
+        stop                                                              SNL-SWAN  ! not sure if this is the "approved" way of stopping
       ENDIF                                                               40.13
       RETURN
 !     * end of SUBROUTINE SWTRCF
