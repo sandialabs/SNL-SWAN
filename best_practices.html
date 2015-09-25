@@ -75,7 +75,6 @@
 <li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-1-release-notes">SNL-SWAN v1.1 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-0-release-notes">SNL-SWAN v1.0 Release Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_notes.html#compatibility-notes">Compatibility Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
@@ -98,7 +97,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="application.html">Application</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="application.html#input-file">INPUT FILE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="application.html#input-file">Input File</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-0">SET OBCASE=0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-1">SET OBCASE=1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-2">SET OBCASE=2</a></li>
@@ -106,21 +105,31 @@
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-4">SET OBCASE=4</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="application.html#relative-capture-width-definition">RELATIVE CAPTURE WIDTH DEFINITION</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="application.html#wave-periods">WAVE PERIODS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#relative-capture-width">RELATIVE CAPTURE WIDTH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application.html#relative-capture-width">Relative Capture Width</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="application.html#wave-periods">Wave Periods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#power-performance">Power Performance</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="application.html#power-matrix-definition">POWER MATRIX DEFINITION</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="application.html#normalization-width">NORMALIZATION WIDTH</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#wave-heights">WAVE HEIGHTS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#id6">WAVE PERIODS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#wec-power-matrix">WEC POWER MATRIX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application.html#power-matrix">Power Matrix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="application.html#normalization-width">Normalization Width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#wave-heights">Wave Heights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#id6">Wave Periods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#id7">Power Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="application.html#sample-input-files">Sample Input Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="application.html#input">INPUT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#rcw">RCW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#id8">Power Matrix</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Best Practices</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#grid-treatment">Grid Treatment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#wec-power-performance">WEC Power Performance</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="online_forum.html">Online Forum</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-development">SNL-SWAN Development</a></li>
@@ -168,9 +177,30 @@
             
   <div class="section" id="best-practices">
 <span id="id1"></span><h1>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this headline">¶</a></h1>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This section is under development</p>
+<p>In this section SNL-SWAN best practices are given for the use of the SNL-SWAN to model WECs. This section is meant to address frequently addressed questions.</p>
+<div class="section" id="grid-treatment">
+<h2>Grid Treatment<a class="headerlink" href="#grid-treatment" title="Permalink to this headline">¶</a></h2>
+<p>As noted in Section 3.10 of the SWAN Scientific and Technical Documentation, obstacles are treated as lines running through the computational grid.  When calculating the action density flux from one grid point to its neighbors, SWAN first determines if the connecting grid line crosses an obstacle line.  If and only if a grid line is crossed by an obstacle line, the transmission coefficient applied to the flux between those nodes.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/Fig4.jpg"><img alt="_images/Fig4.jpg" src="_images/Fig4.jpg" style="width: 350pt;" /></a>
+</div>
+<p>As described in Section 5.2.1 of the SWAN Scientific and Technical Documentation, SWAN uses a vertex centered grid, with volume cells defined by grid centers.  Figure 4 below shows a computational grid (solid lines), a grid vertex, and the finite volume cell corresponding to that vertex (dashed lines).  The finite volume cell edges are the fluxing faces between neighboring vertices.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/Fig5.jpg"><img alt="_images/Fig5.jpg" src="_images/Fig5.jpg" style="width: 350pt;" /></a>
+</div>
+<p>This grid treatment in combination with SWAN?s obstacle treatment has some implications which should be noted.  Figure 5 shows the various ways in which obstacles can interact with the computational grid.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/Fig6.jpg"><img alt="_images/Fig6.jpg" src="_images/Fig6.jpg" style="width: 350pt;" /></a>
+</div>
+<p>The two blue obstacles shown in Figure 5 will have the exact same influence on the model solution, even though they have much different widths.  Since both obstacles cross the same computation grid line, SWAN will apply their transmission coefficient the same volumetric fluxing face.  The straight dashed lines in Figure 4 show the fluxing faces of a cell volume.  Both obstacles correspond to the same face, and thus their obstacle coefficients will have the same impact on the model calculation.</p>
+<p>Due to grid discretization, the green obstacle in Figure 5 does not intersect and computational grid lines.  In this situation it will have no effect, even though the obstacle is much larger than the small blue obstacle (which does have an effect).</p>
+<p>The red line in Figure 5 shows the appropriate use of the obstacle implementation, where grid discretization is much finer than the obstacle length.  This means that obstacles will span multiple grid lines and their length and transmission effects can be properly captured.</p>
+</div>
+<div class="section" id="wec-power-performance">
+<h2>WEC Power Performance<a class="headerlink" href="#wec-power-performance" title="Permalink to this headline">¶</a></h2>
+<p>It should be noted that RCW values should be kept between zero and one (0&lt;RCW&lt;1) in order to produce physical transmission coefficients.  Should RCW values be specified outside of these bounds, SNL-SWAN will enforce these limits in order to maintain realizable values for the transmission coefficient.</p>
+<p>In choosing an obstacle case, attention should be paid to the way the Power Matrix or RCW curve was created.  Using OBCASE equal to 3 or 4 is only appropriate when information is available about individual frequencies.  OBCASE 1 and 2 are more appropriate when information is available about average sea states.  Power Matrices may be populated with information derived from either regular waves, or irregular real sea waves.  When working with a Power Matrix populated with regular waves, it makes sense to use OBCASE=3.  However, when working with a Power Matrix which has been populated using values aggregated over real sea waves, it is more appropriate to use OBCASE=1.</p>
+<p>Transmission coefficients are obtained through interpolation between points in either the Power Matrix or the RCW curve.  Any frequency or significant wave height lying outside the bounds specified in these files will be given a transmission coefficient of 1.0 (an absorption coefficient of 0.0).  SNL-SWAN will not extrapolate values outside of these ranges, and the user is encouraged to modify their input curves should they desire this behavior.</p>
 </div>
 </div>
 

@@ -75,7 +75,6 @@
 <li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-1-release-notes">SNL-SWAN v1.1 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-0-release-notes">SNL-SWAN v1.0 Release Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_notes.html#compatibility-notes">Compatibility Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
@@ -98,7 +97,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="application.html">Application</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="application.html#input-file">INPUT FILE</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="application.html#input-file">Input File</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-0">SET OBCASE=0</a></li>
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-1">SET OBCASE=1</a></li>
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-2">SET OBCASE=2</a></li>
@@ -106,21 +105,31 @@
 <li class="toctree-l3"><a class="reference internal" href="application.html#set-obcase-4">SET OBCASE=4</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="application.html#relative-capture-width-definition">RELATIVE CAPTURE WIDTH DEFINITION</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="application.html#wave-periods">WAVE PERIODS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#relative-capture-width">RELATIVE CAPTURE WIDTH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application.html#relative-capture-width">Relative Capture Width</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="application.html#wave-periods">Wave Periods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#power-performance">Power Performance</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="application.html#power-matrix-definition">POWER MATRIX DEFINITION</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="application.html#normalization-width">NORMALIZATION WIDTH</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#wave-heights">WAVE HEIGHTS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#id6">WAVE PERIODS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="application.html#wec-power-matrix">WEC POWER MATRIX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="application.html#power-matrix">Power Matrix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="application.html#normalization-width">Normalization Width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#wave-heights">Wave Heights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#id6">Wave Periods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#id7">Power Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="application.html#sample-input-files">Sample Input Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="application.html#input">INPUT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#rcw">RCW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="application.html#id8">Power Matrix</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="best_practices.html">Best Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="best_practices.html">Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="best_practices.html#grid-treatment">Grid Treatment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="best_practices.html#wec-power-performance">WEC Power Performance</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="online_forum.html">Online Forum</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-development">SNL-SWAN Development</a></li>
@@ -168,63 +177,59 @@
             
   <div class="section" id="implementation">
 <span id="id1"></span><h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This section is under development</p>
-</div>
 <p>In this section, the implementation of the WEC Module within the SNL-SWAN code will be described in detail. This section explains how the WEC Module was formulated from the SWAN (Version 41.01) code.</p>
-<p>SNL-SWAN models WEC devices as obstacles using the five ?obcase? flags listed below to determine the appropriate obstacle transmission coefficient.  The following section describes the SNL-SWAN treatment of WEC devices under each obstacle case model.</p>
+<p>SNL-SWAN models WEC devices as obstacles using the five &#8220;obcase&#8221; flags listed below to determine the appropriate obstacle transmission coefficient.  The following section describes the SNL-SWAN treatment of WEC devices under each obstacle case model.</p>
 <p>Section 3.10 of the <a class="reference external" href="http://swanmodel.sourceforge.net/online_doc/swantech/swantech.html">SWAN Scientific and Technical Documentation</a> describes the effect of obstacles through a coefficient in the convection terms of the action density evolution equation.  The action density equation is shown below Eq.(1) with the obstacle transmission coefficient boxed in red.  The sole difference between the obstacle cases is the method of obtaining this value.  The five methods are described below. A visual conceptual comparison is shown at the end of this section.</p>
-<ul class="simple">
-<li>EQ1</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ1.jpg"><img alt="_images/EQ1.jpg" src="_images/EQ1.jpg" style="width: 500pt;" /></a>
+</div>
 <div class="section" id="obcase-0">
 <h2>OBCASE 0<a class="headerlink" href="#obcase-0" title="Permalink to this headline">¶</a></h2>
 <p>This is the standard, TUDelft SWAN, obstacle treatment.  The value K_t is a constant value entered into the SWAN input file.  K_t represents the ratio of wave heights incident to and lee of the obstacle (or WEC).</p>
-<ul class="simple">
-<li>EQ2</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ2.jpg"><img alt="_images/EQ2.jpg" src="_images/EQ2.jpg" style="width: 150pt;" /></a>
+</div>
 </div>
 <div class="section" id="obcase-1">
 <h2>OBCASE 1<a class="headerlink" href="#obcase-1" title="Permalink to this headline">¶</a></h2>
 <p>Obstacle case 1 uses the WEC power matrix to calculate the effective transmission coefficient.  In this case, K_t^2 is calculated using the provided power matrix, and a constant value for this coefficient is used across all frequencies.  K_t^2 represents the energy (or power) ratio incident and lee of the obstacle.</p>
-<ul class="simple">
-<li>EQ3</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ3.jpg"><img alt="_images/EQ3.jpg" src="_images/EQ3.jpg" style="width: 125pt;" /></a>
+</div>
 <p>The power matrix is a table of absorbed power (in Kilowatts, kW) by a WEC device over varying significant wave heights and peak wave periods.  SNL-SWAN determines the incident significant wave height and the incident peak wave period and then linearly interpolates a value for absorbed power from the matrix.  Note: if the incident values for wave height or period lie outside of the power matrix range, a value of zero is returned.</p>
-<p>The absorbed power flux (power per unit width) of the obstacle is determined by dividing the interpolated value for absorbed power by the ?width? value provided as the first entry in the Power.txt file.  Note that the width value here should be thought of as a normalization value, and is only used to convert the power matrix entries of absorbed power (kW) into absorbed flux (kW/m) values.  This value is calculated as follows.</p>
-<ul class="simple">
-<li>EQ4</li>
-</ul>
+<p>The absorbed power flux (power per unit width) of the obstacle is determined by dividing the interpolated value for absorbed power by the &#8220;width&#8221; value provided as the first entry in the Power.txt file.  Note that the width value here should be thought of as a normalization value, and is only used to convert the power matrix entries of absorbed power (kW) into absorbed flux (kW/m) values.  This value is calculated as follows.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ4.jpg"><img alt="_images/EQ4.jpg" src="_images/EQ4.jpg" style="width: 175pt;" /></a>
+</div>
 <p>This value is then applied evenly across the entire obstacle, as defined in the main INPUT file.  In most cases the width value in Power.txt should be the same as the length of the obstacle defined in the INPUT file, but this is not required by the model.  There are no checks in the code to guarantee or enforce this equality.</p>
 <p>SNL-SWAN then calculates the incident power fluxing across the obstacle (in kW/m).  The power fluxing over the obstacle is calculated directly from the spectral information incident to the obstacle.</p>
-<ul class="simple">
-<li>EQ5</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ5.jpg"><img alt="_images/EQ5.jpg" src="_images/EQ5.jpg" style="width: 250pt;" /></a>
+</div>
 <p>To determine the transmission coefficient, SWAN takes the incident power flux and subtracts off absorbed power flux.  The transmission coefficient is the ratio of the remaining flux to the incident flux, and K_t^2 is calculated using the following equation:</p>
-<ul class="simple">
-<li>EQ6</li>
-</ul>
-<p>When the action balance equation is solved, the convection term, N(s,?)c_g K_t^2, will be applied (integrated) across the computational width of the obstacle.  The computational width (as opposed to the width defined in the power matrix file) is determined by the obstacle dimensions defined in the main SWAN INPUT file and the grid discretization (See the section on Grid Treatment).</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ6.jpg"><img alt="_images/EQ6.jpg" src="_images/EQ6.jpg" style="width: 400pt;" /></a>
+</div>
+<p>When the action balance equation is solved, the convection term, N(s,theta)c_g K_t^2, will be applied (integrated) across the computational width of the obstacle.  The computational width (as opposed to the width defined in the power matrix file) is determined by the obstacle dimensions defined in the main SWAN INPUT file and the grid discretization (See the section on Grid Treatment).</p>
 </div>
 <div class="section" id="obcase-2">
 <h2>OBCASE 2<a class="headerlink" href="#obcase-2" title="Permalink to this headline">¶</a></h2>
 <p>Obstacle case 2 uses the WEC relative capture width curve to calculate the effective transmission coefficient.  K_t^2 is again calculated using the provided curve, and a constant value is used across all frequencies.</p>
 <p>The relative capture width curve is a table of absorbed power ratios by a WEC device at varying wave periods.  In ways, this implementation is simpler than that or the power matrix.  Since the relative capture width curve already provides power ratios, K_t^2 is more straightforward to calculate without the need to determine the incident power flux.  For this case, SNL-SWAN linearly interpolates an RCW value from the curve given the peak incident wave period, and directly calculates a transmission coefficient using the following relation.  As with obstacle case 1, any wave periods outside of the defined range are given a transmission coefficient of zero.</p>
-<ul class="simple">
-<li>EQ7</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ7.jpg"><img alt="_images/EQ7.jpg" src="_images/EQ7.jpg" style="width: 200pt;" /></a>
+</div>
 </div>
 <div class="section" id="obcase-3">
 <h2>OBCASE 3<a class="headerlink" href="#obcase-3" title="Permalink to this headline">¶</a></h2>
-<p>SNL-SWAN?s obstacle case 3 is just an extension of case 1.  This case behaves exactly the same way as case 1, except that the routine to determine the transmission coefficient is performed separately for each binned frequency of the model.  This in effect makes K_t^2 a function of frequency, resulting in varying power absorption for waves of different frequency.  Note: while the power matrix is defined in terms of wave period, internal SWAN calculations are all performed using wave frequency.  Each computational frequency is converted to a wave period as follows before interpolating from the power matrix.</p>
-<ul class="simple">
-<li>EQ8</li>
-</ul>
+<p>SNL-SWAN&#8217;s obstacle case 3 is just an extension of case 1.  This case behaves exactly the same way as case 1, except that the routine to determine the transmission coefficient is performed separately for each binned frequency of the model.  This in effect makes K_t^2 a function of frequency, resulting in varying power absorption for waves of different frequency.  Note: while the power matrix is defined in terms of wave period, internal SWAN calculations are all performed using wave frequency.  Each computational frequency is converted to a wave period as follows before interpolating from the power matrix.</p>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/EQ8.jpg"><img alt="_images/EQ8.jpg" src="_images/EQ8.jpg" style="width: 100pt;" /></a>
+</div>
 </div>
 <div class="section" id="obcase-4">
 <h2>OBCASE 4<a class="headerlink" href="#obcase-4" title="Permalink to this headline">¶</a></h2>
-<p>SNL-SWAN?s obstacle case 4 is an extension of case 2.  Again, the only difference is that the RCW curve is sampled independently for each frequency of the simulation, resulting in a frequency dependent obstacle transmission coefficient.</p>
+<p>SNL-SWAN&#8217;s obstacle case 4 is an extension of case 2.  Again, the only difference is that the RCW curve is sampled independently for each frequency of the simulation, resulting in a frequency dependent obstacle transmission coefficient.</p>
 </div>
 <div class="section" id="obcase-5">
 <h2>OBCASE 5<a class="headerlink" href="#obcase-5" title="Permalink to this headline">¶</a></h2>
@@ -236,9 +241,9 @@
 <div class="section" id="obcase-comparison">
 <h2>OBCASE Comparison<a class="headerlink" href="#obcase-comparison" title="Permalink to this headline">¶</a></h2>
 <p>Differences between SNL-SWAN OBCASE options are visualized in Figure XX. In this figure a conceptual frequency independent RCW curve which would be the case for OBCASE 1 and 2 is shown as the dotted red line in the top panel. The frequency dependent OBCASES 3 and 4 would have a RCW curve that is variable dependent on frequency, as indicated by the blue line in the top panel. The resultant wave spectra in the lee of the obstacle for these cases are shown in the bottom panel, as compared to the incident spectra (black line).</p>
-<ul class="simple">
-<li>Fig1</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/Fig1.jpg"><img alt="_images/Fig1.jpg" src="_images/Fig1.jpg" style="width: 350pt;" /></a>
+</div>
 </div>
 </div>
 

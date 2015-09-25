@@ -75,7 +75,6 @@
 <li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-1-release-notes">SNL-SWAN v1.1 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-0-release-notes">SNL-SWAN v1.0 Release Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="release_notes.html#compatibility-notes">Compatibility Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
@@ -118,9 +117,19 @@
 <li class="toctree-l3"><a class="reference internal" href="#id7">Power Performance</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#sample-input-files">Sample Input Files</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#input">INPUT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rcw">RCW</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Power Matrix</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="best_practices.html">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="best_practices.html">Best Practices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="best_practices.html#grid-treatment">Grid Treatment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="best_practices.html#wec-power-performance">WEC Power Performance</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="online_forum.html">Online Forum</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-development">SNL-SWAN Development</a></li>
@@ -168,10 +177,6 @@
             
   <div class="section" id="application">
 <span id="id1"></span><h1>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h1>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This section is under development</p>
-</div>
 <p>In the following sections, descriptions on how to run the SNL-SWAN code are given. For additional information regarding how to set up and run and SWAN model, please refer to the SWAN documentation available online at <a class="reference external" href="http://swanmodel.sourceforge.net/">http://swanmodel.sourceforge.net/</a>.</p>
 <div class="section" id="input-file">
 <h2>Input File<a class="headerlink" href="#input-file" title="Permalink to this headline">¶</a></h2>
@@ -200,9 +205,9 @@
 <div class="section" id="relative-capture-width">
 <h2>Relative Capture Width<a class="headerlink" href="#relative-capture-width" title="Permalink to this headline">¶</a></h2>
 <p>IF SNL-SWAN IS RUN WITH OPTION 2 OR 4, THE RELATIVE_CAPTURE_WIDTH.TXT FILE IS REQUIRED TO RUN. This is the WEC power performance in the form of a relative capture width curve, in two vertical columns containing one the period and the one with Relative Capture Width Curve (RCW) value. This curve can be directly copied from excel into a <a href="#id2"><span class="problematic" id="id3">*</span></a>.txt file, see Example RCW File section.</p>
-<ul class="simple">
-<li>Fig 2</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/Fig2.jpg"><img alt="_images/Fig2.jpg" src="_images/Fig2.jpg" style="width: 450pt;" /></a>
+</div>
 <div class="section" id="wave-periods">
 <h3>Wave Periods<a class="headerlink" href="#wave-periods" title="Permalink to this headline">¶</a></h3>
 <p>The wave period should be defined in seconds. The wave periods should be defined in the first column of the RELATIVE_CAPTURE_WIDTH.TXT file.</p>
@@ -215,9 +220,9 @@
 <div class="section" id="power-matrix">
 <h2>Power Matrix<a class="headerlink" href="#power-matrix" title="Permalink to this headline">¶</a></h2>
 <p>IF SNL-SWAN IS RUN WITH OPTION 1 OR 3, THE POWER.TXT FILE IS REQUIRED TO RUN. This is the WEC power performance in the form of a power matrix.  The file starts with the normalization width, then the number of wave heights, followed by a list of wave heights, then the number of wave periods, followed by the list of wave periods, and finally the WEC power matrix is defined. These values can be directly copied from excel into a <a href="#id4"><span class="problematic" id="id5">*</span></a>.txt file, see Example Power Matrix File section.</p>
-<ul class="simple">
-<li>Fig3</li>
-</ul>
+<div class="figure align-center">
+<a class="reference internal image-reference" href="_images/Fig3.jpg"><img alt="_images/Fig3.jpg" src="_images/Fig3.jpg" style="width: 500pt;" /></a>
+</div>
 <div class="section" id="normalization-width">
 <h3>Normalization Width<a class="headerlink" href="#normalization-width" title="Permalink to this headline">¶</a></h3>
 <p>The normalization width value should usually be the WEC?s physical dimension. This term is used to normalize the absorbed power value from the matrix by the width over which it is absorbed.  This gives a value in terms of power per unit width which can be generally applied to an obstacle of any size. This is the first term defined in the POWER.TXT file.</p>
@@ -233,6 +238,27 @@
 <div class="section" id="id7">
 <h3>Power Performance<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
 <p>The WEC power matrix should be defined in kW. This is the last term defined in the POWER.TXT file.</p>
+</div>
+</div>
+<div class="section" id="sample-input-files">
+<h2>Sample Input Files<a class="headerlink" href="#sample-input-files" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="input">
+<h3>INPUT<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Here is a sample input file <a class="reference download internal" href="_downloads/INPUT"><code class="xref download docutils literal"><span class="pre">INPUT</span></code></a></li>
+</ul>
+</div>
+<div class="section" id="rcw">
+<h3>RCW<a class="headerlink" href="#rcw" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Here is a sample Relative Capture Width file <a class="reference download internal" href="_downloads/Relative_Capture_Width.txt"><code class="xref download docutils literal"><span class="pre">RCW</span></code></a></li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h3>Power Matrix<a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Here is a sample Power Matrix file <a class="reference download internal" href="_downloads/Power.txt"><code class="xref download docutils literal"><span class="pre">PowerMatrix</span></code></a></li>
+</ul>
 </div>
 </div>
 </div>

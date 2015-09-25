@@ -3,9 +3,6 @@
 Application
 ===============
 
-.. Note::
-	This section is under development
-
 In the following sections, descriptions on how to run the SNL-SWAN code are given. For additional information regarding how to set up and run and SWAN model, please refer to the SWAN documentation available online at http://swanmodel.sourceforge.net/. 
 
 Input File
@@ -37,7 +34,9 @@ Relative Capture Width
 ----------------------------------
 IF SNL-SWAN IS RUN WITH OPTION 2 OR 4, THE RELATIVE_CAPTURE_WIDTH.TXT FILE IS REQUIRED TO RUN. This is the WEC power performance in the form of a relative capture width curve, in two vertical columns containing one the period and the one with Relative Capture Width Curve (RCW) value. This curve can be directly copied from excel into a *.txt file, see Example RCW File section.
 
-* Fig 2
+.. figure:: _static/Fig2.jpg
+   :width: 450pt
+   :align: center
 
 Wave Periods
 ~~~~~~~~~~~~
@@ -52,7 +51,9 @@ Power Matrix
 ----------------------------------
 IF SNL-SWAN IS RUN WITH OPTION 1 OR 3, THE POWER.TXT FILE IS REQUIRED TO RUN. This is the WEC power performance in the form of a power matrix.  The file starts with the normalization width, then the number of wave heights, followed by a list of wave heights, then the number of wave periods, followed by the list of wave periods, and finally the WEC power matrix is defined. These values can be directly copied from excel into a *.txt file, see Example Power Matrix File section.
 
-* Fig3
+.. figure:: _static/Fig3.jpg
+   :width: 500pt
+   :align: center
 
 Normalization Width
 ~~~~~~~~~~~~
@@ -71,3 +72,17 @@ Power Performance
 The WEC power matrix should be defined in kW. This is the last term defined in the POWER.TXT file.
 
 
+Sample Input Files
+---------------------
+
+INPUT
+~~~~~~~~~~~~
+* Here is a sample input file :download:`INPUT <_static/INPUT>`
+
+RCW
+~~~~~~~~~~~~
+* Here is a sample Relative Capture Width file :download:`RCW <_static/Relative_Capture_Width.txt>`
+
+Power Matrix
+~~~~~~~~~~~~
+* Here is a sample Power Matrix file :download:`PowerMatrix <_static/Power.txt>`
