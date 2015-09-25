@@ -24,11 +24,15 @@ def GetStruc(InpFile):
             #
             # read until 'CGRID' found
             #
+            if len(linein) == 0:
+                continue # cycle this loop
             if linein[0].upper().find('''CGRID''') >= 0:
-                if linein[1].upper().find('''UNSTRUCTURED''') >= 0:
+                #if linein[1].upper().find('''UNSTRUCTURED''') >= 0:
+                if linein[1].upper().find('''UNS''') >= 0:
                     iunst=1
                     break
-                if linein[1].upper().find('''REGULAR''') >= 0:
+                #if linein[1].upper().find('''REGULAR''') >= 0:
+                if linein[1].upper().find('''REG''') >= 0:
                     iunst=0
                     break
     return iunst
@@ -44,10 +48,20 @@ def GetMat(InpFile):
         #
         # read until 'BLOCK COMPGRID' output line found
         #
+        ifound=1
         while linein.upper().find("""BLOCK 'COMPGRID'""") < 0:
+        #while linein.upper().find("""TABLE 'COMPGRID'""") < 0:
             linein = fin.readline()
-    matfile = linein.split()[3].replace("'","")
-    data = loadmat(matfile, struct_as_record=False, squeeze_me=True)
+            if linein == '':  #EOF
+                ifound=0
+                break
+    if ifound == 0:
+        matfile = ''
+        data = ''
+    else:
+        matfile = linein.split()[3].replace("'","")
+        print 'Loading ' + matfile
+        data = loadmat(matfile, struct_as_record=False, squeeze_me=True)
     return matfile, data
 
 ###########################################################################################
@@ -103,7 +117,7 @@ def GetStrucGrid(InpFile):
         #
         # read until 'CGRID REGULAR' found
         #
-        while linein.upper().find('''CGRID REGULAR''') < 0:
+        while linein.upper().find('''CGRID REG''') < 0:
             linein = fin.readline()
 
     GridInfo=linein.split()[2:]  # chop off keywords in the front
@@ -163,9 +177,14 @@ if iunst == -1:
 # get the matlab data
 #
 matfile, mat = GetMat(inputfile)
+if matfile == '':
+    print 'ERROR matfile not found'
+    exit()
 
-# hardcoded, make general sometime
-plotvar = ['Hsig', 'Tm_10', 'RTpeak', 'Transp_y', 'Transp_x', 'PkDir']
+# hardcoded, TODO general sometime
+#plotvar = ['Hsig', 'Tm_10', 'RTpeak', 'Transp_y', 'Transp_x', 'PkDir']
+plotvar = ['Hsig']
+
 # variable to plot
 ivar = 0  # hsig
 if len(sys.argv) > 1:
@@ -193,6 +212,7 @@ cmap = 'jet'
 #
 # plot the data
 #
+
 if iunst == 1:
     nodefile, elefile  = GetNodeEleFile(inputfile)
     nnode, nodelocs = ReadNodeLocs(nodefile)

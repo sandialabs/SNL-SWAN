@@ -3081,7 +3081,7 @@
      &         ITER              ,KGRPNT            ,OBREDF            ,  40.41
      &         CAX1              ,CAY1              ,SPCDIR            ,  33.08
      &         CGO               ,SWMATR(1,1,JTRA0) ,SWMATR(1,1,JTRA1) ,  40.85 33.08
-     &         CROSS, PABSORB, AREA                                    )  SNL-SWAN
+     &         CROSS, PABSORB, AREA, LINK                              )  SNL-SWAN
 
 !TIMG        CALL SWTSTO(118)                                                  40.23
 !
@@ -4337,7 +4337,7 @@
      &                   ITER       ,KGRPNT     ,OBREDF     ,             40.41
      &                   CAX1       ,CAY1       ,SPCDIR     ,             33.08
      &                   CGO        ,TRAC0      ,TRAC1      ,             40.85 33.08
-     &                   CROSS      ,PABSORB    ,AREA         )           SNL-SWAN
+     &                   CROSS      ,PABSORB    ,AREA, LINK   )           SNL-SWAN
 !
 !****************************************************************
 !
@@ -4564,7 +4564,7 @@
      &         SPCDIR(MDC,6)                                              33.08
       REAL  :: TRAC0 (1:MDC,1:MSC,1:MTRNP)                                40.85
       REAL  :: TRAC1 (1:MDC,1:MSC,1:MTRNP)                                40.85
-      INTEGER :: CROSS(2,MCGRD)                                           SNL-SWAN
+      INTEGER :: CROSS(2,MCGRD), LINK(2)                                  SNL-SWAN
       REAL :: PABSORB(NUMOBS), AREA                                       SNL-SWAN
 !
       LOGICAL  ANYBLK(MDC,MSC)     ,ANYBIN(MDC,MSC)
@@ -4616,7 +4616,7 @@
      &               CAY      ,AC2      ,AC1      ,IMATRA   ,IMATDA   ,
      &                         RDX      ,RDY      ,                       40.00
      &               OBREDF   ,TRAC0    ,TRAC1    ,                       40.85 40.00
-     &               CROSS    ,PABSORB  ,AREA                         )   SNL-SWAN
+     &               CROSS    ,PABSORB  ,AREA     ,LINK               )   SNL-SWAN
 !
       END IF                                                              33.08
 !TIMG      CALL SWTSTO(140)                                                    40.23
