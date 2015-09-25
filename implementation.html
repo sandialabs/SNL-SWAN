@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Implementation &mdash; SNL-SWAN</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SNL-SWAN" href="index.html"/>
+        <link rel="next" title="Online Forum" href="online_forum.html"/>
+        <link rel="prev" title="Getting Started" href="getting_started.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> SNL-SWAN
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-1-release-notes">SNL-SWAN v1.1 Release Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-0-release-notes">SNL-SWAN v1.0 Release Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#compatibility-notes">Compatibility Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#downloading-snl-swan">Downloading SNL-SWAN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#option-1-clone-with-github-recommended-for-users">Option 1: Clone with GitHub (Recommended for Users)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#option-2-fork-with-git-recommended-for-developers">Option 2: Fork with Git (Recommended for Developers)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#option-3-static-code-download">Option 3: Static Code Download</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#obcase-0">OBCASE 0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obcase-1">OBCASE 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obcase-2">OBCASE 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obcase-3">OBCASE 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obcase-4">OBCASE 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obcase-5">OBCASE 5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#obcase-comparison">OBCASE Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="online_forum.html">Online Forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-development">SNL-SWAN Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-application">SNL-SWAN Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#news-articles">News Articles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">SNL-SWAN</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Implementation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/implementation.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="implementation">
+<span id="id1"></span><h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section is under development</p>
+</div>
+<p>In this section, the implementation of the WEC Module within the SNL-SWAN code will be described in detail. This section explains how the WEC Module was formulated from the SWAN (Version 41.01) code.</p>
+<p>SNL-SWAN models WEC devices as obstacles using the five ?obcase? flags listed below to determine the appropriate obstacle transmission coefficient.  The following section describes the SNL-SWAN treatment of WEC devices under each obstacle case model.</p>
+<p>Section 3.10 of the <a class="reference external" href="http://swanmodel.sourceforge.net/online_doc/swantech/swantech.html">SWAN Scientific and Technical Documentation</a> describes the effect of obstacles through a coefficient in the convection terms of the action density evolution equation.  The action density equation is shown below Eq.(1) with the obstacle transmission coefficient boxed in red.  The sole difference between the obstacle cases is the method of obtaining this value.  The five methods are described below. A visual conceptual comparison is shown at the end of this section.</p>
+<ul class="simple">
+<li>EQ1</li>
+</ul>
+<div class="section" id="obcase-0">
+<h2>OBCASE 0<a class="headerlink" href="#obcase-0" title="Permalink to this headline">¶</a></h2>
+<p>This is the standard, TUDelft SWAN, obstacle treatment.  The value K_t is a constant value entered into the SWAN input file.  K_t represents the ratio of wave heights incident to and lee of the obstacle (or WEC).</p>
+<ul class="simple">
+<li>EQ2</li>
+</ul>
+</div>
+<div class="section" id="obcase-1">
+<h2>OBCASE 1<a class="headerlink" href="#obcase-1" title="Permalink to this headline">¶</a></h2>
+<p>Obstacle case 1 uses the WEC power matrix to calculate the effective transmission coefficient.  In this case, K_t^2 is calculated using the provided power matrix, and a constant value for this coefficient is used across all frequencies.  K_t^2 represents the energy (or power) ratio incident and lee of the obstacle.</p>
+<ul class="simple">
+<li>EQ3</li>
+</ul>
+<p>The power matrix is a table of absorbed power (in Kilowatts, kW) by a WEC device over varying significant wave heights and peak wave periods.  SNL-SWAN determines the incident significant wave height and the incident peak wave period and then linearly interpolates a value for absorbed power from the matrix.  Note: if the incident values for wave height or period lie outside of the power matrix range, a value of zero is returned.</p>
+<p>The absorbed power flux (power per unit width) of the obstacle is determined by dividing the interpolated value for absorbed power by the ?width? value provided as the first entry in the Power.txt file.  Note that the width value here should be thought of as a normalization value, and is only used to convert the power matrix entries of absorbed power (kW) into absorbed flux (kW/m) values.  This value is calculated as follows.</p>
+<ul class="simple">
+<li>EQ4</li>
+</ul>
+<p>This value is then applied evenly across the entire obstacle, as defined in the main INPUT file.  In most cases the width value in Power.txt should be the same as the length of the obstacle defined in the INPUT file, but this is not required by the model.  There are no checks in the code to guarantee or enforce this equality.</p>
+<p>SNL-SWAN then calculates the incident power fluxing across the obstacle (in kW/m).  The power fluxing over the obstacle is calculated directly from the spectral information incident to the obstacle.</p>
+<ul class="simple">
+<li>EQ5</li>
+</ul>
+<p>To determine the transmission coefficient, SWAN takes the incident power flux and subtracts off absorbed power flux.  The transmission coefficient is the ratio of the remaining flux to the incident flux, and K_t^2 is calculated using the following equation:</p>
+<ul class="simple">
+<li>EQ6</li>
+</ul>
+<p>When the action balance equation is solved, the convection term, N(s,?)c_g K_t^2, will be applied (integrated) across the computational width of the obstacle.  The computational width (as opposed to the width defined in the power matrix file) is determined by the obstacle dimensions defined in the main SWAN INPUT file and the grid discretization (See the section on Grid Treatment).</p>
+</div>
+<div class="section" id="obcase-2">
+<h2>OBCASE 2<a class="headerlink" href="#obcase-2" title="Permalink to this headline">¶</a></h2>
+<p>Obstacle case 2 uses the WEC relative capture width curve to calculate the effective transmission coefficient.  K_t^2 is again calculated using the provided curve, and a constant value is used across all frequencies.</p>
+<p>The relative capture width curve is a table of absorbed power ratios by a WEC device at varying wave periods.  In ways, this implementation is simpler than that or the power matrix.  Since the relative capture width curve already provides power ratios, K_t^2 is more straightforward to calculate without the need to determine the incident power flux.  For this case, SNL-SWAN linearly interpolates an RCW value from the curve given the peak incident wave period, and directly calculates a transmission coefficient using the following relation.  As with obstacle case 1, any wave periods outside of the defined range are given a transmission coefficient of zero.</p>
+<ul class="simple">
+<li>EQ7</li>
+</ul>
+</div>
+<div class="section" id="obcase-3">
+<h2>OBCASE 3<a class="headerlink" href="#obcase-3" title="Permalink to this headline">¶</a></h2>
+<p>SNL-SWAN?s obstacle case 3 is just an extension of case 1.  This case behaves exactly the same way as case 1, except that the routine to determine the transmission coefficient is performed separately for each binned frequency of the model.  This in effect makes K_t^2 a function of frequency, resulting in varying power absorption for waves of different frequency.  Note: while the power matrix is defined in terms of wave period, internal SWAN calculations are all performed using wave frequency.  Each computational frequency is converted to a wave period as follows before interpolating from the power matrix.</p>
+<ul class="simple">
+<li>EQ8</li>
+</ul>
+</div>
+<div class="section" id="obcase-4">
+<h2>OBCASE 4<a class="headerlink" href="#obcase-4" title="Permalink to this headline">¶</a></h2>
+<p>SNL-SWAN?s obstacle case 4 is an extension of case 2.  Again, the only difference is that the RCW curve is sampled independently for each frequency of the simulation, resulting in a frequency dependent obstacle transmission coefficient.</p>
+</div>
+<div class="section" id="obcase-5">
+<h2>OBCASE 5<a class="headerlink" href="#obcase-5" title="Permalink to this headline">¶</a></h2>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section is under development</p>
+</div>
+</div>
+<div class="section" id="obcase-comparison">
+<h2>OBCASE Comparison<a class="headerlink" href="#obcase-comparison" title="Permalink to this headline">¶</a></h2>
+<p>Differences between SNL-SWAN OBCASE options are visualized in Figure XX. In this figure a conceptual frequency independent RCW curve which would be the case for OBCASE 1 and 2 is shown as the dotted red line in the top panel. The frequency dependent OBCASES 3 and 4 would have a RCW curve that is variable dependent on frequency, as indicated by the blue line in the top panel. The resultant wave spectra in the lee of the obstacle for these cases are shown in the bottom panel, as compared to the incident spectra (black line).</p>
+<ul class="simple">
+<li>Fig1</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="online_forum.html" class="btn btn-neutral float-right" title="Online Forum" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="getting_started.html" class="btn btn-neutral" title="Getting Started" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Sandia Corporation.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

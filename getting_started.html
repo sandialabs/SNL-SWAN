@@ -31,7 +31,7 @@
 
   
     <link rel="top" title="SNL-SWAN" href="index.html"/>
-        <link rel="next" title="Online Forum" href="online_forum.html"/>
+        <link rel="next" title="Implementation" href="implementation.html"/>
         <link rel="prev" title="Release Notes" href="release_notes.html"/> 
 
   
@@ -78,7 +78,20 @@
 <li class="toctree-l2"><a class="reference internal" href="release_notes.html#compatibility-notes">Compatibility Notes</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#downloading-snl-swan">Downloading SNL-SWAN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#option-1-clone-with-github-recommended-for-users">Option 1: Clone with GitHub (Recommended for Users)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-2-fork-with-git-recommended-for-developers">Option 2: Fork with Git (Recommended for Developers)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#option-3-static-code-download">Option 3: Static Code Download</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-0">OBCASE 0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-1">OBCASE 1</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="online_forum.html">Online Forum</a></li>
 <li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-development">SNL-SWAN Development</a></li>
@@ -126,9 +139,34 @@
             
   <div class="section" id="getting-started">
 <span id="id1"></span><h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
-<ul class="simple">
-<li>add content</li>
-</ul>
+<p>SNL-SWAN is a modification of the open source spectral wave mode, SWAN. Use of the baseline features of the SNL code in SNL-SWAN is the same. For more information on the SWAN code, and how to setup and run baseline SWAN models, please refer to the SWAN website and online documentation: <a class="reference external" href="http://swanmodel.sourceforge.net/">http://swanmodel.sourceforge.net/</a></p>
+<div class="section" id="downloading-snl-swan">
+<h2>Downloading SNL-SWAN<a class="headerlink" href="#downloading-snl-swan" title="Permalink to this headline">¶</a></h2>
+<p>SNL-SWAN is distributed through the <a class="reference external" href="https://github.com/SNL-WaterPower/SNL-SWAN">SNL-SWAN GitHub site</a>. There are three ways of obtaining the SNL-SWAN code, each of which are described in this section.</p>
+<div class="section" id="option-1-clone-with-github-recommended-for-users">
+<h3>Option 1: Clone with GitHub (Recommended for Users)<a class="headerlink" href="#option-1-clone-with-github-recommended-for-users" title="Permalink to this headline">¶</a></h3>
+<p>SNL-SWAN can be obtained by cloning the repository with Git:</p>
+<div class="highlight-python"><div class="highlight"><pre>git clone https://github.com/SNL-WaterPower/SNL-SWAN
+</pre></div>
+</div>
+<p>This method is recommended for most users because it makes it easy to update your local version of SNL-SWAN to the latest version using Git&#8217;s pull command:</p>
+<div class="highlight-python"><div class="highlight"><pre>git pull
+</pre></div>
+</div>
+</div>
+<div class="section" id="option-2-fork-with-git-recommended-for-developers">
+<h3>Option 2: Fork with Git (Recommended for Developers)<a class="headerlink" href="#option-2-fork-with-git-recommended-for-developers" title="Permalink to this headline">¶</a></h3>
+<p>If you are planning to contribute to the SNL-SWAN code, please follow the <a class="reference external" href="https://help.github.com/articles/fork-a-repo/">forking instructions</a>  provided by GitHub. Should you make improvements to the code that you would like included in the SNL-SWAN master code, please make a <a class="reference external" href="https://help.github.com/articles/using-pull-requests/">pull request</a> so that your improvement can be merged into <a class="reference external" href="https://github.com/SNL-WaterPower/SNL-SWAN">SNL-SWAN master</a>, and included in future releases.</p>
+</div>
+<div class="section" id="option-3-static-code-download">
+<h3>Option 3: Static Code Download<a class="headerlink" href="#option-3-static-code-download" title="Permalink to this headline">¶</a></h3>
+<p>The easiest way to obtain a copy of SNL-SWAN is to download the latest tagged release of the SNL-SWAN code available on Github, <a class="reference external" href="https://github.com/SNL-WaterPower/SNL-SWAN/releases">SNL-SWAN Release</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This is a static download of the SNL-SWAN code. If you chose this method, you will have to re-download the code in order to receive code updates.</p>
+</div>
+</div>
+</div>
 </div>
 
 
@@ -137,7 +175,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="online_forum.html" class="btn btn-neutral float-right" title="Online Forum" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="implementation.html" class="btn btn-neutral float-right" title="Implementation" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="release_notes.html" class="btn btn-neutral" title="Release Notes" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
