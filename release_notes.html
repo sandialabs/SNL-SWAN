@@ -75,7 +75,6 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="">Release Notes</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#snl-swan-v1-1-release-notes">SNL-SWAN v1.1 Release Notes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#snl-swan-v1-0-release-notes">SNL-SWAN v1.0 Release Notes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#compatibility-notes">Compatibility Notes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
@@ -168,15 +167,22 @@
             
   <div class="section" id="release-notes">
 <span id="id1"></span><h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline">¶</a></h1>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This section is under development</p>
-</div>
 <div class="section" id="snl-swan-v1-1-release-notes">
 <h2>SNL-SWAN v1.1 Release Notes<a class="headerlink" href="#snl-swan-v1-1-release-notes" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Add content here</li>
+<li>SNL-SWAN v1.1 development <a class="reference external" href="https://github.com/SNL-WaterPower/SNL-SWAN/tree/newmods">available on GitHub</a></li>
+<li>Documentation available on <a class="reference external" href="http://snl-waterpower.github.io/SNL-SWAN/index.html">SNL-SWAN website</a></li>
+<li>Further modification of the WEC Module<ul>
+<li>binary wave energy extraction as a function of incident wave direction</li>
+<li>modified reflection coefficient to be frequency dependent</li>
+<li>created Obcase 5, an extension of Obcase 3 for the power matrix formulation</li>
 </ul>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">SNL-SWAN v1.1 is under development, but has some bugs. A stable tagged release coming soon!</p>
+</div>
 </div>
 <div class="section" id="snl-swan-v1-0-release-notes">
 <h2>SNL-SWAN v1.0 Release Notes<a class="headerlink" href="#snl-swan-v1-0-release-notes" title="Permalink to this headline">¶</a></h2>
@@ -184,12 +190,11 @@
 <li>Initial release of the SNL-SWAN code</li>
 <li>Available as a static download on <a class="reference external" href="https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v1.0">SNL-SWAN GitHub</a></li>
 <li>Documentation available in PDF</li>
+<li>Modified to include a WEC Module which accounts for WEC power performance<ul>
+<li>Imports WEC power performance as relative capture or power matrix</li>
+<li>Applies energy extraction as a constant accross all incident wave periods (Obcase 0,1,2), or as a function of wave period (Obcase 3,4)</li>
 </ul>
-</div>
-<div class="section" id="compatibility-notes">
-<h2>Compatibility Notes<a class="headerlink" href="#compatibility-notes" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li>Add content here</li>
+</li>
 </ul>
 </div>
 </div>
