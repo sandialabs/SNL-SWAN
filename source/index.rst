@@ -9,6 +9,8 @@
    release_notes.rst
    getting_started.rst
    implementation.rst
+   application.rst
+   best_practices.rst
    online_forum.rst
    publications.rst
    license.rst

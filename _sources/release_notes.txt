@@ -1,3 +1,5 @@
+.. _release_notes:
+
 Release Notes
 =============
 
@@ -11,7 +13,9 @@ SNL-SWAN v1.1 Release Notes
 
 SNL-SWAN v1.0 Release Notes
 --------------------------------
-* Add content here
+* Initial release of the SNL-SWAN code
+* Available as a static download on `SNL-SWAN GitHub <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v1.0>`_
+* Documentation available in PDF
 
 Compatibility Notes
 --------------------------------

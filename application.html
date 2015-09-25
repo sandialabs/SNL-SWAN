@@ -1,0 +1,307 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Application &mdash; SNL-SWAN</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SNL-SWAN" href="index.html"/>
+        <link rel="next" title="Best Practices" href="best_practices.html"/>
+        <link rel="prev" title="Implementation" href="implementation.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="index.html" class="icon icon-home"> SNL-SWAN
+        
+
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="release_notes.html">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-1-release-notes">SNL-SWAN v1.1 Release Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#snl-swan-v1-0-release-notes">SNL-SWAN v1.0 Release Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="release_notes.html#compatibility-notes">Compatibility Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="getting_started.html#downloading-snl-swan">Downloading SNL-SWAN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#option-1-clone-with-github-recommended-for-users">Option 1: Clone with GitHub (Recommended for Users)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#option-2-fork-with-git-recommended-for-developers">Option 2: Fork with Git (Recommended for Developers)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="getting_started.html#option-3-static-code-download">Option 3: Static Code Download</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">Implementation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-0">OBCASE 0</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-1">OBCASE 1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-2">OBCASE 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-3">OBCASE 3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-4">OBCASE 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-5">OBCASE 5</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation.html#obcase-comparison">OBCASE Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#input-file">Input File</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#set-obcase-0">SET OBCASE=0</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-obcase-1">SET OBCASE=1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-obcase-2">SET OBCASE=2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-obcase-3">SET OBCASE=3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-obcase-4">SET OBCASE=4</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#relative-capture-width">Relative Capture Width</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#wave-periods">Wave Periods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#power-performance">Power Performance</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#power-matrix">Power Matrix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#normalization-width">Normalization Width</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#wave-heights">Wave Heights</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Wave Periods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Power Performance</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="best_practices.html">Best Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="online_forum.html">Online Forum</a></li>
+<li class="toctree-l1"><a class="reference internal" href="publications.html">Publications</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-development">SNL-SWAN Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#snl-swan-application">SNL-SWAN Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="publications.html#news-articles">News Articles</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">SNL-SWAN</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Application</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/application.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="application">
+<span id="id1"></span><h1>Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h1>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This section is under development</p>
+</div>
+<p>In the following sections, descriptions on how to run the SNL-SWAN code are given. For additional information regarding how to set up and run and SWAN model, please refer to the SWAN documentation available online at <a class="reference external" href="http://swanmodel.sourceforge.net/">http://swanmodel.sourceforge.net/</a>.</p>
+<div class="section" id="input-file">
+<h2>Input File<a class="headerlink" href="#input-file" title="Permalink to this headline">¶</a></h2>
+<p>This is the SNL-SWAN input file (INPUT), which has the same settings as SWAN, as specified in the <a class="reference external" href="http://swanmodel.sourceforge.net/">SWAN user&#8217;s manual</a>, with the ADDITION OF THE SET OBCASE LINE THAT SETS WHICH VERSION OF SNL-SWAN IS RUN.</p>
+<div class="section" id="set-obcase-0">
+<h3>SET OBCASE=0<a class="headerlink" href="#set-obcase-0" title="Permalink to this headline">¶</a></h3>
+<p>Baseline SWAN, uses the SWAN constant transmission obstacle formulation.</p>
+</div>
+<div class="section" id="set-obcase-1">
+<h3>SET OBCASE=1<a class="headerlink" href="#set-obcase-1" title="Permalink to this headline">¶</a></h3>
+<p>SNL-SWAN Power Matrix, uses the WEC power matrix to calculate the effective transmission coefficient, a constant value across all frequencies. This case requires POWER.TXT which is described in the power matrix section below.</p>
+</div>
+<div class="section" id="set-obcase-2">
+<h3>SET OBCASE=2<a class="headerlink" href="#set-obcase-2" title="Permalink to this headline">¶</a></h3>
+<p>SNL-SWAN RCW, uses the WEC power matrix to calculate the effective transmission coefficient, a constant value across all frequencies. This case requires RELATIVE_CAPTURE_WIDTH.TXT which is described in the relative capture width section below.</p>
+</div>
+<div class="section" id="set-obcase-3">
+<h3>SET OBCASE=3<a class="headerlink" href="#set-obcase-3" title="Permalink to this headline">¶</a></h3>
+<p>SNL-SWAN Power Matrix, uses the WEC power matrix to calculate the transmission coefficient for each frequency bin. Requires POWER.TXT</p>
+</div>
+<div class="section" id="set-obcase-4">
+<h3>SET OBCASE=4<a class="headerlink" href="#set-obcase-4" title="Permalink to this headline">¶</a></h3>
+<p>SNL-SWAN RCW, uses the WEC power matrix to calculate the transmission coefficient for each frequency bin. Requires RELATIVE_CAPTURE_WIDTH.TXT</p>
+</div>
+</div>
+<div class="section" id="relative-capture-width">
+<h2>Relative Capture Width<a class="headerlink" href="#relative-capture-width" title="Permalink to this headline">¶</a></h2>
+<p>IF SNL-SWAN IS RUN WITH OPTION 2 OR 4, THE RELATIVE_CAPTURE_WIDTH.TXT FILE IS REQUIRED TO RUN. This is the WEC power performance in the form of a relative capture width curve, in two vertical columns containing one the period and the one with Relative Capture Width Curve (RCW) value. This curve can be directly copied from excel into a <a href="#id2"><span class="problematic" id="id3">*</span></a>.txt file, see Example RCW File section.</p>
+<ul class="simple">
+<li>Fig 2</li>
+</ul>
+<div class="section" id="wave-periods">
+<h3>Wave Periods<a class="headerlink" href="#wave-periods" title="Permalink to this headline">¶</a></h3>
+<p>The wave period should be defined in seconds. The wave periods should be defined in the first column of the RELATIVE_CAPTURE_WIDTH.TXT file.</p>
+</div>
+<div class="section" id="power-performance">
+<h3>Power Performance<a class="headerlink" href="#power-performance" title="Permalink to this headline">¶</a></h3>
+<p>The RCW is a non-dimensionalized power ratio defining the WEC?s power performance. The RCW values should be defined in the second column of the RELATIVE_CAPTURE_WIDTH.TXT file.</p>
+</div>
+</div>
+<div class="section" id="power-matrix">
+<h2>Power Matrix<a class="headerlink" href="#power-matrix" title="Permalink to this headline">¶</a></h2>
+<p>IF SNL-SWAN IS RUN WITH OPTION 1 OR 3, THE POWER.TXT FILE IS REQUIRED TO RUN. This is the WEC power performance in the form of a power matrix.  The file starts with the normalization width, then the number of wave heights, followed by a list of wave heights, then the number of wave periods, followed by the list of wave periods, and finally the WEC power matrix is defined. These values can be directly copied from excel into a <a href="#id4"><span class="problematic" id="id5">*</span></a>.txt file, see Example Power Matrix File section.</p>
+<ul class="simple">
+<li>Fig3</li>
+</ul>
+<div class="section" id="normalization-width">
+<h3>Normalization Width<a class="headerlink" href="#normalization-width" title="Permalink to this headline">¶</a></h3>
+<p>The normalization width value should usually be the WEC?s physical dimension. This term is used to normalize the absorbed power value from the matrix by the width over which it is absorbed.  This gives a value in terms of power per unit width which can be generally applied to an obstacle of any size. This is the first term defined in the POWER.TXT file.</p>
+</div>
+<div class="section" id="wave-heights">
+<h3>Wave Heights<a class="headerlink" href="#wave-heights" title="Permalink to this headline">¶</a></h3>
+<p>The number of wave heights used to define the WEC power matrix is first defined, and then the wave heights defining the WEC power matrix are specified. Wave heights should be defined in meters. This is the second term defined in the POWER.TXT file.</p>
+</div>
+<div class="section" id="id6">
+<h3>Wave Periods<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>The number of wave periods used to define the WEC power matrix is first defined, and then the wave periods defining the WEC power matrix are specified. The wave periods should be defined in seconds. This is the third term defined in the POWER.TXT file.</p>
+</div>
+<div class="section" id="id7">
+<h3>Power Performance<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>The WEC power matrix should be defined in kW. This is the last term defined in the POWER.TXT file.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="best_practices.html" class="btn btn-neutral float-right" title="Best Practices" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="implementation.html" class="btn btn-neutral" title="Implementation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2015, Sandia Corporation.
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
