@@ -6,9 +6,15 @@ Publications
 SNL-SWAN Development
 ~~~~~~~~~~~~~~~~~~~~
 
-[1] A. Porter, K. Ruehl, and C. Chartrand, “`Further Development of SNL-SWAN, a Validated Wave Energy Converter Array Modeling Tool <http://energy.sandia.gov/wp-content/gallery/uploads/dlm_uploads/2014-METS-2014-SNL-SWAN-Development_Porter.pdf>`_,” in Proceedings of the 2nd Marine Energy Technology Symposium, Seattle, WA, USA, 2014.
+[1] K. Ruehl, Aaron Porter, Ari Posner, and Jesse Roberts, “`Development of SNL-SWAN, a Validated Wave Energy Converter Array Modeling Tool <http://energy.sandia.gov/wp-content/gallery/uploads/dlm_uploads/2013-EWTEC-2013-Development_of_SNL-SWAN_Ruehl.pdf>`_,” in *Proceedings of the 10th European Wave and Tidal Energy Conference*, Denmark, 2013.
 
-[2] K. Ruehl, Aaron Porter, Ari Posner, and Jesse Roberts, “`Development of SNL-SWAN, a Validated Wave Energy Converter Array Modeling Tool <http://energy.sandia.gov/wp-content/gallery/uploads/dlm_uploads/2013-EWTEC-2013-Development_of_SNL-SWAN_Ruehl.pdf>`_,” presented at the EWTEC 2013, Denmark, 2013.
+[2] A. Porter, K. Ruehl, and C. Chartrand, “`Further Development of SNL-SWAN, a Validated Wave Energy Converter Array Modeling Tool <http://energy.sandia.gov/wp-content/gallery/uploads/dlm_uploads/2014-METS-2014-SNL-SWAN-Development_Porter.pdf>`_,” in *Proceedings of the 2nd Marine Energy Technology Symposium*, Seattle, WA, USA, 2014.
+
+[3] Porter, K. Ruehl, C. Chartrand, and H. Smith, “`Development and Release of the Open-Source Wave Climate Environment Assessment Tool SNL-SWAN <http://energy.sandia.gov/wp-content/uploads/2014/12/2015-METS2015_SNL-SWAN_Porter.pdf>`_,” in *Proceedings of the 3rd Marine Energy Technology Symposium*, Washington DC USA, 2015.
+
+[4] Ruehl, A. Porter, C. Chartrand, H. Smith, G. Chang, and J. Roberts, “`Development, Verification and Application of the SNL-SWAN Open Source Wave Farm Code <http://energy.sandia.gov/wp-content/uploads/2014/12/2015-EWTEC_2015_SNL-SWAN_Ruehl.pdf>`_,” in *Proceedings of the 11th European Wave and Tidal Energy Conference*, Nantes, France, 2015.
+
+
 
 SNL-SWAN Application
 ~~~~~~~~~~~~~~~~~~~~
