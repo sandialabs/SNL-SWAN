@@ -20,7 +20,7 @@ As described in Section 5.2.1 of the SWAN Scientific and Technical Documentation
    :width: 350pt
    :align: center
 
-This grid treatment in combination with SWAN’s obstacle treatment has some implications which should be noted.  Figure 5 shows the various ways in which obstacles can interact with the computational grid.
+This grid treatment in combination with SWAN's obstacle treatment has some implications which should be noted.  Figure 5 shows the various ways in which obstacles can interact with the computational grid.
 
 .. figure:: _static/Fig6.jpg
    :width: 350pt

@@ -3,8 +3,8 @@
 Release Notes
 =============
 	
-SNL-SWAN v1.1 Release Notes
---------------------------------
+SNL-SWAN v1.1 
+-------------
 * SNL-SWAN v1.1 development `available on GitHub <https://github.com/SNL-WaterPower/SNL-SWAN/tree/newmods>`_
 * Documentation available on `SNL-SWAN website <http://snl-waterpower.github.io/SNL-SWAN/index.html>`_
 * Further modification of the WEC Module
@@ -17,7 +17,7 @@ SNL-SWAN v1.1 Release Notes
 	SNL-SWAN v1.1 is under development, but has some bugs. A stable tagged release coming soon!
 
 
-SNL-SWAN v1.0 Release Notes
+`SNL-SWAN v1.0 <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v1.0>`_
 --------------------------------
 * Initial release of the SNL-SWAN code
 * Available as a static download on `SNL-SWAN GitHub <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v1.0>`_
