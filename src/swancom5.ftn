@@ -207,7 +207,7 @@
           RDY(IXY) = RDY(IXY) / LENDEG                                    33.09
           RDX(IXY) = RDX(IXY) / (COSLAT(1) * LENDEG)                      33.09
         ENDDO
-        AREA = AREA * LENDEG**2                                             SNL-SWAN
+        AREA = AREA * LENDEG**2 * COSLAT(1)                                 SNL-SWAN
       ENDIF
 !
       IF (TESTFL .AND. ITEST .GE. 30) THEN

@@ -219,8 +219,8 @@ elsif ($os =~ /Linux/i) {
 #      print OUTFILE "FLAGS_OPT = -O2 -ipo -xW -mp1\n";
 #    }
 #    else {
-    #print OUTFILE "FLAGS_OPT = -O2\n";
-    print OUTFILE "FLAGS_OPT = -g\n";
+    print OUTFILE "FLAGS_OPT = -O2\n";
+    #print OUTFILE "FLAGS_OPT = -g\n";
 #    }
 #    print OUTFILE "FLAGS_MSC = -W0 -assume byterecl -traceback -diag-disable remark\n";
     print OUTFILE "FLAGS_MSC = -W0 -assume byterecl -traceback -diag-disable 8290 -diag-disable 8291 -diag-disable 8293\n";
