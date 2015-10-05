@@ -1083,9 +1083,9 @@
             NUMNOR = NUMNOR + 1
             ALLOCATE(TMP)                                                 SNL-SWAN
             ! normalize XP and YP
-            nmag = sqrt(XP**2+YP**2)    ! normalize normal vector
-            TMP%X = XP/nmag                                                    SNL-SWAN
-            TMP%Y = YP/nmag                                                    SNL-SWAN
+            vmag = sqrt(XP**2+YP**2)    ! normalize normal vector
+            TMP%X = XP/vmag                                                    SNL-SWAN
+            TMP%Y = YP/vmag                                                    SNL-SWAN
             TMP%ANGL = ANGL * acos(-1.0)/180.0                            SNL-SWAN      !  deg to rad
             NULLIFY(TMP%NEXTXY)                                           SNL-SWAN
             CURR%NEXTXY => TMP                                            SNL-SWAN
