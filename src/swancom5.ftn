@@ -3006,18 +3006,12 @@
      &            (RDX(1) * CAX(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2)+
      &             RDY(1) * CAY(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2))
      &             * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
-!     &            (RDX(1) * CAX(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2)+
-!     &             RDY(1) * CAY(ID,IS,2)* (1.0-TCF1) * AC2(ID,IS,IND2))
-!     &             * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
               endif
               if ( LINK(2) .ne. 0 ) then
                 PABSORB(  LINK(2) ) =  PABSORB( LINK(2) )+
      &            (RDX(2) * CAX(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3)+
      &             RDY(2) * CAY(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3))
      &             * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
-!     &            (RDX(2) * CAX(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3)+
-!     &             RDY(2) * CAY(ID,IS,3)* (1.0-TCF2) * AC2(ID,IS,IND3))
-!     &             * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
 
               endif
             endif                                                         SNL-SWAN
