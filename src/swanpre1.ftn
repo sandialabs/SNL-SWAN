@@ -386,6 +386,7 @@
 ! 13. Source text
 !
       LOGICAL :: FOUND                                                    40.03
+      LOGICAL :: FEXIST
       LOGICAL, SAVE :: RUNMADE = .FALSE.                                  40.03
 !
 !     *** The logical variable LOGCOM has a record about which    ***
@@ -1916,6 +1917,23 @@
          CALL ININTG ('INRHOG', INRHOG, 'UNC', 0)
          CALL ININTG ('OBCASE', iobcase, 'UNC', 0)                        SNL-SWAN
          CALL ININTG ('RFLCASE', irflcase, 'UNC', 0)                      SNL-SWAN
+         ! another dirty hack for D3D compatibility, TODO clean this up
+         ! in coupled mode, D3D writes out swan input files, but does not
+         ! know about these two new variables.  Workaround is to make
+         ! new files containing only the correct value
+         ! These will orverride any values set in the default input file
+         inquire(file='OBCASE',exist=FEXIST)
+         if ( FEXIST ) then
+           open(file='OBCASE',unit=596979)
+           read(596979,*) iobcase
+           close(596979)
+         endif
+         inquire(file='REFCASE',exist=FEXIST)
+         if ( FEXIST ) then
+           open(file='REFCASE',unit=596979)
+           read(596979,*) irflcase
+           close(596979)
+         endif
          IF (INRHOG.EQ.0) THEN                                            30.20
            OVUNIT(7) = 'm2/s'
            OVUNIT(9) = 'm2/s'
@@ -2766,23 +2784,32 @@
 !
 ! ============================================================
 !
+      !IF (KEYWIS ('TRI')) THEN
+      !  CALL ININTG ('ITRIAD', ITRIAD, 'STA', 1)
+      !  IF (ITRIAD.EQ.1) THEN
+      !     CALL INREAL ('TRFAC', PTRIAD(1), 'STA', 0.65)                  41.44
+      !     CALL INREAL ('CUTFR', PTRIAD(2), 'STA', 2.5)                   40.61 40.56 30.82
+      !  ELSEIF (ITRIAD.EQ.2) THEN
+      !     CALL INREAL ('TRFAC', PTRIAD(1), 'STA', 1.0)                   41.46
+      !     CALL INREAL ('A'    , PTRIAD(6), 'STA', 0.95)                  41.46
+      !     CALL INREAL ('B'    , PTRIAD(7), 'STA',-0.75)                  41.46
+      !  ELSEIF (ITRIAD.EQ.5) THEN
+      !     CALL INREAL ('TRFAC', PTRIAD(1), 'STA', 0.35)                  41.45
+      !     CALL INREAL ('CUTFR', PTRIAD(2), 'STA', 1.33333333)
+      !  ENDIF
+      !  CALL INREAL ('URCRIT', PTRIAD(4), 'UNC', 0.0)                     40.13
+      !  CALL INREAL ('URSLIM', PTRIAD(5), 'STA', 0.01)                    40.41 40.23 40.13
+      !  GOTO 100
+      !ENDIF
+      ! old 4072ABCDEFG version, for compatibility with Delft3D.
       IF (KEYWIS ('TRI')) THEN
-        CALL ININTG ('ITRIAD', ITRIAD, 'STA', 1)
-        IF (ITRIAD.EQ.1) THEN
-           CALL INREAL ('TRFAC', PTRIAD(1), 'STA', 0.65)                  41.44
-           CALL INREAL ('CUTFR', PTRIAD(2), 'STA', 2.5)                   40.61 40.56 30.82
-        ELSEIF (ITRIAD.EQ.2) THEN
-           CALL INREAL ('TRFAC', PTRIAD(1), 'STA', 1.0)                   41.46
-           CALL INREAL ('A'    , PTRIAD(6), 'STA', 0.95)                  41.46
-           CALL INREAL ('B'    , PTRIAD(7), 'STA',-0.75)                  41.46
-        ELSEIF (ITRIAD.EQ.5) THEN
-           CALL INREAL ('TRFAC', PTRIAD(1), 'STA', 0.35)                  41.45
-           CALL INREAL ('CUTFR', PTRIAD(2), 'STA', 1.33333333)
-        ENDIF
+        ITRIAD = 1                                                        20.81
+        CALL INREAL ('TRFAC', PTRIAD(1), 'UNC', 0.0)
+        CALL INREAL ('CUTFR', PTRIAD(2), 'STA', 2.5)                      40.61 40.55 30.82
         CALL INREAL ('URCRIT', PTRIAD(4), 'UNC', 0.0)                     40.13
         CALL INREAL ('URSLIM', PTRIAD(5), 'STA', 0.01)                    40.41 40.23 40.13
         GOTO 100
-      ENDIF
+      ENDIF      
 !
 !     ------------------------------------------------------------------
 !
