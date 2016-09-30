@@ -10,6 +10,7 @@
    getting_started.rst
    implementation.rst
    application.rst
+   tutorial.rst
    best_practices.rst
    online_forum.rst
    publications.rst
