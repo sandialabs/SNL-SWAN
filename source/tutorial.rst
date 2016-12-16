@@ -7,7 +7,7 @@ In this section, a tutorial is provided that gives the step-by-step instructions
 
 Slides 
 -----------
-* Here are the tutorial slides :download:`Tutorial <_static/SNL-SWAN Tutorial_Final.pdf>`
+* Here are the tutorial slides :download:`Tutorial <_static/SNL-SWAN Tutorial_Finalv2.pdf>`
 
 FIles
 ----------
