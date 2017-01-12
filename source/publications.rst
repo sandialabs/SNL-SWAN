@@ -29,6 +29,7 @@ SNL-SWAN Application
 
 [5] Grace Chang, Jason Magalen, Craig Jones, and Jesse Roberts, “`Investigation of Wave Energy Converter Effects on the Nearshore Environment: A Month-Long Study in Monterey Bay, CA <http://energy.sandia.gov/wp-content/gallery/uploads/dlm_uploads/SAND-2014-17474_Investigation-of-WEC-Effects-on-Nearshore-Environment_SNL-SWAN_Month-Long-study.pdf>`_,” SAND2014-17474.
 
+[6] G. Chang, K. Ruehl, C. A. Jones, J. Roberts, and C. Chartrand, “`Numerical modeling of the effects of wave energy converter characteristics on nearshore wave conditions <http://energy.sandia.gov/wp-content/uploads/2014/12/2016-ChangetalRenewEnergy16.pdf>`_,” Renewable Energy, vol. 89, pp. 636–648, 2016.
    
    
 News Articles
