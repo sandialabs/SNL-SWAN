@@ -30,7 +30,7 @@ SNL-SWAN Development
 
 SNL-SWAN Application
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
-* Jesse Robertsl (Sandia - PI)
+* Jesse Roberts (Sandia - PI)
 * Craig Jones (Integral Consulting)
 * Grace Chang  (Integral Consulting)
 
