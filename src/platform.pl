@@ -231,7 +231,8 @@ elsif ($os =~ /Linux/i) {
     print OUTFILE "FLAGS90_MSC = \$(FLAGS_MSC)\n";
     print OUTFILE "FLAGS_DYN = -fPIC\n";
     print OUTFILE "FLAGS_SER =\n";
-    print OUTFILE "FLAGS_OMP = -qopenmp\n";
+#    print OUTFILE "FLAGS_OMP = -qopenmp\n";
+    print OUTFILE "FLAGS_OMP = -openmp\n";
     print OUTFILE "FLAGS_MPI =\n";
     print OUTFILE "NETCDFROOT =\n";
     print OUTFILE "ifneq (\$(NETCDFROOT),)\n";
