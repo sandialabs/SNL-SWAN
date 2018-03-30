@@ -3,24 +3,17 @@
 Release Notes
 =============
 	
-SNL-SWAN v1.1 
--------------
-* SNL-SWAN v1.1 development `available on GitHub <https://github.com/SNL-WaterPower/SNL-SWAN/tree/newmods>`_
-* Documentation available on `SNL-SWAN website <http://snl-waterpower.github.io/SNL-SWAN/index.html>`_
-* Further modification of the WEC Module
-
-  * binary wave energy extraction as a function of incident wave direction
-  * modified reflection coefficient to be frequency dependent
-  * created Obcase 5, an extension of Obcase 3 for the power matrix formulation
-
-.. Note::
-	SNL-SWAN v1.1 is under development, but has some bugs. A stable tagged release coming soon!
-
+`SNL-SWAN v2.0 <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v2.0>`_
+---------------------------------------------------------------------------------
+* Second release of the SNL-SWAN code (SWAN v41.20)
+* Available as a static download on `SNL-SWAN v2.0 release page <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v2.0>`_
+* Documentation available on `SNL-SWAN Website <http://snl-waterpower.github.io/SNL-SWAN>`_
+* Tutorial available on Tutorial page `<http://snl-waterpower.github.io/SNL-SWAN/tutorial.html>`_
 
 `SNL-SWAN v1.0 <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v1.0>`_
---------------------------------
-* Initial release of the SNL-SWAN code
-* Available as a static download on `SNL-SWAN GitHub <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v1.0>`_
+----------------------------------------------------------------------------------
+* Initial release of the SNL-SWAN code (SWAN v41.01)
+* Available as a static download on `SNL-SWAN v1.0 release page <https://github.com/SNL-WaterPower/SNL-SWAN/releases/tag/v1.0>`_
 * Documentation available in PDF
 * Modified to include a WEC Module which accounts for WEC power performance
 

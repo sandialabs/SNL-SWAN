@@ -22,9 +22,9 @@ Project Overview
 
 SNL-SWAN Development
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+* Chris Chartrand (Sandia)
 * Kelley Ruehl (Sandia - PI)
 * Aaron Porter (Coast and Harbor Inc.)
-* Chris Chartrand (Sandia)
 * Helen Smith (University of Exeter)
 * Ari Posner (DOE EERE Post-Doc)
 
@@ -41,7 +41,7 @@ SNL-SWAN is funded by the U.S. Department of Energy’s Wind and Water Power Techn
 
 
 .. Indices and tables
-.. ======
+.. ====================
 
 .. * :ref:`genindex`
 .. * :ref:`modindex`

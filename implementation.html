@@ -181,7 +181,7 @@
             
   <div class="section" id="implementation">
 <span id="id1"></span><h1>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h1>
-<p>In this section, the implementation of the WEC Module within the SNL-SWAN code will be described in detail. This section explains how the WEC Module was formulated from the SWAN (Version 41.01) code.</p>
+<p>In this section, the implementation of the WEC Module within the SNL-SWAN code will be described in detail. This section explains how the WEC Module was formulated from the SWAN (Version 41.20) code.</p>
 <p>SNL-SWAN models WEC devices as obstacles using the five &#8220;obcase&#8221; flags listed below to determine the appropriate obstacle transmission coefficient.  The following section describes the SNL-SWAN treatment of WEC devices under each obstacle case model.</p>
 <p>Section 3.10 of the <a class="reference external" href="http://swanmodel.sourceforge.net/online_doc/swantech/swantech.html">SWAN Scientific and Technical Documentation</a> describes the effect of obstacles through a coefficient in the convection terms of the action density evolution equation.  The action density equation is shown below Eq.(1) with the obstacle transmission coefficient boxed in red.  The sole difference between the obstacle cases is the method of obtaining this value.  The five methods are described below. A visual conceptual comparison is shown at the end of this section.</p>
 <div class="figure align-center">

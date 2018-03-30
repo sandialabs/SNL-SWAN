@@ -33,7 +33,7 @@ Due to grid discretization, the green obstacle in Figure 5 does not intersect an
 The red line in Figure 5 shows the appropriate use of the obstacle implementation, where grid discretization is much finer than the obstacle length.  This means that obstacles will span multiple grid lines and their length and transmission effects can be properly captured.
 
 WEC Power Performance
---------------
+----------------------------------------------
 
 It should be noted that RCW values should be kept between zero and one (0<RCW<1) in order to produce physical transmission coefficients.  Should RCW values be specified outside of these bounds, SNL-SWAN will enforce these limits in order to maintain realizable values for the transmission coefficient.
 

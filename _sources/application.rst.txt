@@ -43,7 +43,7 @@ Wave Periods
 The wave period should be defined in seconds. The wave periods should be defined in the first column of the RELATIVE_CAPTURE_WIDTH.TXT file.
 
 Power Performance
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 The RCW is a non-dimensionalized power ratio defining the WEC's power performance. The RCW values should be defined in the second column of the RELATIVE_CAPTURE_WIDTH.TXT file. 
 
 
@@ -56,7 +56,7 @@ IF SNL-SWAN IS RUN WITH OPTION 1 OR 3, THE POWER.TXT FILE IS REQUIRED TO RUN. Th
    :align: center
 
 Normalization Width
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 The normalization width value should usually be the WEC's physical dimension. This term is used to normalize the absorbed power value from the matrix by the width over which it is absorbed.  This gives a value in terms of power per unit width which can be generally applied to an obstacle of any size. This is the first term defined in the POWER.TXT file.
 
 Wave Heights
@@ -68,7 +68,7 @@ Wave Periods
 The number of wave periods used to define the WEC power matrix is first defined, and then the wave periods defining the WEC power matrix are specified. The wave periods should be defined in seconds. This is the third term defined in the POWER.TXT file.
 
 Power Performance
-~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 The WEC power matrix should be defined in kW. This is the last term defined in the POWER.TXT file.
 
 

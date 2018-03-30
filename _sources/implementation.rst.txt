@@ -3,7 +3,7 @@
 Implementation
 ===============
 
-In this section, the implementation of the WEC Module within the SNL-SWAN code will be described in detail. This section explains how the WEC Module was formulated from the SWAN (Version 41.01) code.
+In this section, the implementation of the WEC Module within the SNL-SWAN code will be described in detail. This section explains how the WEC Module was formulated from the SWAN (Version 41.20) code.
 
 SNL-SWAN models WEC devices as obstacles using the five "obcase" flags listed below to determine the appropriate obstacle transmission coefficient.  The following section describes the SNL-SWAN treatment of WEC devices under each obstacle case model.
 
