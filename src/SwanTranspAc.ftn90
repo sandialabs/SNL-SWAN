@@ -3,7 +3,7 @@ subroutine SwanTranspAc ( amat  , rhs   , leakcf, ac2   , ac1   , &
                           anybin, rdx   , rdy   , spcsig, spcdir, &
                           obredf, idcmin, idcmax, iscmin, iscmax, &
                           iddlow, iddtop, isslow, isstop, anyblk, &
-                          trac0 , trac1, link, area, pabsorb )
+                          trac0 , trac1 )
 !
 !   --|-----------------------------------------------------------|--
 !     | Delft University of Technology                            |
@@ -16,7 +16,7 @@ subroutine SwanTranspAc ( amat  , rhs   , leakcf, ac2   , ac1   , &
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 1993-2014  Delft University of Technology
+!     Copyright (C) 1993-2017  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -98,10 +98,6 @@ subroutine SwanTranspAc ( amat  , rhs   , leakcf, ac2   , ac1   , &
     real, dimension(MSC), intent(in)            :: spcsig ! relative frequency bins
     real, dimension(MDC,MSC,MTRNP), intent(out) :: trac0  ! explicit part of propagation in present vertex for output purposes
     real, dimension(MDC,MSC,MTRNP), intent(out) :: trac1  ! implicit part of propagation in present vertex for output purposes
-    integer, dimension(2), intent(in)         :: link  ! contains sequence number of obstacles for each face
-    real :: area
-    REAL :: PABSORB(NUMOBS)
-   
     !
     logical, dimension(MDC,MSC), intent(in)     :: anybin ! true if bin is active in considered sweep
     logical, dimension(MDC,MSC), intent(out)    :: anyblk ! true if bin is blocked by a counter current based on a CFL criterion
@@ -134,7 +130,7 @@ subroutine SwanTranspAc ( amat  , rhs   , leakcf, ac2   , ac1   , &
 !TIMG    call SWTSTA(140)
     call SwanTranspX ( amat   , rhs  , ac2   , ac1   , cax   , cay   , &
                        rdx    , rdy  , obredf, idcmin, idcmax, isslow, &
-                       isstop , trac0, trac1, link, area, pabsorb )
+                       isstop , trac0, trac1 )
     !
     ! add GSE correction, if appropriate
     !

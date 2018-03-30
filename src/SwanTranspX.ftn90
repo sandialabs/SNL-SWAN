@@ -1,6 +1,6 @@
 subroutine SwanTranspX ( amat   , rhs  , ac2   , ac1   , cax   , cay   , &
                          rdx    , rdy  , obredf, idcmin, idcmax, isslow, &
-                         isstop , trac0, trac1, link, area, pabsorb )
+                         isstop , trac0, trac1 )
 !
 !   --|-----------------------------------------------------------|--
 !     | Delft University of Technology                            |
@@ -13,7 +13,7 @@ subroutine SwanTranspX ( amat   , rhs  , ac2   , ac1   , cax   , cay   , &
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 1993-2014  Delft University of Technology
+!     Copyright (C) 1993-2017  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -52,7 +52,6 @@ subroutine SwanTranspX ( amat   , rhs  , ac2   , ac1   , cax   , cay   , &
     use swcomm4
     use SwanGriddata
     use SwanCompdata
-    USE M_GENARR, only : spcsig                                         !SNL-SWAN
 !
     implicit none
 !
@@ -80,9 +79,6 @@ subroutine SwanTranspX ( amat   , rhs  , ac2   , ac1   , cax   , cay   , &
     real, dimension(MDC,MSC), intent(inout)     :: rhs    ! right-hand side of system of equations in (sigma,theta) space
     real, dimension(MDC,MSC,MTRNP), intent(out) :: trac0  ! explicit part of propagation in present vertex for output purposes
     real, dimension(MDC,MSC,MTRNP), intent(out) :: trac1  ! implicit part of propagation in present vertex for output purposes
-    integer, dimension(2), intent(in)         :: link ! contains sequence number of obstacles for each face
-    real :: area
-    REAL :: PABSORB(NUMOBS)
 !
 !   Local variables
 !
@@ -135,24 +131,6 @@ subroutine SwanTranspX ( amat   , rhs  , ac2   , ac1   , cax   , cay   , &
           !
           rsum = (rdx(1)*cax(id,is,2) + rdy(1)*cay(id,is,2)*fac1)*obredf(id,is,1)*ac2(id,is,iv2) + &
                  (rdx(2)*cax(id,is,3) + rdy(2)*cay(id,is,3)*fac2)*obredf(id,is,2)*ac2(id,is,iv3)
-
-          if (link(1) .ne. 0 ) then         ! if fluxing over an obstacle
-            ! this term represents the action density lost due to the transmission coefficient
-            ! action density is mutliplied by sigma to get energy
-            ! then multiplied by sigma*(ds/sigma) * dtheta * dA
-            ! for integration over frequency, direction and cell area
-            ! this gives rate of energy absorption (power)
-            ! should be e/(rho*g)/s = P/(rho*g)
-            PABSORB( link(1) ) = PABSORB( link(1) )+                                              &
-                  (rdx(1)*cax(id,is,2) + rdy(1)*cay(id,is,2)*fac1)*(1.0-obredf(id,is,1))*ac2(id,is,iv2)   &
-                  * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
-          endif
-          if (link(2) .ne. 0 ) then
-            PABSORB( link(2) ) = PABSORB( link(2) )+                                              &
-                  (rdx(2)*cax(id,is,3) + rdy(2)*cay(id,is,3)*fac2)*(1.0-obredf(id,is,2))*ac2(id,is,iv3)   &
-                  * SPCSIG(IS)**2 * FRINTF * DDIR * AREA
-          endif
-
           !
           ! build the system
           !

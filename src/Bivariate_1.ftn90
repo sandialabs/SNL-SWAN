@@ -13,14 +13,11 @@ REAL yitmp(ni),yjtmp(nj)
 
 INTEGER i,j
 
-
 if ( x1 < x1a(1) .or. x1 >x1a(ni) .or.		&
      x2 < x2a(1) .or. x2 >x2a(nj) ) then
   y=0.0
   dy=0.0
   !write(*,*) 'warning interpolation value out of range'
-  !write(*,*) x1,x1a(1),x1a(ni)
-  !write(*,*) x2,x2a(1),x2a(nj)
   return
 endif
 
@@ -49,8 +46,6 @@ enddo
 !write(*,*) 'output',y
 !write(*,*) ya(:,1)
 !pause
-
-!write(*,*) x1,x2,y
 
 END
 

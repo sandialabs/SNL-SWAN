@@ -28,7 +28,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 1993-2014  Delft University of Technology
+!     Copyright (C) 1993-2017  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -95,6 +95,7 @@
       CHARACTER  INPFIL *40, OUTFIL *40, INIFIL *(*), TSTFIL *40,
      &           PLTOPT *4, TIMSTR *24,
      &           INPFO *40, OUTFO *40, TSTFO *40, TXT*120
+      CHARACTER (LEN=LENFNM) SCRFIL
       INTEGER    PRCTIM(6), INIVER, INIVEF
       INTEGER    PFROPT                                                   40.31
       REAL       PLPARM(10)                                               40.31
@@ -185,9 +186,6 @@
         INPFIL = 'INPUT'
         PRINTF = 4
         OUTFIL = 'PRINT'
-
-        !POWFIL = 'POWER.DAT'
-
 !       unit ref. numbers for output to screen and to separate
 !       test print file:
         PRTEST = PRINTF
@@ -304,14 +302,20 @@
         WRITE (PRINTF, 12) TIMSTR
    12   FORMAT ('1',//,20X, 'Execution started at ',A, //)
       ENDIF
-      IF (PRTEST.NE.PRINTF) OPEN (UNIT=PRTEST, FILE=TSTFIL, ERR=922)
-      IF (SCREEN.NE.6) OPEN(UNIT=SCREEN, FILE='screen',ERR=960)           34.01
+      IF (PRTEST.NE.PRINTF) THEN
+         OPEN (UNIT=PRTEST, FILE=TSTFIL, ERR=922)
+      ENDIF
+      IF (SCREEN.NE.6) THEN
+         SCRFIL = 'screen'
+         OPEN (UNIT=SCREEN, FILE=SCRFIL, ERR=960)                         34.01
+      ENDIF
       IF (LREAD) THEN
-        IF (INPFIL.NE.'    ')
-     &  OPEN (UNIT=INPUTF, FILE=INPFIL, STATUS='OLD',                     40.41
-!CVIS     &        SHARED,                                                     40.41
-     &        ERR=910)                                                    40.41
-        CALL RDINIT
+         IF (INPFIL.NE.'    ') THEN
+            OPEN (UNIT=INPUTF, FILE=INPFIL, STATUS='OLD',                 40.41
+!CVIS     &            SHARED,                                                 40.41
+     &            ERR=910)                                                40.41
+         ENDIF
+         CALL RDINIT
       ENDIF
 !
       RETURN
@@ -363,7 +367,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 1993-2014  Delft University of Technology
+!     Copyright (C) 1993-2017  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -462,7 +466,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 1993-2014  Delft University of Technology
+!     Copyright (C) 1993-2017  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
@@ -587,7 +591,7 @@
 !
 !
 !     SWAN (Simulating WAves Nearshore); a third generation wave model
-!     Copyright (C) 1993-2014  Delft University of Technology
+!     Copyright (C) 1993-2017  Delft University of Technology
 !
 !     This program is free software; you can redistribute it and/or
 !     modify it under the terms of the GNU General Public License as
