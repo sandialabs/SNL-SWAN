@@ -4,6 +4,7 @@ from scipy.io import loadmat
 
 import numpy as np
 import pylab as plt
+#import scipy.io as sio
 
 ###########################################################################################
 
@@ -11,19 +12,18 @@ def clean_line(line):
     line = line.strip()           # remove leading and trailing whitespace, carriage returns
     line = line.replace(',', ' ') # change commas to spaces
     line = line.split()           # split on spaces
+    
     return line
 
 ###########################################################################################
 
 def GetStruc(InpFile):
-
+    ## determine whether run is structured/unstructured
     iunst=-1    #0 = structured, 1 = unstructured, -1 = undetermined
     with open(inputfile,'r') as fin:
         for line in fin:
             linein = line.split()
-            #
-            # read until 'CGRID' found
-            #
+            ## read until 'CGRID' found
             if len(linein) == 0:
                 continue # cycle this loop
             if linein[0].upper().find('''CGRID''') >= 0:
@@ -35,19 +35,16 @@ def GetStruc(InpFile):
                 if linein[1].upper().find('''REG''') >= 0:
                     iunst=0
                     break
+   
     return iunst
 
 ###########################################################################################
 
 def GetMat(InpFile):
-    #
-    # get the matlab output file
-    #
+    ## get the matlab output file
     with open(InpFile,'r') as fin:
         linein = fin.readline()
-        #
-        # read until 'BLOCK COMPGRID' output line found
-        #
+        ## read until 'BLOCK COMPGRID' output line found
         ifound=1
         while linein.upper().find("""BLOCK 'COMPGRID'""") < 0:
         #while linein.upper().find("""TABLE 'COMPGRID'""") < 0:
@@ -61,24 +58,22 @@ def GetMat(InpFile):
     else:
         matfile = linein.split()[3].replace("'","")
         print 'Loading ' + matfile
-        data = loadmat(matfile, struct_as_record=False, squeeze_me=True)
+        data = loadmat(matfile, struct_as_record=False, squeeze_me=True)    
+    
     return matfile, data
 
 ###########################################################################################
 
 def GetNodeEleFile(InpFile):
-    #
-    # get node and element files
-    #
+    ## get node and element files
     with open(InpFile,'r') as fin:
         for line in fin:
             linein = line.split()
-            #
-            #  find the line defining the unstructure grid files
-            #
+            ##  find the line defining the unstructure grid files
             if linein[0].upper().find("""READ""") >= 0 and linein[1].upper().find("""UNSTRUC""") >= 0:
                 casename = linein[3].replace("'","")
                 break
+    
     return casename+'.node', casename+'.ele'
 
 ###########################################################################################
@@ -86,12 +81,11 @@ def GetNodeEleFile(InpFile):
 def ReadNodeLocs(NodeFile):
     with open(NodeFile,'r') as fin:
         nnode = int(float(fin.readline().split()[0]))
-
         # for each line in file, split it and extract x,y, convert to float
         # first line is nverts, ndim, nattr (???), nbmark (value of boundary mark)
         # other lines are node#, xloc, yloc, vmark (mark value?)
         nodelocs = np.asarray( [ [float(val) for val in dataline.split()[1:3]] for dataline in fin.readlines()] ) # just take columns 2 and 3 (x and y)
-
+    
     return nnode, nodelocs
 
 ###########################################################################################
@@ -99,7 +93,6 @@ def ReadNodeLocs(NodeFile):
 def ReadElems(EleFile):
     with open(EleFile,'r') as fin:
         nele = int(fin.readline().split()[0])
-
         # for each line in file, split it and extract x,y, convert to float
         # subtract one because python counts from 0
         elenodes = np.asarray( [ [int(val)-1 for val in dataline.split()[1:4]] for dataline in fin.readlines()] )
@@ -109,9 +102,7 @@ def ReadElems(EleFile):
 ###########################################################################################
 
 def GetStrucGrid(InpFile):
-    #
-    # get the grid coordinates
-    #
+    ## get the grid coordinates
     with open(InpFile,'r') as fin:
         linein = fin.readline()
         #
@@ -139,130 +130,117 @@ def GetStrucGrid(InpFile):
 ###########################################################################################
 
 def GetObs(InpFile):
-    #
-    # get the obstacle locations
-    #
+    ## get the obstacle locations
     obslist=[]
     with open(InpFile,'r') as fin:
         for linein in fin:
-            #
             # read each 'OBSTACLE' line found
-            #
-            if linein.upper().find('''OBSTICAL''') >= 0:
-                obsinfo = [float(val) for val in clean_line(linein)[4:] ]  # chop off initial keywords, float the rest
+            if linein.upper().find('''OBSTACLE''') >= 0:
+                obsinfo = [float(val) for val in clean_line(linein)[-4:] ]  # chop off initial keywords, float the rest
                 obslist.append(obsinfo)    # append the obstacle info to the list
+    
     return obslist
 
 ###########################################################################################
-#
-# Begin body of the script
-#
+## Begin body of the script
 ###########################################################################################
 
 import sys
-#
-# define input filename
-#
+## define input filename
 inputfile = 'INPUT'
 
-#
-# read in grid structure format 0 = structured, 1 = unstructured
-#
+## read in grid structure format 0 = structured, 1 = unstructured
 iunst = GetStruc(inputfile)
 if iunst == -1:
     print 'ERROR structure not found'
     exit()
 
-#
-# get the matlab data
-#
+## get the matlab dataarray
+# Kelley - generalize to load more than one MAT file, currently loads one MAT with all variables
 matfile, mat = GetMat(inputfile)
 if matfile == '':
     print 'ERROR matfile not found'
     exit()
 
-# hardcoded, TODO general sometime
-#plotvar = ['Hsig', 'Tm_10', 'RTpeak', 'Transp_y', 'Transp_x', 'PkDir']
-plotvar = ['Hsig']
+## load mat variables
+plotvar = mat.keys()
+plotvar.remove('__globals__')
+plotvar.remove('__header__')
+plotvar.remove('__version__')
+plotunit = ['[m]', '[s]', '[s]', '[deg]']
+ivar = len(plotvar)
+nvars = range(len(plotvar))
 
-# variable to plot
-ivar = 0  # hsig
-if len(sys.argv) > 1:
-    ivar = int(sys.argv[1])
-
-#
-# get obstacle locations
-#
-obslist = GetObs(inputfile)
-
-#
-#  set up the plotting
-#
-fig, ax=plt.subplots()
-fig.set_facecolor("white")
-
-#
-# choose color map
-#
-#import custom_colormaps as ccm
-#cmap = ccm.cmaps['Parula']
-##cmap = ccm.cmaps['CubicYF']
-cmap = 'jet'
-
-#
-# plot the data
-#
-
-if iunst == 1:
-    nodefile, elefile  = GetNodeEleFile(inputfile)
-    nnode, nodelocs = ReadNodeLocs(nodefile)
-    nele, elenodes = ReadElems(elefile)
-
-    x = nodelocs[:,0]
-    y = nodelocs[:,1]
-    z = mat[plotvar[ivar]]
-
-    import matplotlib.tri as tri
-    grid = tri.Triangulation(x, y, triangles=elenodes, mask=None)
-
-    CSF = plt.tricontourf(grid,z,256,cmap=cmap)
-    #gridlines = plt.triplot(grid,color='k')
-else:
-    x,y = GetStrucGrid(inputfile)
-    xi, yi = np.meshgrid(x,y)
-    z = mat[plotvar[ivar]]
-    CSF = plt.contourf(xi,yi,z,256,cmap=cmap)
-    
-#minz=z.min()
-#maxz=z.max()
-#print plotvar[ivar],'Value Range', minz,maxz
-
-## square axes
-#plt.axis('equal')
-
-plt.xlim(min(x),max(x))
-plt.ylim(min(y),max(y))
-
-plt.title(plotvar[ivar])
-plt.colorbar()
-
-#
-#  plot the obstacles
-#
-for obs in obslist:
-    x = [ obs[0], obs[2] ]
-    y = [ obs[1], obs[3] ]
-
-    plt.plot(x,y, color='k', linewidth=2)
-
-#plt.show()
-
-# split off the extension
-import os.path
-pngFile = os.path.splitext(matfile)[0]
-# add variable plotted
-pngFile += '_'+plotvar[ivar]
-# add png extension
-pngFile += '.png'
-plt.savefig(pngFile)
+## loop through each variable
+if ivar > 1:
+    for i in range(len(plotvar)):
+        ivar = nvars[i]
+        
+        ## get obstacle locations
+        obslist = GetObs(inputfile)
+        
+        ## set up the plotting
+        fig, ax=plt.subplots()
+        fig.set_facecolor("white")
+        
+        ## choose color map
+        cmap = 'jet'
+            #import custom_colormaps as ccm
+            #cmap = ccm.cmaps['Parula']
+            ##cmap = ccm.cmaps['CubicYF']
+        
+        ## plot the data
+        if iunst == 1:
+            nodefile, elefile  = GetNodeEleFile(inputfile)
+            nnode, nodelocs = ReadNodeLocs(nodefile)
+            nele, elenodes = ReadElems(elefile)
+        
+            x = nodelocs[:,0]
+            y = nodelocs[:,1]
+            z = mat[plotvar[ivar]]
+        
+            import matplotlib.tri as tri
+            grid = tri.Triangulation(x, y, triangles=elenodes, mask=None)
+        
+            CSF = plt.tricontourf(grid,z,256,cmap=cmap)
+            #specify cmin and cmax - Kelley
+            #gridlines = plt.triplot(grid,color='k')
+        else:
+            x,y = GetStrucGrid(inputfile)
+            xi, yi = np.meshgrid(x,y)
+            z = mat[plotvar[ivar]]
+            CSF = plt.contourf(xi,yi,z,256,cmap=cmap)
+            
+        #minz=z.min()
+        #maxz=z.max()
+        #print plotvar[ivar],'Value Range', minz,maxz
+        
+        ## square axes
+        #plt.axis('equal')
+        
+        ## plot axes
+        plt.xlim(min(x),max(x))
+        plt.ylim(min(y),max(y))
+        plt.xlabel('Cross-shore [m]')
+        plt.ylabel('Along-shore [m]')
+        plt.title(plotvar[ivar])
+        cbar = plt.colorbar()
+        cbar.set_label(plotvar[ivar] + ' ' + plotunit[ivar])
+        #specify clim, cmin and cmax units- Kelley
+        
+        ##  plot the obstacles
+        for obs in obslist:
+            x = [ obs[0], obs[2] ]
+            y = [ obs[1], obs[3] ]
+            plt.plot(x,y, color='k', linewidth=2)
+            #plt.show()
+        
+        ## split off the extension
+        import os.path
+        pngFile = os.path.splitext(matfile)[0]
+        ## add variable plotted
+        pngFile += '_'+plotvar[ivar]
+        ## add png extension
+        pngFile += '.png'
+        plt.savefig(pngFile)
 
