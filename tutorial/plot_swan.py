@@ -1,10 +1,9 @@
-#!/usr/bin/env python
+# Updated to Python 3.7
 
 from scipy.io import loadmat
-
 import numpy as np
-import pylab as plt
-#import scipy.io as sio
+#import pylab as plt
+import matplotlib.pyplot as plt
 
 ###########################################################################################
 
@@ -23,15 +22,13 @@ def GetStruc(InpFile):
     with open(inputfile,'r') as fin:
         for line in fin:
             linein = line.split()
-            ## read until 'CGRID' found
+            ## read until 'CGRID' colorfound
             if len(linein) == 0:
                 continue # cycle this loop
             if linein[0].upper().find('''CGRID''') >= 0:
-                #if linein[1].upper().find('''UNSTRUCTURED''') >= 0:
                 if linein[1].upper().find('''UNS''') >= 0:
                     iunst=1
                     break
-                #if linein[1].upper().find('''REGULAR''') >= 0:
                 if linein[1].upper().find('''REG''') >= 0:
                     iunst=0
                     break
@@ -47,7 +44,6 @@ def GetMat(InpFile):
         ## read until 'BLOCK COMPGRID' output line found
         ifound=1
         while linein.upper().find("""BLOCK 'COMPGRID'""") < 0:
-        #while linein.upper().find("""TABLE 'COMPGRID'""") < 0:
             linein = fin.readline()
             if linein == '':  #EOF
                 ifound=0
@@ -57,7 +53,7 @@ def GetMat(InpFile):
         data = ''
     else:
         matfile = linein.split()[3].replace("'","")
-        print 'Loading ' + matfile
+        print('Loading ' + matfile)
         data = loadmat(matfile, struct_as_record=False, squeeze_me=True)    
     
     return matfile, data
@@ -115,7 +111,7 @@ def GetStrucGrid(InpFile):
 
     xo = float(GridInfo[0])
     yo = float(GridInfo[1])
-    rot = float(GridInfo[2])
+#    rot = float(GridInfo[2])
     xmax = float(GridInfo[3])
     ymax = float(GridInfo[4])
     nx = int(GridInfo[5]) +1
@@ -124,7 +120,7 @@ def GetStrucGrid(InpFile):
     xvalues = np.asarray(np.linspace(xo,xmax,nx))
     yvalues = np.asarray(np.linspace(yo,ymax,ny))
 
-    # TODO add rotation functionality
+    # TODO: add rotation functionality
     return xvalues, yvalues
 
 ###########################################################################################
@@ -134,7 +130,7 @@ def GetObs(InpFile):
     obslist=[]
     with open(InpFile,'r') as fin:
         for linein in fin:
-            # read each 'OBSTACLE' line found
+            ## read each 'OBSTACLE' line found
             if linein.upper().find('''OBSTACLE''') >= 0:
                 obsinfo = [float(val) for val in clean_line(linein)[-4:] ]  # chop off initial keywords, float the rest
                 obslist.append(obsinfo)    # append the obstacle info to the list
@@ -145,36 +141,35 @@ def GetObs(InpFile):
 ## Begin body of the script
 ###########################################################################################
 
-import sys
+#import sys
 ## define input filename
 inputfile = 'INPUT'
 
 ## read in grid structure format 0 = structured, 1 = unstructured
 iunst = GetStruc(inputfile)
 if iunst == -1:
-    print 'ERROR structure not found'
+    print('ERROR structure not found')
     exit()
 
 ## get the matlab dataarray
-# Kelley - generalize to load more than one MAT file, currently loads one MAT with all variables
 matfile, mat = GetMat(inputfile)
 if matfile == '':
-    print 'ERROR matfile not found'
+    print('ERROR matfile not found')
     exit()
 
 ## load mat variables
-plotvar = mat.keys()
-plotvar.remove('__globals__')
-plotvar.remove('__header__')
-plotvar.remove('__version__')
-plotunit = ['[m]', '[s]', '[s]', '[deg]']
-ivar = len(plotvar)
-nvars = range(len(plotvar))
+plot_vars = list(mat.keys())
+plot_vars.remove('__globals__')
+plot_vars.remove('__header__')
+plot_vars.remove('__version__')
+plot_unit = ['[m]', '[s]', '[s]', '[deg]']
+num_vars = len(plot_vars)
+len_vars = range(num_vars)
 
 ## loop through each variable
-if ivar > 1:
-    for i in range(len(plotvar)):
-        ivar = nvars[i]
+if num_vars > 1:
+    for i in len_vars:
+        num_vars = len_vars[i]
         
         ## get obstacle locations
         obslist = GetObs(inputfile)
@@ -184,10 +179,10 @@ if ivar > 1:
         fig.set_facecolor("white")
         
         ## choose color map
-        cmap = 'jet'
-            #import custom_colormaps as ccm
-            #cmap = ccm.cmaps['Parula']
-            ##cmap = ccm.cmaps['CubicYF']
+#        colormap = 'jet'
+#        colormap = 'copper'
+#        colormap = 'plasma'
+        colormap = 'viridis'
         
         ## plot the data
         if iunst == 1:
@@ -197,36 +192,30 @@ if ivar > 1:
         
             x = nodelocs[:,0]
             y = nodelocs[:,1]
-            z = mat[plotvar[ivar]]
+            z = mat[plot_vars[num_vars]]
         
             import matplotlib.tri as tri
             grid = tri.Triangulation(x, y, triangles=elenodes, mask=None)
         
-            CSF = plt.tricontourf(grid,z,256,cmap=cmap)
-            #specify cmin and cmax - Kelley
+            CSF = plt.tricontourf(grid,z,256,cmap=colormap)
             #gridlines = plt.triplot(grid,color='k')
         else:
             x,y = GetStrucGrid(inputfile)
             xi, yi = np.meshgrid(x,y)
-            z = mat[plotvar[ivar]]
-            CSF = plt.contourf(xi,yi,z,256,cmap=cmap)
-            
-        #minz=z.min()
-        #maxz=z.max()
-        #print plotvar[ivar],'Value Range', minz,maxz
-        
+            z = mat[plot_vars[num_vars]]
+            CSF = plt.contourf(xi,yi,z,256,cmap=colormap)
+                        
         ## square axes
-        #plt.axis('equal')
+        plt.axis('equal')
         
         ## plot axes
         plt.xlim(min(x),max(x))
         plt.ylim(min(y),max(y))
         plt.xlabel('Cross-shore [m]')
         plt.ylabel('Along-shore [m]')
-        plt.title(plotvar[ivar])
-        cbar = plt.colorbar()
-        cbar.set_label(plotvar[ivar] + ' ' + plotunit[ivar])
-        #specify clim, cmin and cmax units- Kelley
+        plt.title(plot_vars[num_vars])
+        cbar = plt.colorbar(fraction=0.15, pad=0.05, format =  '%0.4f')
+        cbar.set_label(plot_vars[num_vars] + ' ' + plot_unit[num_vars])
         
         ##  plot the obstacles
         for obs in obslist:
@@ -239,7 +228,7 @@ if ivar > 1:
         import os.path
         pngFile = os.path.splitext(matfile)[0]
         ## add variable plotted
-        pngFile += '_'+plotvar[ivar]
+        pngFile += '_'+plot_vars[num_vars]
         ## add png extension
         pngFile += '.png'
         plt.savefig(pngFile)
