@@ -3866,7 +3866,7 @@
                 endif
               ENDDO
             ENDDO
-            !WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
+            WRITE (PRINTF,*) X1,Y1,OBREDF(1,1:MSC,1)  ! Writes transmission coefficient (Kt) to main output file
           elseif (iobcase.eq.5) then   ! Power matrix lookup table
             !call P_Matrix(TP,HSIN,RCW)  ! Call power matrix subroutine for RCW values
             !incident=0.42*HSIN*HSIN*TP ! debugging print statments for relevant variables
@@ -4082,6 +4082,8 @@
                  OBREDF(ID,IS,ILINK) = TRCF(IS,ID)
               ENDDO
            ENDDO
+        ELSE IF (ITRAS.EQ.0) THEN                                         SNL-SWAN
+          ! do nothing.  this was done above
         ELSE
            DO IS = 1, MSC
               DO ID = 1, MDC
