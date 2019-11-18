@@ -1,8 +1,8 @@
-my $os  = `uname -s`;
+#my $os  = `uname -s`;
    $os  = $^O unless chomp($os);
 
-my $cpu = `uname -m`;
-   $cpu = $^O unless chomp($cpu);
+#my $cpu = `uname -m`;
+#   $cpu = $^O unless chomp($cpu);
 
 open(OUTFILE,">macros.inc");
 

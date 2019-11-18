@@ -8,5 +8,11 @@ Instructions for quick installation of SWAN
    called ActivePerl (www.activestate.com/activeperl/downloads).
    The Perl version should be at least 5.0.0 or higher!
 
-2) From the 'build' directory, type 'mk.pl ser' for a serial compilation.
-   Type 'mk.pl omp' for an openMP compilation
+2) From the 'src' directory, type 'perl platform.pl' to set up macros.ini file
+   On Linux:
+     Type 'make ser' for serial compilation.
+     Type 'make omp' for an openMP compilation
+   On Windows:
+     Enter the VS compiler environment
+     Type 'nmake ser' for serial compilation.
+     Type 'nmake omp' for an openMP compilation

@@ -1,3 +1,10 @@
 *.tws
+*.mod
+*.f
+*.for
+*.f90
+*.obj
+*.o
+*~
 norm_end
 swaninit
